@@ -15,6 +15,7 @@ export default defineConfig({
         svgrPlugin(),
         {
             name: 'custom-hmr-control',
+            // eslint-disable-next-line consistent-return
             handleHotUpdate({ file, server }) {
                 if (file.includes('src/app/configs/')) {
                     server.ws.send({
@@ -30,7 +31,7 @@ export default defineConfig({
     },
     server: {
         open: true,
-        port: 3000
+        port: 3400
     },
     define: {
         global: 'window'
