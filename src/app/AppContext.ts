@@ -7,10 +7,10 @@ import { RouteObject } from 'react-router/dist/lib/context';
  * The type of the AppContext value.
  */
 export type AppContextType = {
-	/**
-	 * The routes to be used in the app.
-	 */
-	routes: RouteObject[];
+    /**
+     * The routes to be used in the app.
+     */
+    routes: RouteObject[];
 };
 
 /**
