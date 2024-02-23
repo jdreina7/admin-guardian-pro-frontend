@@ -20,10 +20,9 @@ npm i
 
 ## Usage
 1. Run the API/backend server
-2. Create a `.env` file with the next environment variables inside:
+2. Create a `.env` file with the next environment variable inside:
 ```bash
-REACT_APP_API_URL="YOUR_LOCAL_API_SERVER_URL"
-PORT=3400
+VITE_API_URL="YOUR_LOCAL_API_SERVER_URL"
 ```
 3. Run 🚀
 ```sh

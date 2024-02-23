@@ -9,14 +9,13 @@ function UserModel(data: PartialDeep<User>): User {
     data = data || {};
 
     return _.defaults(data, {
-        id: '',
-        email: '',
-        role: null, // guest
+        uid: '',
+        role: '', // guest
         token: '',
         data: {
-            displayName: 'Juanito Pérez',
+            displayName: '',
             photoURL: '',
-            email: 'mio@mio.mio',
+            email: '',
             shortcuts: [],
             settings: {}
         }

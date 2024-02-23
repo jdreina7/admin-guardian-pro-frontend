@@ -14,6 +14,7 @@ import BrowserRouter from '@fuse/core/BrowserRouter';
 import { PartialDeep } from 'type-fest';
 import { useSelector } from 'react-redux';
 import withReducer from 'app/store/withReducer';
+import { DEFAULT_LOGIN_PATH } from 'src/utils/contants';
 import useJwtAuth, { JwtAuth } from './services/jwt/useJwtAuth';
 import { User } from './user';
 import useFirebaseAuth from './services/firebase/useFirebaseAuth';
@@ -61,8 +62,8 @@ function AuthRoute(props: AuthProviderProps) {
      */
     const jwtService = useJwtAuth({
         config: {
-            tokenStorageKey: 'token',
-            signInUrl: 'http://localhost:3000/api/v1/users/login',
+            tokenStorageKey: 'access_token',
+            signInUrl: `${import.meta.env.VITE_API_URL}${DEFAULT_LOGIN_PATH}`,
             signUpUrl: '',
             tokenRefreshUrl: '',
             getUserUrl: '',

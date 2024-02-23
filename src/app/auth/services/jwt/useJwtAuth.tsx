@@ -3,10 +3,11 @@ import axios, { AxiosError, AxiosResponse } from 'axios';
 import jwtDecode, { JwtPayload } from 'jwt-decode';
 import _ from '@lodash';
 import { PartialDeep } from 'type-fest';
+import { DEFAULT_LOGIN_PATH } from 'src/utils/contants';
 
 const defaultAuthConfig = {
-    tokenStorageKey: 'token',
-    signInUrl: 'http://localhost:3000/api/v1/users/login',
+    tokenStorageKey: 'access_token',
+    signInUrl: `${import.meta.env.VITE_API_URL}${DEFAULT_LOGIN_PATH}`,
     signUpUrl: '',
     tokenRefreshUrl: '',
     getUserUrl: '',
@@ -221,17 +222,15 @@ const useJwtAuth = <User, SignInPayload, SignUpPayload>(
         const response = axios.post(authConfig.signInUrl, credentials);
 
         response.then(
-            (res: AxiosResponse<{ user: User; token: string }>) => {
-                console.log(`225 res >>> `, res);
+            (res: AxiosResponse<{ user: User; access_token: string }>) => {
                 const userData = res?.data?.user;
-                const accessToken = res?.data?.token;
+                const accessToken = res?.data?.access_token;
 
                 handleSignInSuccess(userData, accessToken);
 
                 return userData;
             },
             (error) => {
-				console.log('234 error >>> ', error);
                 const axiosError = error as AxiosError;
 
                 handleSignInFailure(axiosError);
@@ -351,8 +350,6 @@ const useJwtAuth = <User, SignInPayload, SignUpPayload>(
 
                     if (axiosError?.response?.status === 401) {
                         signOut();
-                        // eslint-disable-next-line no-console
-                        console.warn('Unauthorized request. User was signed out.');
                     }
 
                     return Promise.reject(axiosError);
