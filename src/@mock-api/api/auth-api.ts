@@ -19,177 +19,177 @@ type UserAuthType = User & { uid: string; password: string };
 let usersApi = mockApi.components.examples.auth_users.value as unknown as UserAuthType[];
 
 export const authApiMocks = (mock: ExtendedMockAdapter) => {
-	mock.onPost('/auth/sign-in').reply((config) => {
-		const data = JSON.parse(config.data as string) as { email: string; password: string };
+    mock.onPost('/auth/sign-in').reply((config) => {
+        const data = JSON.parse(config.data as string) as { email: string; password: string };
 
-		const { email, password } = data;
+        const { email, password } = data;
 
-		const user = _.cloneDeep(usersApi.find((_user) => _user.data.email === email));
+        const user = _.cloneDeep(usersApi.find((_user) => _user.data.email === email));
 
-		const error = [];
+        const error = [];
 
-		if (!user) {
-			error.push({
-				type: 'email',
-				message: 'Check your email address'
-			});
-		}
+        if (!user) {
+            error.push({
+                type: 'email',
+                message: 'Check your email address'
+            });
+        }
 
-		if (user && user.password !== password) {
-			error.push({
-				type: 'password',
-				message: 'Check your password'
-			});
-		}
+        if (user && user.password !== password) {
+            error.push({
+                type: 'password',
+                message: 'Check your password'
+            });
+        }
 
-		if (error.length === 0) {
-			delete (user as Partial<UserAuthType>).password;
+        if (error.length === 0) {
+            delete (user as Partial<UserAuthType>).password;
 
-			const access_token = generateJWTToken({ id: user.uid });
+            const access_token = generateJWTToken({ id: user.uid });
 
-			const response = {
-				user,
-				access_token
-			};
+            const response = {
+                user,
+                access_token
+            };
 
-			return [200, response];
-		}
+            return [200, response];
+        }
 
-		return [400, error];
-	});
+        return [400, error];
+    });
 
-	mock.onPost('/auth/refresh').reply((config) => {
-		const newTokenResponse = generateAccessToken(config);
+    mock.onPost('/auth/refresh').reply((config) => {
+        const newTokenResponse = generateAccessToken(config);
 
-		if (newTokenResponse) {
-			const { access_token } = newTokenResponse;
+        if (newTokenResponse) {
+            const { access_token } = newTokenResponse;
 
-			return [200, null, { 'New-Access-Token': access_token }];
-		}
+            return [200, null, { 'New-Access-Token': access_token }];
+        }
 
-		const error = 'Invalid access token detected or user not found';
+        const error = 'Invalid access token detected or user not found';
 
-		return [401, { data: error }];
-	});
+        return [401, { data: error }];
+    });
 
-	mock.onGet('/auth/user').reply((config) => {
-		const newTokenResponse = generateAccessToken(config);
+    mock.onGet('/auth/user').reply((config) => {
+        const newTokenResponse = generateAccessToken(config);
 
-		if (newTokenResponse) {
-			const { access_token, user } = newTokenResponse;
+        if (newTokenResponse) {
+            const { access_token, user } = newTokenResponse;
 
-			return [200, user, { 'New-Access-Token': access_token }];
-		}
+            return [200, user, { 'New-Access-Token': access_token }];
+        }
 
-		const error = 'Invalid access token detected or user not found';
+        const error = 'Invalid access token detected or user not found';
 
-		return [401, { error }];
-	});
+        return [401, { error }];
+    });
 
-	function generateAccessToken(config: AxiosRequestConfig): { access_token: string; user: User } | null {
-		const authHeader = config.headers.Authorization as string;
+    function generateAccessToken(config: AxiosRequestConfig): { access_token: string; user: User } | null {
+        const authHeader = config.headers.Authorization as string;
 
-		if (!authHeader) {
-			return null;
-		}
+        if (!authHeader) {
+            return null;
+        }
 
-		const [scheme, access_token] = authHeader.split(' ');
+        const [scheme, access_token] = authHeader.split(' ');
 
-		if (scheme !== 'Bearer' || !access_token) {
-			return null;
-		}
+        if (scheme !== 'Bearer' || !access_token) {
+            return null;
+        }
 
-		if (verifyJWTToken(access_token)) {
-			const { id }: { id: string } = jwtDecode(access_token);
+        if (verifyJWTToken(access_token)) {
+            const { id }: { id: string } = jwtDecode(access_token);
 
-			const user = _.cloneDeep(usersApi.find((_user) => _user.uid === id));
+            const user = _.cloneDeep(usersApi.find((_user) => _user.uid === id));
 
-			if (user) {
-				delete (user as Partial<UserAuthType>).password;
-				const access_token = generateJWTToken({ id: user.uid });
-				return { access_token, user };
-			}
-		}
+            if (user) {
+                delete (user as Partial<UserAuthType>).password;
+                const access_token = generateJWTToken({ id: user.uid });
+                return { access_token, user };
+            }
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	mock.onPost('/auth/sign-up').reply((request) => {
-		const data = JSON.parse(request.data as string) as { displayName: string; password: string; email: string };
-		const { displayName, password, email } = data;
-		const isEmailExists = usersApi.find((_user) => _user.data.email === email);
-		const error = [];
+    mock.onPost('/auth/sign-up').reply((request) => {
+        const data = JSON.parse(request.data as string) as { displayName: string; password: string; email: string };
+        const { displayName, password, email } = data;
+        const isEmailExists = usersApi.find((_user) => _user.data.email === email);
+        const error = [];
 
-		if (isEmailExists) {
-			error.push({
-				type: 'email',
-				message: 'The email address is already in use'
-			});
-		}
+        if (isEmailExists) {
+            error.push({
+                type: 'email',
+                message: 'The email address is already in use'
+            });
+        }
 
-		if (error.length === 0) {
-			const newUser = UserModel({
-				role: ['admin'],
-				data: {
-					displayName,
-					photoURL: 'assets/images/avatars/Abbott.jpg',
-					email,
-					shortcuts: [],
-					settings: {}
-				}
-			}) as UserAuthType;
+        if (error.length === 0) {
+            const newUser = UserModel({
+                role: ['admin'],
+                data: {
+                    displayName,
+                    photoURL: 'assets/images/avatars/Abbott.jpg',
+                    email,
+                    shortcuts: [],
+                    settings: {}
+                }
+            }) as UserAuthType;
 
-			newUser.uid = FuseUtils.generateGUID();
-			newUser.password = password;
+            newUser.uid = FuseUtils.generateGUID();
+            newUser.password = password;
 
-			usersApi = [...usersApi, newUser];
+            usersApi = [...usersApi, newUser];
 
-			const user = _.cloneDeep(newUser);
+            const user = _.cloneDeep(newUser);
 
-			delete (user as Partial<UserAuthType>).password;
+            delete (user as Partial<UserAuthType>).password;
 
-			const access_token = generateJWTToken({ id: user.uid });
+            const access_token = generateJWTToken({ id: user.uid });
 
-			const response = {
-				user,
-				access_token
-			};
+            const response = {
+                user,
+                access_token
+            };
 
-			return [200, response];
-		}
+            return [200, response];
+        }
 
-		return [200, { error }];
-	});
+        return [200, { error }];
+    });
 
-	mock.onPut('/auth/user').reply((config) => {
-		const access_token = config?.headers?.Authorization as string;
+    mock.onPut('/auth/user').reply((config) => {
+        const access_token = config?.headers?.Authorization as string;
 
-		const userData = jwtDecode(access_token);
-		const uid = (userData as { [key: string]: string }).id;
+        const userData = jwtDecode(access_token);
+        const uid = (userData as { [key: string]: string }).id;
 
-		const user = JSON.parse(config.data as string) as { user: PartialDeep<UserAuthType> };
+        const user = JSON.parse(config.data as string) as { user: PartialDeep<UserAuthType> };
 
-		let updatedUser: User;
+        let updatedUser: User;
 
-		usersApi = usersApi.map((_user) => {
-			if (uid === _user.uid) {
-				updatedUser = _.assign({}, _user, user);
-			}
+        usersApi = usersApi.map((_user) => {
+            if (uid === _user.uid) {
+                updatedUser = _.assign({}, _user, user);
+            }
 
-			return _user;
-		});
+            return _user;
+        });
 
-		delete (updatedUser as Partial<UserAuthType>).password;
+        delete (updatedUser as Partial<UserAuthType>).password;
 
-		return [200, updatedUser];
-	});
+        return [200, updatedUser];
+    });
 
-	/**
-	 * JWT Token Generator/Verifier Helpers
-	 * !! Created for Demonstration Purposes, cannot be used for PRODUCTION
-	 */
+    /**
+     * JWT Token Generator/Verifier Helpers
+     * !! Created for Demonstration Purposes, cannot be used for PRODUCTION
+     */
 
-	const jwtSecret = 'some-secret-code-goes-here';
+    const jwtSecret = 'some-secret-code-goes-here';
 
 /* eslint-disable */
 

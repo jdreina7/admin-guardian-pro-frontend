@@ -2,9 +2,13 @@ import { Controller, useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import _ from '@lodash';
 import { z } from 'zod';
+import { AxiosError } from 'axios';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Box, Button, Checkbox, FormControl, FormControlLabel, Paper, TextField, Typography } from '@mui/material';
 import sample from 'public/assets/images/videos/login-video.mp4';
+import { useAuth } from 'src/app/auth/AuthRouteProvider';
+import Swal from 'sweetalert2';
+import { IAPIErrorResponse } from 'src/utils/interfaces';
 
 /**
  * Form Validation Schema
@@ -33,7 +37,9 @@ const defaultValues = {
  * The sign in page.
  */
 function SignInPage() {
-    const { control, formState, handleSubmit, reset } = useForm<FormType>({
+    const { jwtService } = useAuth();
+
+    const { control, formState, handleSubmit } = useForm<FormType>({
         mode: 'onChange',
         defaultValues,
         resolver: zodResolver(schema)
@@ -41,8 +47,23 @@ function SignInPage() {
 
     const { isValid, dirtyFields, errors } = formState;
 
-    function onSubmit() {
-        reset(defaultValues);
+    const sweetAlerts = (options: object) => {
+        Swal.fire({ ...options });
+    };
+
+    function onSubmit(formData: FormType) {
+        const { email, password } = formData;
+
+        jwtService
+            .signIn({
+                email,
+                password
+            })
+            .catch((error: AxiosError<IAPIErrorResponse>) => {
+                const errorData: IAPIErrorResponse = error.response.data;
+
+                sweetAlerts({ icon: 'error', text: errorData?.message });
+            });
     }
 
     return (

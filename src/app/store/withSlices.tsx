@@ -9,42 +9,42 @@ export type SlicesType = Slice[];
  * Injects reducers grouped by common key.
  */
 export const injectReducersGroupedByCommonKey = async (slices: SlicesType) => {
-	const reducers = generateReducersFromSlices(slices);
+    const reducers = generateReducersFromSlices(slices);
 
-	if (reducers) {
-		Object.keys(reducers).forEach((key) => {
-			const reducer = reducers[key] as Reducer;
+    if (reducers) {
+        Object.keys(reducers).forEach((key) => {
+            const reducer = reducers[key] as Reducer;
 
-			if (!key || !reducer) {
-				return;
-			}
+            if (!key || !reducer) {
+                return;
+            }
 
-			rootReducer.inject(
-				{
-					reducerPath: key,
-					reducer
-				},
-				{
-					overrideExisting: true
-				}
-			);
-		});
-	}
+            rootReducer.inject(
+                {
+                    reducerPath: key,
+                    reducer
+                },
+                {
+                    overrideExisting: true
+                }
+            );
+        });
+    }
 
-	return true;
+    return true;
 };
 
 /**
  * A Higher Order Component that injects reducers for the provided slices.
  */
 const withSlices =
-	<P extends object>(slices: SlicesType) =>
-	(WrappedComponent: React.FC<P>) => {
-		injectReducersGroupedByCommonKey(slices);
+    <P extends object>(slices: SlicesType) =>
+    (WrappedComponent: React.FC<P>) => {
+        injectReducersGroupedByCommonKey(slices);
 
-		return function WithInjectedReducer(props: P) {
-			return <WrappedComponent {...props} />;
-		};
-	};
+        return function WithInjectedReducer(props: P) {
+            return <WrappedComponent {...props} />;
+        };
+    };
 
 export default withSlices;
