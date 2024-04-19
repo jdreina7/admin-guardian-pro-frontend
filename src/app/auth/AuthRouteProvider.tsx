@@ -14,10 +14,9 @@ import BrowserRouter from '@fuse/core/BrowserRouter';
 import { PartialDeep } from 'type-fest';
 import { useSelector } from 'react-redux';
 import withReducer from 'app/store/withReducer';
-import { DEFAULT_LOGIN_PATH } from 'src/utils/contants';
+import { DEFAULT_LOGIN_PATH, DEFAULT_USERS_PATH } from 'src/utils/contants';
 import useJwtAuth, { JwtAuth } from './services/jwt/useJwtAuth';
 import { User } from './user';
-import useFirebaseAuth from './services/firebase/useFirebaseAuth';
 
 /**
  * Initialize Firebase
@@ -35,8 +34,7 @@ export type SignUpPayload = {
 };
 
 type AuthContext = {
-    jwtService?: JwtAuth<User, SignInPayload, SignUpPayload>;
-    firebaseService?: ReturnType<typeof useFirebaseAuth>;
+    jwtService?: JwtAuth<SignInPayload, SignUpPayload>;
     signOut?: () => void;
     updateUser?: (U: PartialDeep<User>) => void;
     isAuthenticated: boolean;
@@ -66,7 +64,7 @@ function AuthRoute(props: AuthProviderProps) {
             signInUrl: `${import.meta.env.VITE_API_URL}${DEFAULT_LOGIN_PATH}`,
             signUpUrl: '',
             tokenRefreshUrl: '',
-            getUserUrl: '',
+            getUserUrl: `${import.meta.env.VITE_API_URL}${DEFAULT_USERS_PATH}`,
             updateUserUrl: '',
             updateTokenFromHeader: true
         },
@@ -87,7 +85,7 @@ function AuthRoute(props: AuthProviderProps) {
         },
         onError: (error) => {
             // eslint-disable-next-line no-console
-            console.warn(error);
+            console.warn('90 error >>> ', error);
         }
     });
 

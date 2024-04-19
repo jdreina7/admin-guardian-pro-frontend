@@ -7,25 +7,25 @@ import history from '@history';
 import { WithRouterProps } from '@fuse/core/withRouter/withRouter';
 import { FuseRouteItemType } from '@fuse/utils/FuseUtils';
 import {
-	getSessionRedirectUrl,
-	resetSessionRedirectUrl,
-	setSessionRedirectUrl
+    getSessionRedirectUrl,
+    resetSessionRedirectUrl,
+    setSessionRedirectUrl
 } from '@fuse/core/FuseAuthorization/sessionRedirectUrl';
 import FuseLoading from '@fuse/core/FuseLoading';
 
 type FuseAuthorizationProps = {
-	children: ReactNode;
-	location: Location;
-	userRole: string[] | string;
-	loginRedirectUrl?: string;
+    children: ReactNode;
+    location: Location;
+    userRole: string[] | string;
+    loginRedirectUrl?: string;
 } & WithRouterProps;
 
 type State = AppContextType & {
-	accessGranted: boolean;
+    accessGranted: boolean;
 };
 
 function isUserGuest(role: string[] | string) {
-	return !role || (Array.isArray(role) && role.length === 0);
+    return !role || (Array.isArray(role) && role.length === 0);
 }
 
 /**
@@ -33,101 +33,107 @@ function isUserGuest(role: string[] | string) {
  * It checks the provided Auth property from FuseRouteItemType (auth property) against the current logged-in user role.
  */
 class FuseAuthorization extends Component<FuseAuthorizationProps, State> {
-	constructor(props: FuseAuthorizationProps, context: AppContextType) {
-		super(props);
+    constructor(props: FuseAuthorizationProps, context: AppContextType) {
+        super(props);
 
-		const { routes } = context;
+        const { routes } = context;
 
-		this.state = {
-			accessGranted: true,
-			routes
-		};
-	}
+        this.state = {
+            accessGranted: true,
+            routes
+        };
+    }
 
-	componentDidMount() {
-		const { accessGranted } = this.state;
+    componentDidMount() {
+        const { accessGranted } = this.state;
+		console.log('49 accessGranted >>> ', accessGranted);
 
-		if (!accessGranted) {
-			this.redirectRoute();
-		}
-	}
+        if (!accessGranted) {
+            this.redirectRoute();
+        }
+    }
 
-	shouldComponentUpdate(nextProps: FuseAuthorizationProps, nextState: State) {
-		const { accessGranted } = this.state;
+    shouldComponentUpdate(nextProps: FuseAuthorizationProps, nextState: State) {
+        const { accessGranted } = this.state;
+		console.log('58 accessGranted >>> ', accessGranted);
 
-		return nextState.accessGranted !== accessGranted;
-	}
+        return nextState.accessGranted !== accessGranted;
+    }
 
-	componentDidUpdate() {
-		const { accessGranted } = this.state;
+    componentDidUpdate() {
+        const { accessGranted } = this.state;
+		console.log('65 accessGranted >>> ', accessGranted);
 
-		if (!accessGranted) {
-			this.redirectRoute();
-		}
-	}
+        if (!accessGranted) {
+            this.redirectRoute();
+        }
+    }
 
-	static getDerivedStateFromProps(props: FuseAuthorizationProps, state: State) {
-		const { location, userRole } = props;
-		const { pathname } = location;
-		const matchedRoutes = matchRoutes(state.routes, pathname);
-		const matched = matchedRoutes ? matchedRoutes[0] : false;
+    static getDerivedStateFromProps(props: FuseAuthorizationProps, state: State) {
+        const { location, userRole } = props;
+		console.log('71 userRole >>> ', userRole);
+        const { pathname } = location;
+        const matchedRoutes = matchRoutes(state.routes, pathname);
+        const matched = matchedRoutes ? matchedRoutes[0] : false;
 
-		const isGuest = isUserGuest(userRole);
+        const isGuest = isUserGuest(userRole);
+		console.log('76 isGuest >>> ', isGuest);
 
-		if (!matched) {
-			return { accessGranted: true };
-		}
+        if (!matched) {
+            return { accessGranted: true };
+        }
 
-		const { route }: { route: FuseRouteItemType } = matched;
+        const { route }: { route: FuseRouteItemType } = matched;
 
-		const userHasPermission = FuseUtils.hasPermission(route.auth, userRole);
+        const userHasPermission = FuseUtils.hasPermission(route.auth, userRole);
 
-		const ignoredPaths = ['/', '/callback', '/sign-in', '/sign-out', '/logout', '/404'];
+        const ignoredPaths = ['/', '/callback', '/sign-in', '/sign-out', '/logout', '/404'];
 
-		if (matched && !userHasPermission && !ignoredPaths.includes(pathname)) {
-			setSessionRedirectUrl(pathname);
-		}
+        if (matched && !userHasPermission && !ignoredPaths.includes(pathname)) {
+            setSessionRedirectUrl(pathname);
+        }
 
-		/**
-		 * If user is member but don't have permission to view the route
-		 * redirected to main route '/'
-		 */
-		if (!userHasPermission && !isGuest && !ignoredPaths.includes(pathname)) {
-			setSessionRedirectUrl('/');
-		}
+        /**
+         * If user is member but don't have permission to view the route
+         * redirected to main route '/'
+         */
+        if (!userHasPermission && !isGuest && !ignoredPaths.includes(pathname)) {
+            setSessionRedirectUrl('/');
+        }
 
-		return {
-			accessGranted: matched ? userHasPermission : true
-		};
-	}
+        return {
+            accessGranted: matched ? userHasPermission : true
+        };
+    }
 
-	redirectRoute() {
-		const { userRole, loginRedirectUrl = '/' } = this.props;
-		const redirectUrl = getSessionRedirectUrl() || loginRedirectUrl;
+    redirectRoute() {
+        const { userRole, loginRedirectUrl = '/' } = this.props;
+        const redirectUrl = getSessionRedirectUrl() || loginRedirectUrl;
 
-		/*
+        /*
 		User is guest
 		Redirect to Login Page
 		*/
-		if (!userRole || userRole.length === 0) {
-			setTimeout(() => history.push('/sign-in'), 0);
-		} else {
-			/*
+        if (!userRole || userRole.length === 0) {
+			console.log('113 REDIRECT LOGIN PAGE >>>>>>>>> ');
+            setTimeout(() => history.push('/sign-in'), 0);
+        } else {
+            /*
 		  User is member
 		  User must be on unAuthorized page or just logged in
 		  Redirect to dashboard or loginRedirectUrl
 			*/
-			setTimeout(() => history.push(redirectUrl), 0);
-			resetSessionRedirectUrl();
-		}
-	}
+            setTimeout(() => history.push(redirectUrl), 0);
+            resetSessionRedirectUrl();
+        }
+    }
 
-	render() {
-		const { accessGranted } = this.state;
-		const { children } = this.props;
+    render() {
+        const { accessGranted } = this.state;
+        const { children } = this.props;
 
-		return accessGranted ? children : <FuseLoading />;
-	}
+        return accessGranted ? children : <FuseLoading />;
+    }
 }
 
 FuseAuthorization.contextType = AppContext;

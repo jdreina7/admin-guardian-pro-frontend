@@ -1,13 +1,13 @@
 import i18n from 'app/store/i18nSlice';
 import apiService from 'app/store/apiService';
 import {
-	ReducersMapObject,
-	configureStore,
-	Store,
-	combineSlices,
-	buildCreateSlice,
-	asyncThunkCreator,
-	Middleware
+    ReducersMapObject,
+    configureStore,
+    Store,
+    combineSlices,
+    buildCreateSlice,
+    asyncThunkCreator,
+    Middleware
 } from '@reduxjs/toolkit';
 import { createDynamicMiddleware } from '@reduxjs/toolkit/react';
 import { AppDispatchType } from 'app/store/types';
@@ -27,8 +27,8 @@ export const addAppMiddleware = dynamicInstance.addMiddleware.withTypes<Config>(
 const middlewares: Middleware[] = [apiService.middleware, dynamicMiddleware];
 
 if (process.env.NODE_ENV === 'development') {
-	const logger = createLogger({ collapsed: (getState, action, logEntry) => (logEntry ? !logEntry.error : true) });
-	middlewares.push(logger);
+    const logger = createLogger({ collapsed: (getState, action, logEntry) => (logEntry ? !logEntry.error : true) });
+    middlewares.push(logger);
 }
 
 /**
@@ -40,8 +40,8 @@ export interface LazyLoadedSlices {}
  * The static reducers.
  */
 const staticReducers: ReducersMapObject = {
-	i18n,
-	[apiService.reducerPath]: apiService.reducer
+    i18n,
+    [apiService.reducerPath]: apiService.reducer
 };
 
 /**
@@ -58,15 +58,15 @@ export type RootState = ReturnType<typeof rootReducer>;
  * Configures the app store.
  */
 export function configureAppStore(initialState?: RootState) {
-	const store = configureStore({
-		reducer: rootReducer,
-		preloadedState: initialState,
-		middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(middlewares)
-	}) as Store<RootState>;
+    const store = configureStore({
+        reducer: rootReducer,
+        preloadedState: initialState,
+        middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(middlewares)
+    }) as Store<RootState>;
 
-	setupListeners(store.dispatch);
+    setupListeners(store.dispatch);
 
-	return store;
+    return store;
 }
 
 /**
@@ -93,15 +93,15 @@ export const appSelector = rootReducer.selector;
  * createAppSlice is a wrapper around createSlice that adds support for asyncThunkCreator.
  */
 export const createAppSlice = buildCreateSlice({
-	creators: { asyncThunk: asyncThunkCreator }
+    creators: { asyncThunk: asyncThunkCreator }
 });
 
 /**
  * The type definition for the config object passed to `withAppMiddleware`.
  */
 type Config = {
-	state: RootState;
-	dispatch: AppDispatch;
+    state: RootState;
+    dispatch: AppDispatch;
 };
 
 export const withAppMiddleware = dynamicInstance.withMiddleware.withTypes<Config>();
