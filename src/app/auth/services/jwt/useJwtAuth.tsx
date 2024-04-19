@@ -3,14 +3,16 @@ import axios, { AxiosError, AxiosResponse } from 'axios';
 import jwtDecode, { JwtPayload } from 'jwt-decode';
 import _ from '@lodash';
 import { PartialDeep } from 'type-fest';
-import { DEFAULT_LOGIN_PATH } from 'src/utils/contants';
+import { DEFAULT_LOGIN_PATH, DEFAULT_USERS_PATH } from 'src/utils/contants';
+import { useSelector } from 'react-redux';
+import { User } from '../../user';
 
 const defaultAuthConfig = {
     tokenStorageKey: 'access_token',
     signInUrl: `${import.meta.env.VITE_API_URL}${DEFAULT_LOGIN_PATH}`,
     signUpUrl: '',
     tokenRefreshUrl: '',
-    getUserUrl: '',
+    getUserUrl: `${import.meta.env.VITE_API_URL}${DEFAULT_USERS_PATH}`,
     updateUserUrl: '',
     updateTokenFromHeader: false
 };
@@ -36,7 +38,7 @@ export type JwtAuthProps<T> = {
     onError?: (error: AxiosError) => void;
 };
 
-export type JwtAuth<User, SignInPayload, SignUpPayload> = {
+export type JwtAuth<SignInPayload, SignUpPayload> = {
     user: User;
     isAuthenticated: boolean;
     isLoading: boolean;
@@ -58,9 +60,7 @@ export type JwtAuth<User, SignInPayload, SignUpPayload> = {
  * It uses Axios interceptors to sign out the user if the refresh token is invalid or expired
  */
 
-const useJwtAuth = <User, SignInPayload, SignUpPayload>(
-    props: JwtAuthProps<User>
-): JwtAuth<User, SignInPayload, SignUpPayload> => {
+const useJwtAuth = <SignInPayload, SignUpPayload>(props: JwtAuthProps<User>): JwtAuth<SignInPayload, SignUpPayload> => {
     const { config, onSignedIn, onSignedOut, onSignedUp, onError, onUpdateUser } = props;
 
     // Merge default config with the one from the props
@@ -73,15 +73,16 @@ const useJwtAuth = <User, SignInPayload, SignUpPayload>(
     /**
      * Set session
      */
-    const setSession = useCallback((accessToken: string) => {
+    const setSession = useCallback((accessToken: string, userData?: User) => {
         if (accessToken) {
             localStorage.setItem(authConfig.tokenStorageKey, accessToken);
+            localStorage.setItem('uid', userData?.uid);
             axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
         }
     }, []);
 
     const resetSession = useCallback(() => {
-        localStorage.removeItem(authConfig.tokenStorageKey);
+        localStorage.clear();
         delete axios.defaults.headers.common.Authorization;
     }, []);
 
@@ -96,7 +97,7 @@ const useJwtAuth = <User, SignInPayload, SignUpPayload>(
      * Handle sign-in success
      */
     const handleSignInSuccess = useCallback((userData: User, accessToken: string) => {
-        setSession(accessToken);
+        setSession(accessToken, userData);
 
         setIsAuthenticated(true);
 
@@ -166,6 +167,9 @@ const useJwtAuth = <User, SignInPayload, SignUpPayload>(
         return false;
     }, []);
 
+    type IRootState = { user: object };
+    const storeUserData = useSelector((state: IRootState) => state.user);
+
     /**
      * Check if the access token exist and is valid on mount
      * If it is, set the user and isAuthenticated states
@@ -174,16 +178,21 @@ const useJwtAuth = <User, SignInPayload, SignUpPayload>(
     useEffect(() => {
         const attemptAutoLogin = async () => {
             const accessToken = getAccessToken();
+            const userId = localStorage.getItem('uid');
 
             if (isTokenValid(accessToken)) {
                 try {
                     setIsLoading(true);
 
-                    const response: AxiosResponse<User> = await axios.get(authConfig.getUserUrl, {
+                    const response: AxiosResponse<User> = await axios.get(`${authConfig.getUserUrl}/${userId}`, {
                         headers: { Authorization: `Bearer ${accessToken}` }
                     });
 
+                    console.log('192 storeUserData >>> ', storeUserData);
+                    console.log('193 response >>> ', response);
+
                     const userData = response?.data;
+                    console.log('196 userData >>> ', userData);
 
                     handleSignInSuccess(userData, accessToken);
 
@@ -219,6 +228,7 @@ const useJwtAuth = <User, SignInPayload, SignUpPayload>(
      * Sign in
      */
     const signIn = async (credentials: SignInPayload) => {
+        console.log('231 credentials >>> ', credentials);
         const response = axios.post(authConfig.signInUrl, credentials);
 
         response.then(
