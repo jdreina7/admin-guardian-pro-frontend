@@ -46,7 +46,6 @@ class FuseAuthorization extends Component<FuseAuthorizationProps, State> {
 
     componentDidMount() {
         const { accessGranted } = this.state;
-		console.log('49 accessGranted >>> ', accessGranted);
 
         if (!accessGranted) {
             this.redirectRoute();
@@ -55,14 +54,12 @@ class FuseAuthorization extends Component<FuseAuthorizationProps, State> {
 
     shouldComponentUpdate(nextProps: FuseAuthorizationProps, nextState: State) {
         const { accessGranted } = this.state;
-		console.log('58 accessGranted >>> ', accessGranted);
 
         return nextState.accessGranted !== accessGranted;
     }
 
     componentDidUpdate() {
         const { accessGranted } = this.state;
-		console.log('65 accessGranted >>> ', accessGranted);
 
         if (!accessGranted) {
             this.redirectRoute();
@@ -71,13 +68,11 @@ class FuseAuthorization extends Component<FuseAuthorizationProps, State> {
 
     static getDerivedStateFromProps(props: FuseAuthorizationProps, state: State) {
         const { location, userRole } = props;
-		console.log('71 userRole >>> ', userRole);
         const { pathname } = location;
         const matchedRoutes = matchRoutes(state.routes, pathname);
         const matched = matchedRoutes ? matchedRoutes[0] : false;
 
         const isGuest = isUserGuest(userRole);
-		console.log('76 isGuest >>> ', isGuest);
 
         if (!matched) {
             return { accessGranted: true };
@@ -115,7 +110,6 @@ class FuseAuthorization extends Component<FuseAuthorizationProps, State> {
 		Redirect to Login Page
 		*/
         if (!userRole || userRole.length === 0) {
-			console.log('113 REDIRECT LOGIN PAGE >>>>>>>>> ');
             setTimeout(() => history.push('/sign-in'), 0);
         } else {
             /*

@@ -5,6 +5,7 @@ import { FuseSettingsConfigType } from '@fuse/core/FuseSettings/FuseSettings';
  */
 export type User = {
     uid: string;
+    idNumber: number;
     role: string[] | string | null;
     data: {
         displayName: string;

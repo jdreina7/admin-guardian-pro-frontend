@@ -3,9 +3,10 @@ import axios, { AxiosError, AxiosResponse } from 'axios';
 import jwtDecode, { JwtPayload } from 'jwt-decode';
 import _ from '@lodash';
 import { PartialDeep } from 'type-fest';
-import { DEFAULT_LOGIN_PATH, DEFAULT_USERS_PATH } from 'src/utils/contants';
-import { useSelector } from 'react-redux';
+import { DEFAULT_LOGIN_PATH, DEFAULT_USERS_PATH } from '../../../../utils/contants';
+import { transformUserDataToUserModel } from '../../../../utils/utils';
 import { User } from '../../user';
+import { IUserDB } from '../../../../utils/types';
 
 const defaultAuthConfig = {
     tokenStorageKey: 'access_token',
@@ -167,9 +168,6 @@ const useJwtAuth = <SignInPayload, SignUpPayload>(props: JwtAuthProps<User>): Jw
         return false;
     }, []);
 
-    type IRootState = { user: object };
-    const storeUserData = useSelector((state: IRootState) => state.user);
-
     /**
      * Check if the access token exist and is valid on mount
      * If it is, set the user and isAuthenticated states
@@ -184,15 +182,11 @@ const useJwtAuth = <SignInPayload, SignUpPayload>(props: JwtAuthProps<User>): Jw
                 try {
                     setIsLoading(true);
 
-                    const response: AxiosResponse<User> = await axios.get(`${authConfig.getUserUrl}/${userId}`, {
+                    const response: AxiosResponse<IUserDB> = await axios.get(`${authConfig.getUserUrl}/${userId}`, {
                         headers: { Authorization: `Bearer ${accessToken}` }
                     });
 
-                    console.log('192 storeUserData >>> ', storeUserData);
-                    console.log('193 response >>> ', response);
-
-                    const userData = response?.data;
-                    console.log('196 userData >>> ', userData);
+                    const userData = await transformUserDataToUserModel(response?.data, accessToken);
 
                     handleSignInSuccess(userData, accessToken);
 
@@ -228,7 +222,6 @@ const useJwtAuth = <SignInPayload, SignUpPayload>(props: JwtAuthProps<User>): Jw
      * Sign in
      */
     const signIn = async (credentials: SignInPayload) => {
-        console.log('231 credentials >>> ', credentials);
         const response = axios.post(authConfig.signInUrl, credentials);
 
         response.then(
