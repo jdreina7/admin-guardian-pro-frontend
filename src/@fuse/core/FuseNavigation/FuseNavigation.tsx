@@ -16,29 +16,29 @@ import { registerComponent } from './FuseNavItem';
 import { FuseNavItemType } from './types/FuseNavItemType';
 
 const inputGlobalStyles = (
-	<GlobalStyles
-		styles={() => ({
-			'.popper-navigation-list': {
-				'& .fuse-list-item': {
-					padding: '8px 12px 8px 12px',
-					height: 40,
-					minHeight: 40,
-					'& .fuse-list-item-text': {
-						padding: '0 0 0 8px'
-					}
-				},
-				'&.dense': {
-					'& .fuse-list-item': {
-						minHeight: 32,
-						height: 32,
-						'& .fuse-list-item-text': {
-							padding: '0 0 0 8px'
-						}
-					}
-				}
-			}
-		})}
-	/>
+    <GlobalStyles
+        styles={() => ({
+            '.popper-navigation-list': {
+                '& .fuse-list-item': {
+                    padding: '8px 12px 8px 12px',
+                    height: 40,
+                    minHeight: 40,
+                    '& .fuse-list-item-text': {
+                        padding: '0 0 0 8px'
+                    }
+                },
+                '&.dense': {
+                    '& .fuse-list-item': {
+                        minHeight: 32,
+                        height: 32,
+                        '& .fuse-list-item-text': {
+                            padding: '0 0 0 8px'
+                        }
+                    }
+                }
+            }
+        })}
+    />
 );
 
 /*
@@ -57,15 +57,15 @@ registerComponent('vertical-divider', () => <Divider className="my-16" />);
 registerComponent('horizontal-divider', () => <Divider className="my-16" />);
 
 export type FuseNavigationProps = {
-	className?: string;
-	dense?: boolean;
-	active?: boolean;
-	onItemClick?: (T: FuseNavItemType) => void;
-	navigation?: FuseNavItemType[];
-	layout?: 'horizontal' | 'vertical' | 'vertical-2';
-	firstLevel?: boolean;
-	selectedId?: string;
-	checkPermission?: boolean;
+    className?: string;
+    dense?: boolean;
+    active?: boolean;
+    onItemClick?: (T: FuseNavItemType) => void;
+    navigation?: FuseNavItemType[];
+    layout?: 'horizontal' | 'vertical' | 'vertical-2';
+    firstLevel?: boolean;
+    selectedId?: string;
+    checkPermission?: boolean;
 };
 
 /**
@@ -74,35 +74,35 @@ export type FuseNavigationProps = {
  * and acts as parent for providing props to its children components
  */
 function FuseNavigation(props: FuseNavigationProps) {
-	const { navigation, layout = 'vertical' } = props;
+    const { navigation, layout = 'vertical' } = props;
 
-	if (!navigation || navigation.length === 0) {
-		return null;
-	}
+    if (!navigation || navigation.length === 0) {
+        return null;
+    }
 
-	return (
-		<>
-			{inputGlobalStyles}
-			{layout === 'horizontal' && (
-				<FuseNavHorizontalLayout1
-					checkPermission={false}
-					{...props}
-				/>
-			)}
-			{layout === 'vertical' && (
-				<FuseNavVerticalLayout1
-					checkPermission={false}
-					{...props}
-				/>
-			)}
-			{layout === 'vertical-2' && (
-				<FuseNavVerticalLayout2
-					checkPermission={false}
-					{...props}
-				/>
-			)}
-		</>
-	);
+    return (
+        <>
+            {inputGlobalStyles}
+            {layout === 'horizontal' && (
+                <FuseNavHorizontalLayout1
+                    checkPermission={false}
+                    {...props}
+                />
+            )}
+            {layout === 'vertical' && (
+                <FuseNavVerticalLayout1
+                    checkPermission={false}
+                    {...props}
+                />
+            )}
+            {layout === 'vertical-2' && (
+                <FuseNavVerticalLayout2
+                    checkPermission={false}
+                    {...props}
+                />
+            )}
+        </>
+    );
 }
 
 export default memo(FuseNavigation);
