@@ -6,56 +6,61 @@ import useThemeMediaQuery from '@fuse/hooks/useThemeMediaQuery';
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
 import { FuseSettingsConfigType } from '@fuse/core/FuseSettings/FuseSettings';
 import { useSelector } from 'react-redux';
+import { useMemo, useState } from 'react';
 import { navbarToggle, navbarToggleMobile } from './store/navbarSlice';
 
 type NavbarToggleButtonProps = {
-	className?: string;
-	children?: React.ReactNode;
+    className?: string;
+    children?: React.ReactNode;
 };
 
 /**
  * The navbar toggle button.
  */
 function NavbarToggleButton(props: NavbarToggleButtonProps) {
-	const {
-		className = '',
-		children = (
-			<FuseSvgIcon
-				size={20}
-				color="action"
-			>
-				heroicons-outline:view-list
-			</FuseSvgIcon>
-		)
-	} = props;
+    const [iconPosition, setIconPosition] = useState('heroicons-outline:chevron-right');
+    const icon = useMemo(() => iconPosition, [iconPosition]);
 
-	const dispatch = useAppDispatch();
-	const isMobile = useThemeMediaQuery((theme) => theme.breakpoints.down('lg'));
-	const settings: FuseSettingsConfigType = useSelector(selectFuseCurrentSettings);
-	const { config } = settings.layout;
+    const {
+        className = '',
+        children = (
+            <FuseSvgIcon
+                size={20}
+                color="action"
+            >
+                {icon}
+            </FuseSvgIcon>
+        )
+    } = props;
 
-	return (
-		<IconButton
-			className={className}
-			color="inherit"
-			size="small"
-			onClick={() => {
-				if (isMobile) {
-					dispatch(navbarToggleMobile());
-				} else if (config?.navbar?.style === 'style-2') {
-					dispatch(
-						setDefaultSettings(
-							_.set({}, 'layout.config.navbar.folded', !settings?.layout?.config?.navbar?.folded)
-						)
-					);
-				} else {
-					dispatch(navbarToggle());
-				}
-			}}
-		>
-			{children}
-		</IconButton>
-	);
+    const dispatch = useAppDispatch();
+    const isMobile = useThemeMediaQuery((theme) => theme.breakpoints.down('lg'));
+    const settings: FuseSettingsConfigType = useSelector(selectFuseCurrentSettings);
+    const { config } = settings.layout;
+
+    return (
+        <IconButton
+            className={className}
+            color="inherit"
+            size="small"
+            onClick={() => {
+                if (isMobile) {
+                    dispatch(navbarToggleMobile());
+                } else if (config?.navbar?.style === 'style-2') {
+                    dispatch(
+                        setDefaultSettings(
+                            _.set({}, 'layout.config.navbar.folded', !settings?.layout?.config?.navbar?.folded)
+                        )
+                    );
+                } else {
+                    setIconPosition('heroicons-outline:chevron-left');
+                    dispatch(navbarToggle());
+                }
+            }}
+        >
+            {children}
+        </IconButton>
+    );
 }
 
 export default NavbarToggleButton;

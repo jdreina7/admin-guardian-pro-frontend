@@ -16,33 +16,33 @@ import { navbarCloseMobile } from '../navbar/store/navbarSlice';
 type NavigationProps = Partial<FuseNavigationProps>;
 
 function Navigation(props: NavigationProps) {
-	const { className = '', layout = 'vertical', dense, active } = props;
+    const { className = '', layout = 'vertical', dense, active } = props;
 
-	const navigation = useSelector(selectNavigation);
+    const navigation = useSelector(selectNavigation);
 
-	const isMobile = useThemeMediaQuery((theme) => theme.breakpoints.down('lg'));
+    const isMobile = useThemeMediaQuery((theme) => theme.breakpoints.down('lg'));
 
-	const dispatch = useAppDispatch();
+    const dispatch = useAppDispatch();
 
-	return useMemo(() => {
-		function handleItemClick() {
-			if (isMobile) {
-				dispatch(navbarCloseMobile());
-			}
-		}
+    return useMemo(() => {
+        function handleItemClick() {
+            if (isMobile) {
+                dispatch(navbarCloseMobile());
+            }
+        }
 
-		return (
-			<FuseNavigation
-				className={clsx('navigation flex-1', className)}
-				navigation={navigation}
-				layout={layout}
-				dense={dense}
-				active={active}
-				onItemClick={handleItemClick}
-				checkPermission
-			/>
-		);
-	}, [dispatch, isMobile, navigation, active, className, dense, layout]);
+        return (
+            <FuseNavigation
+                className={clsx('navigation flex-1', className)}
+                navigation={navigation}
+                layout={layout}
+                dense={dense}
+                active={active}
+                onItemClick={handleItemClick}
+                checkPermission
+            />
+        );
+    }, [dispatch, isMobile, navigation, active, className, dense, layout]);
 }
 
 export default withSlices<NavigationProps>([navigationSlice])(Navigation);
