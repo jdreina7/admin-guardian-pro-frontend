@@ -1,10 +1,10 @@
 import axios, { AxiosResponse } from 'axios';
-import { IUserDB } from 'src/utils/types';
+import { IUserDBResponse } from 'src/utils/types';
 
-export const listUsers = async ({ accessToken, ...parameters }) => {
-    const params = new URLSearchParams({ ...parameters });
+export const listUsers = async ({ accessToken }) => {
+    const params = new URLSearchParams();
 
-    const response: AxiosResponse<IUserDB[]> = await axios.get('/users', {
+    const response: AxiosResponse<IUserDBResponse> = await axios.get('/users', {
         headers: { Authorization: `Bearer ${accessToken}` },
         params
     });

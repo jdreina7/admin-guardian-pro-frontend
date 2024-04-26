@@ -1,7 +1,7 @@
 import { FuseSettingsConfigType } from '@fuse/core/FuseSettings/FuseSettings';
 import { IIdentificationType, IGenericInterface } from './interfaces';
 
-export type IDBUser = {
+export type IUser = {
     uid: number;
     identificationTypeId: IIdentificationType;
     email: string;
@@ -28,7 +28,7 @@ export type IDBUser = {
     id: string;
 };
 
-export type IUserDB = {
+export type IUserDBResponse = {
     success: boolean;
-    data: IDBUser;
+    data: IUser[];
 };

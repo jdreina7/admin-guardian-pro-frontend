@@ -8,8 +8,9 @@ import SignUpConfig from '../main/sign-up/SignUpConfig';
 import SignOutConfig from '../main/sign-out/SignOutConfig';
 import Error404Page from '../main/404/Error404Page';
 import DashboardConfig from '../main/dashboard/DashboardConfig';
+import UsersConfig from '../main/users/UsersConfig';
 
-const routeConfigs: FuseRouteConfigsType = [DashboardConfig, SignOutConfig, SignInConfig, SignUpConfig];
+const routeConfigs: FuseRouteConfigsType = [DashboardConfig, UsersConfig, SignOutConfig, SignInConfig, SignUpConfig];
 
 /**
  * The routes of the application.
@@ -20,6 +21,10 @@ const routes: FuseRoutesType = [
         path: '/',
         element: <Navigate to="/dashboard" />,
         auth: settingsConfig.defaultAuth
+    },
+    {
+        path: 'users',
+        element: <Navigate to="/users" />
     },
     {
         path: 'loading',

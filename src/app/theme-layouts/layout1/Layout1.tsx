@@ -70,7 +70,7 @@ function Layout1(props: Layout1Props) {
 
                     <div
                         className="relative z-10 flex min-h-0 flex-auto flex-col"
-                        style={{ backgroundColor: '#09105A' }}
+                        style={{ backgroundColor: '#FFFFFF' }}
                     >
                         <FuseSuspense>{useRoutes(routes)}</FuseSuspense>
 
