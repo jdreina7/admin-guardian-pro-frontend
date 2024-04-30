@@ -40,25 +40,18 @@ const mapUserData = (users: IUser[]) => {
     return data;
 };
 
+const customFilterUserColumn = (userData: IUser) => {
+    const { firstName, middleName, lastName, email } = userData;
+
+    const composedFilter = `${firstName} ${middleName} ${lastName} ${email}`;
+
+    return composedFilter;
+};
+
 function UsersTable(props: UsersTableProps) {
     const { users } = props;
     const gridStyle = useMemo(() => ({ height: '90%', width: '100%' }), []);
     const [rowData, setRowData] = useState([]);
-
-    // const [rowData, setRowData] = useState([
-    //     { make: 'Tesla', model: 'Model Y', price: 64950, electric: true },
-    //     { make: 'Ford', model: 'F-Series', price: 33850, electric: false },
-    //     { make: 'Toyota', model: 'Corolla', price: 29600, electric: false },
-    //     { make: 'Mercedes', model: 'EQA', price: 48890, electric: true },
-    //     { make: 'Fiat', model: '500', price: 15774, electric: false },
-    //     { make: 'Nissan', model: 'Juke', price: 20675, electric: false },
-    //     { make: 'Vauxhall', model: 'Corsa', price: 18460, electric: false },
-    //     { make: 'Volvo', model: 'EX30', price: 33795, electric: true },
-    //     { make: 'Mercedes', model: 'Maybach', price: 175720, electric: false },
-    //     { make: 'Vauxhall', model: 'Astra', price: 25795, electric: false },
-    //     { make: 'Fiat', model: 'Panda', price: 13724, electric: false },
-    //     { make: 'Jaguar', model: 'I-PACE', price: 69425, electric: true }
-    // ]);
 
     useEffect(() => {
         if (users) {
@@ -73,7 +66,9 @@ function UsersTable(props: UsersTableProps) {
                 field: 'name',
                 headerName: 'User Name',
                 cellRenderer: UserNameCell,
-                filter: 'name'
+                filter: 'name',
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+                filterValueGetter: (p) => customFilterUserColumn(p.data?.name as IUser)
             },
             { field: 'identification', filter: 'identification' },
             { field: 'email', filter: 'email' },
