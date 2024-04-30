@@ -1,0 +1,115 @@
+import { useEffect, useMemo, useState } from 'react';
+// AG Grid Component
+import { AgGridReact } from 'ag-grid-react';
+import 'ag-grid-community/styles/ag-grid.css'; // Mandatory CSS required by the grid
+import 'ag-grid-community/styles/ag-theme-quartz.css';
+import { ColDef } from 'ag-grid-community';
+
+import StatusChip from '../../../shared-components/status-chips/StatusChip';
+import UserNameCell from './UserNameCell';
+
+import { IUser } from '../../../../utils/types';
+
+const rowHeight = 60;
+
+type UsersTableProps = {
+    users: IUser[];
+};
+
+type UsersDataTable = {
+    name: IUser;
+    identification: number;
+    email: string;
+    status: boolean;
+};
+
+const mapUserData = (users: IUser[]) => {
+    const data: Array<UsersDataTable> = [];
+
+    users.forEach((user) => {
+        const ob: UsersDataTable = {
+            name: user,
+            identification: user?.uid,
+            email: user?.email,
+            status: user?.status
+        };
+
+        data.push(ob);
+    });
+
+    return data;
+};
+
+function UsersTable(props: UsersTableProps) {
+    const { users } = props;
+    const gridStyle = useMemo(() => ({ height: '90%', width: '100%' }), []);
+    const [rowData, setRowData] = useState([]);
+
+    // const [rowData, setRowData] = useState([
+    //     { make: 'Tesla', model: 'Model Y', price: 64950, electric: true },
+    //     { make: 'Ford', model: 'F-Series', price: 33850, electric: false },
+    //     { make: 'Toyota', model: 'Corolla', price: 29600, electric: false },
+    //     { make: 'Mercedes', model: 'EQA', price: 48890, electric: true },
+    //     { make: 'Fiat', model: '500', price: 15774, electric: false },
+    //     { make: 'Nissan', model: 'Juke', price: 20675, electric: false },
+    //     { make: 'Vauxhall', model: 'Corsa', price: 18460, electric: false },
+    //     { make: 'Volvo', model: 'EX30', price: 33795, electric: true },
+    //     { make: 'Mercedes', model: 'Maybach', price: 175720, electric: false },
+    //     { make: 'Vauxhall', model: 'Astra', price: 25795, electric: false },
+    //     { make: 'Fiat', model: 'Panda', price: 13724, electric: false },
+    //     { make: 'Jaguar', model: 'I-PACE', price: 69425, electric: true }
+    // ]);
+
+    useEffect(() => {
+        if (users) {
+            const data = mapUserData(users);
+            setRowData(data);
+        }
+    }, [users]);
+
+    const columnDefs: ColDef[] = useMemo(() => {
+        return [
+            {
+                field: 'name',
+                headerName: 'User Name',
+                cellRenderer: UserNameCell,
+                filter: 'name'
+            },
+            { field: 'identification', filter: 'identification' },
+            { field: 'email', filter: 'email' },
+            { field: 'status', cellRenderer: StatusChip },
+            { field: 'actions' }
+        ];
+    }, [users]);
+
+    const defaultColDef = useMemo<ColDef>(() => {
+        return {
+            flex: 1
+        };
+    }, []);
+
+    return (
+        <div className="w-full h-full bg-white">
+            <div className="h-full mx-auto max-w-7xl p-12 lg:px-8">
+                <div className="h-full mx-auto max-w-2xl rounded-3xl ring-1 ring-gray-200 lg:mx-0 lg:flex lg:max-w-none">
+                    <div
+                        style={gridStyle}
+                        className="ag-theme-quartz"
+                    >
+                        <AgGridReact
+                            rowData={rowData}
+                            columnDefs={columnDefs}
+                            defaultColDef={defaultColDef}
+                            pagination
+                            paginationPageSize={10}
+                            paginationPageSizeSelector={[2, 5, 10]}
+                            rowHeight={rowHeight}
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+export default UsersTable;

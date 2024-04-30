@@ -4,6 +4,7 @@ import { styled } from '@mui/material/styles';
 import FuseLoading from '@fuse/core/FuseLoading';
 
 import UsersHeader from './components/UsersHeader';
+import UsersTable from './components/UsersTable';
 import { useListUsers } from '../../../api/hooks';
 import { IUser } from '../../../utils/types';
 
@@ -29,13 +30,7 @@ function Users() {
     return (
         <Root
             header={<UsersHeader usersQuantity={usersList?.length} />}
-            content={
-                <div className="w-full p-12 pt-16 sm:pt-24 lg:ltr:pr-0 lg:rtl:pl-0">
-                    {error && <h3>{JSON.stringify(error)}</h3>}
-
-                    <h1>Hi Juan from users</h1>
-                </div>
-            }
+            content={<UsersTable users={usersList} />}
         />
     );
 }
