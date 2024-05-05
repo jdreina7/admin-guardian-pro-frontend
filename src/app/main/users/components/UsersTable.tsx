@@ -9,6 +9,7 @@ import StatusChip from '../../../shared-components/status-chips/StatusChip';
 import UserNameCell from './UserNameCell';
 
 import { IUser } from '../../../../utils/types';
+import UserStatusFilter from './UserStatusFilter';
 
 const rowHeight = 60;
 
@@ -68,11 +69,29 @@ function UsersTable(props: UsersTableProps) {
                 cellRenderer: UserNameCell,
                 filter: 'name',
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-                filterValueGetter: (p) => customFilterUserColumn(p.data?.name as IUser)
+                filterValueGetter: (p) => customFilterUserColumn(p.data?.name as IUser),
+                filterParams: {
+                    filterOptions: ['contains'],
+                    maxNumConditions: 1
+                }
             },
-            { field: 'identification', filter: 'identification' },
-            { field: 'email', filter: 'email' },
-            { field: 'status', cellRenderer: StatusChip },
+            {
+                field: 'identification',
+                filter: 'identification',
+                filterParams: {
+                    filterOptions: ['contains'],
+                    maxNumConditions: 1
+                }
+            },
+            {
+                field: 'email',
+                filter: 'email',
+                filterParams: {
+                    filterOptions: ['contains'],
+                    maxNumConditions: 1
+                }
+            },
+            { field: 'status', cellRenderer: StatusChip, filter: UserStatusFilter },
             { field: 'actions' }
         ];
     }, [users]);
