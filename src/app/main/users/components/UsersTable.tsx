@@ -9,7 +9,7 @@ import StatusChip from '../../../shared-components/status-chips/StatusChip';
 import UserNameCell from './UserNameCell';
 
 import { IUser } from '../../../../utils/types';
-import UserStatusFilter from './UserStatusFilter';
+import UserActionsCell from './UserActionsCell';
 
 const rowHeight = 60;
 
@@ -91,8 +91,8 @@ function UsersTable(props: UsersTableProps) {
                     maxNumConditions: 1
                 }
             },
-            { field: 'status', cellRenderer: StatusChip, filter: UserStatusFilter },
-            { field: 'actions' }
+            { field: 'status', cellRenderer: StatusChip },
+            { field: 'actions', cellRenderer: UserActionsCell }
         ];
     }, [users]);
 
@@ -104,8 +104,8 @@ function UsersTable(props: UsersTableProps) {
 
     return (
         <div className="w-full h-full bg-white">
-            <div className="h-full mx-auto max-w-7xl p-12 lg:px-8">
-                <div className="h-full mx-auto max-w-2xl rounded-3xl ring-1 ring-gray-200 lg:mx-0 lg:flex lg:max-w-none">
+            <div className="h-full mx-auto p-8 lg:px-12">
+                <div className="h-full mx-auto rounded-3xl ring-1 ring-gray-200 lg:mx-0 lg:flex lg:max-w-none">
                     <div
                         style={gridStyle}
                         className="ag-theme-quartz"
