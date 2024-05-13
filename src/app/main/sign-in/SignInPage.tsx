@@ -62,7 +62,12 @@ function SignInPage() {
             .catch((error: AxiosError<IAPIErrorResponse>) => {
                 const errorData: IAPIErrorResponse = error.response.data;
 
-                sweetAlerts({ icon: 'error', text: errorData?.message });
+                sweetAlerts({
+                    icon: 'error',
+                    text: errorData?.message
+                        ? errorData?.message
+                        : 'Error trying to connect with the backend API. Please contact the support team.'
+                });
             });
     }
 

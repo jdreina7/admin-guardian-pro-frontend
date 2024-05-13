@@ -106,7 +106,8 @@ const Root = styled('div')<FusePageSimpleProps>(({ theme, ...props }) => ({
         flex: '1 1 auto',
         alignItems: 'start',
         minHeight: 0,
-        overflowY: 'auto'
+        overflowY: 'auto',
+        maxWidth: '100%'
     },
 
     '& .FusePageSimple-sidebarWrapper': {
