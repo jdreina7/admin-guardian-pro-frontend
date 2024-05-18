@@ -43,7 +43,7 @@ module.exports = {
                 "bracketSpacing": true,
                 "jsxBracketSameLine": false,
                 "bracketSameLine": false,
-                "printWidth": 120,
+                "printWidth": 150,
                 "proseWrap": "preserve",
                 "requirePragma": false,
                 "semi": true,
@@ -51,7 +51,7 @@ module.exports = {
                 "tabWidth": 4,
                 "trailingComma": "none",
                 "useTabs": false,
-                "singleAttributePerLine": true
+                "singleAttributePerLine": false
             }
         ],
         "quotes": [

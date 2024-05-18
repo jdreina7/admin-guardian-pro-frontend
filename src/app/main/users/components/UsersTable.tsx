@@ -15,12 +15,15 @@ const rowHeight = 60;
 
 type UsersTableProps = {
     users: IUser[];
+    handleOpen: () => void;
 };
 
 type UsersDataTable = {
     name: IUser;
     identification: number;
+    role: string;
     email: string;
+    contact: string;
     status: boolean;
 };
 
@@ -31,7 +34,9 @@ const mapUserData = (users: IUser[]) => {
         const ob: UsersDataTable = {
             name: user,
             identification: user?.uid,
+            role: user?.roleId?.name,
             email: user?.email,
+            contact: String(user?.contactPhone),
             status: user?.status
         };
 
@@ -50,7 +55,7 @@ const customFilterUserColumn = (userData: IUser) => {
 };
 
 function UsersTable(props: UsersTableProps) {
-    const { users } = props;
+    const { users, handleOpen } = props;
     const gridStyle = useMemo(() => ({ height: '90%', width: '100%' }), []);
     const [rowData, setRowData] = useState([]);
 
@@ -73,6 +78,9 @@ function UsersTable(props: UsersTableProps) {
                 filterParams: {
                     filterOptions: ['contains'],
                     maxNumConditions: 1
+                },
+                onCellClicked: (event) => {
+                    handleOpen();
                 }
             },
             {
@@ -81,6 +89,20 @@ function UsersTable(props: UsersTableProps) {
                 filterParams: {
                     filterOptions: ['contains'],
                     maxNumConditions: 1
+                },
+                onCellClicked: (event) => {
+                    console.log('120 event.data >>> ', event.data);
+                }
+            },
+            {
+                field: 'role',
+                filter: 'role',
+                filterParams: {
+                    filterOptions: ['contains'],
+                    maxNumConditions: 1
+                },
+                onCellClicked: (event) => {
+                    console.log('120 event.data >>> ', event.data);
                 }
             },
             {
@@ -89,10 +111,27 @@ function UsersTable(props: UsersTableProps) {
                 filterParams: {
                     filterOptions: ['contains'],
                     maxNumConditions: 1
+                },
+                onCellClicked: (event) => {
+                    console.log('120 event.data >>> ', event.data);
+                }
+            },
+            {
+                field: 'contact',
+                filter: 'contact',
+                filterParams: {
+                    filterOptions: ['contains'],
+                    maxNumConditions: 1
+                },
+                onCellClicked: (event) => {
+                    console.log('120 event.data >>> ', event.data);
                 }
             },
             { field: 'status', cellRenderer: StatusChip },
-            { field: 'actions', cellRenderer: UserActionsCell }
+            {
+                field: 'actions',
+                cellRenderer: UserActionsCell
+            }
         ];
     }, [users]);
 
@@ -106,10 +145,7 @@ function UsersTable(props: UsersTableProps) {
         <div className="w-full h-full bg-white">
             <div className="h-full mx-auto p-8 lg:px-12">
                 <div className="h-full mx-auto rounded-3xl ring-1 ring-gray-200 lg:mx-0 lg:flex lg:max-w-none">
-                    <div
-                        style={gridStyle}
-                        className="ag-theme-quartz"
-                    >
+                    <div style={gridStyle} className="ag-theme-quartz">
                         <AgGridReact
                             rowData={rowData}
                             columnDefs={columnDefs}
