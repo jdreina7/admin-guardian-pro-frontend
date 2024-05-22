@@ -7,7 +7,7 @@ import { DatePicker } from '@mui/x-date-pickers';
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
 import _ from 'lodash';
 import { IMaskInput } from 'react-imask';
-import { useListIdentificationsTypes, useListOcupations, useListMaritalStatus } from '../../../../api/hooks';
+import { useListIdentificationsTypes, useListOcupations, useListMaritalStatus, useListGenders } from '../../../../api/hooks';
 import { TUserCreateForm } from '../../../../utils/types';
 
 /**
@@ -95,6 +95,7 @@ export function UserForm({ data }) {
     const { data: idTypesData, isLoading: idTypesLoading } = useListIdentificationsTypes(token);
     const { data: ocupationsData, isLoading: ocupationsLoading } = useListOcupations(token);
     const { data: maritalStatusData, isLoading: maritalStatusLoading } = useListMaritalStatus(token);
+    const { data: gendersData, isLoading: gendersLoading } = useListGenders(token);
 
     let defaultValues = {
         identificationTypeId: '',

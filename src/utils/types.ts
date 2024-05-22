@@ -97,3 +97,18 @@ export type TMaritalStatusDB = {
     updatedAt: string;
     id: string;
 };
+
+// Genders
+export type TGendersDBResponse = {
+    success: boolean;
+    data: TGendersDB[];
+};
+
+export type TGendersDB = {
+    name: string;
+    description: string;
+    status: boolean;
+    createdAt: string;
+    updatedAt: string;
+    id: string;
+};
