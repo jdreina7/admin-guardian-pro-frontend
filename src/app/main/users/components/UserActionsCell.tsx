@@ -3,11 +3,11 @@ import { Box, Button, Tooltip } from '@mui/material';
 
 import { useMemo } from 'react';
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
-import { IUser } from '../../../../utils/types';
+import { TUserDB } from '../../../../utils/types';
 
 interface UserActionsCellProps extends CustomCellRendererProps {
     data: {
-        name: IUser;
+        name: TUserDB;
     };
     handleOpen: () => void;
 }
@@ -16,7 +16,7 @@ interface UserActionsCellProps extends CustomCellRendererProps {
  * The user actions.
  */
 function UserActionsCell(params: UserActionsCellProps) {
-    console.log('18 params >>> ', params);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const user = params?.data?.name;
     const currentUser = useMemo(() => user, [user]);
 
