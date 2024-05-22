@@ -9,12 +9,15 @@ import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
 import { darken } from '@mui/material/styles';
 import { useSelector } from 'react-redux';
 import { selectUser } from 'src/app/auth/user/store/userSlice';
+import { useTranslation } from 'react-i18next';
 
 /**
  * The DashboardHeader page.
  */
 function DashboardHeader() {
     const user = useSelector(selectUser);
+
+    const { t } = useTranslation('dashboard');
 
     const projects = [
         {
@@ -82,7 +85,7 @@ function DashboardHeader() {
                     </Avatar>
                     <div className="flex flex-col min-w-0 mx-16">
                         <Typography className="text-2xl md:text-5xl font-semibold tracking-tight leading-7 md:leading-snug truncate">
-                            {`Welcome back, ${user.data.displayName}!`}
+                            { t('GRETTING') + `, ${user.data.displayName}!`}
                         </Typography>
 
                         <div className="flex items-center">
@@ -96,7 +99,7 @@ function DashboardHeader() {
                                 className="mx-6 leading-6 truncate"
                                 color="text.secondary"
                             >
-                                You have 2 new messages and 15 new tasks
+                                {t('TASKQUANTITY')}
                             </Typography>
                         </div>
                     </div>
@@ -108,7 +111,7 @@ function DashboardHeader() {
                         color="primary"
                         startIcon={<FuseSvgIcon size={20}>heroicons-solid:mail</FuseSvgIcon>}
                     >
-                        Messages
+                        {t('BTNMESG')}
                     </Button>
                     <Button
                         className="whitespace-nowrap"
@@ -116,7 +119,7 @@ function DashboardHeader() {
                         color="secondary"
                         startIcon={<FuseSvgIcon size={20}>heroicons-solid:cog</FuseSvgIcon>}
                     >
-                        Settings
+                        {t('BTNSTG')}
                     </Button>
                 </div>
             </div>

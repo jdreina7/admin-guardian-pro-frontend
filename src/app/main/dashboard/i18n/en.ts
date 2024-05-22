@@ -1,8 +1,8 @@
 const locale = {
-	GRETTING: 'Bienvenido',
-	TASKQUANTITY: 'Tienes 2 mensajes y 15 tareas nuevas, las revisamos?',
-	BTNMESG: 'Mensajes',
-	BTNSTG: 'Configuraciones',
+	GRETTING: 'Welcome back',
+	TASKQUANTITY: 'You have 2 new messages and 15 new tasks',
+	BTNMESG: 'Messages',
+	BTNSTG: 'Settings',
 	COMPOSE: 'Compose',
 	FILTERS: 'Filters',
 	LABELS: 'Labels',
