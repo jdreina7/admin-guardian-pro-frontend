@@ -1,7 +1,7 @@
 import { FuseSettingsConfigType } from '@fuse/core/FuseSettings/FuseSettings';
-import { IIdentificationType, IGenericInterface } from './interfaces';
+import { IGenericInterface, IIdentificationType } from './interfaces';
 
-export type IUserCreateForm = {
+export type TUserCreateForm = {
     uid: number;
     identificationTypeId: string;
     email: string;
@@ -21,7 +21,7 @@ export type IUserCreateForm = {
     status: boolean;
 };
 
-export type IUser = {
+export type TUserDB = {
     uid: number;
     identificationTypeId: IIdentificationType;
     email: string;
@@ -48,7 +48,21 @@ export type IUser = {
     id: string;
 };
 
-export type IUserDBResponse = {
+export type TUserDBResponse = {
     success: boolean;
-    data: IUser[];
+    data: TUserDB[];
+};
+
+export type TIdentificationTypesDBResponse = {
+    success: boolean;
+    data: TIdentificationTypeDB[];
+};
+
+export type TIdentificationTypeDB = {
+    type: string;
+    description: string;
+    status: boolean;
+    createdAt: string;
+    updatedAt: string;
+    id: string;
 };

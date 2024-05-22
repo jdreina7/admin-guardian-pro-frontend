@@ -7,7 +7,8 @@ import { DatePicker } from '@mui/x-date-pickers';
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
 import _ from 'lodash';
 import { IMaskInput } from 'react-imask';
-import { IUserCreateForm } from '../../../../utils/types';
+import { useListIdentificationsTypes } from '../../../../api/hooks';
+import { TUserCreateForm } from '../../../../utils/types';
 
 /**
  * Form Validation Schema
@@ -90,6 +91,9 @@ const TextMaskCustom = forwardRef<HTMLInputElement, CustomProps>(function TextMa
 
 export function UserForm({ data }) {
     console.log('92 data >>> ', data);
+    const token = localStorage.getItem('access_token');
+    const { data: idTypesData, isLoading: idTypesLoading } = useListIdentificationsTypes(token);
+
     let defaultValues = {
         identificationTypeId: '',
         email: '',
@@ -120,7 +124,7 @@ export function UserForm({ data }) {
         };
     }
 
-    const { control, formState, handleSubmit } = useForm<IUserCreateForm>({
+    const { control, formState, handleSubmit } = useForm<TUserCreateForm>({
         mode: 'onChange',
         defaultValues,
         resolver: zodResolver(DataSchema)
@@ -132,7 +136,7 @@ export function UserForm({ data }) {
 
     const { isValid, dirtyFields, errors } = formState;
 
-    function onSubmit(formData: IUserCreateForm) {
+    function onSubmit(formData: TUserCreateForm) {
         // const dataForSave: IUser = {};
 
         alert(formData);

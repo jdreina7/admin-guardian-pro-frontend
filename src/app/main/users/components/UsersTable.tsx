@@ -8,19 +8,19 @@ import { ColDef } from 'ag-grid-community';
 import StatusChip from '../../../shared-components/status-chips/StatusChip';
 import UserNameCell from './UserNameCell';
 
-import { IUser } from '../../../../utils/types';
+import { TUserDB } from '../../../../utils/types';
 import UserActionsCell from './UserActionsCell';
 
 const rowHeight = 60;
 
 type UsersTableProps = {
-    users: IUser[];
+    users: TUserDB[];
     handleOpen: () => void;
-    setSelectedUser: (user: IUser) => void;
+    setSelectedUser: (user: TUserDB) => void;
 };
 
 type UsersDataTable = {
-    name: IUser;
+    name: TUserDB;
     identification: number;
     role: string;
     email: string;
@@ -28,7 +28,7 @@ type UsersDataTable = {
     status: boolean;
 };
 
-const mapUserData = (users: IUser[]) => {
+const mapUserData = (users: TUserDB[]) => {
     const data: Array<UsersDataTable> = [];
 
     users.forEach((user) => {
@@ -47,7 +47,7 @@ const mapUserData = (users: IUser[]) => {
     return data;
 };
 
-const customFilterUserColumn = (userData: IUser) => {
+const customFilterUserColumn = (userData: TUserDB) => {
     const { firstName, middleName, lastName, email } = userData;
 
     const composedFilter = `${firstName} ${middleName} ${lastName} ${email}`;
@@ -75,7 +75,7 @@ function UsersTable(props: UsersTableProps) {
                 cellRenderer: UserNameCell,
                 filter: 'name',
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-                filterValueGetter: (p) => customFilterUserColumn(p.data?.name as IUser),
+                filterValueGetter: (p) => customFilterUserColumn(p.data?.name as TUserDB),
                 filterParams: {
                     filterOptions: ['contains'],
                     maxNumConditions: 1
@@ -83,7 +83,7 @@ function UsersTable(props: UsersTableProps) {
                 onCellClicked: (p) => {
                     handleOpen();
                     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-                    setSelectedUser(p.data?.name as IUser);
+                    setSelectedUser(p.data?.name as TUserDB);
                 },
                 cellStyle: { cursor: 'pointer' }
             },
@@ -97,7 +97,7 @@ function UsersTable(props: UsersTableProps) {
                 onCellClicked: (p) => {
                     handleOpen();
                     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-                    setSelectedUser(p.data?.name as IUser);
+                    setSelectedUser(p.data?.name as TUserDB);
                 },
                 cellStyle: { cursor: 'pointer' }
             },
@@ -111,7 +111,7 @@ function UsersTable(props: UsersTableProps) {
                 onCellClicked: (p) => {
                     handleOpen();
                     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-                    setSelectedUser(p.data?.name as IUser);
+                    setSelectedUser(p.data?.name as TUserDB);
                 },
                 cellStyle: { cursor: 'pointer' }
             },
@@ -125,7 +125,7 @@ function UsersTable(props: UsersTableProps) {
                 onCellClicked: (p) => {
                     handleOpen();
                     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-                    setSelectedUser(p.data?.name as IUser);
+                    setSelectedUser(p.data?.name as TUserDB);
                 },
                 cellStyle: { cursor: 'pointer' }
             },
@@ -139,7 +139,7 @@ function UsersTable(props: UsersTableProps) {
                 onCellClicked: (p) => {
                     handleOpen();
                     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-                    setSelectedUser(p.data?.name as IUser);
+                    setSelectedUser(p.data?.name as TUserDB);
                 },
                 cellStyle: { cursor: 'pointer' }
             },
@@ -149,7 +149,7 @@ function UsersTable(props: UsersTableProps) {
                 onCellClicked: (p) => {
                     handleOpen();
                     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-                    setSelectedUser(p.data?.name as IUser);
+                    setSelectedUser(p.data?.name as TUserDB);
                 },
                 cellStyle: { cursor: 'pointer' }
             },

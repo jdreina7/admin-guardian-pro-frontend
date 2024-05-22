@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import UsersHeader from './components/UsersHeader';
 import UsersTable from './components/UsersTable';
 import { useListUsers } from '../../../api/hooks';
-import { IUser } from '../../../utils/types';
+import { TUserDB } from '../../../utils/types';
 import { UserForm } from './components/UserForm';
 
 const Root = styled(FusePageSimple)(({ theme }) => ({
@@ -38,8 +38,8 @@ function Users() {
     const navigate = useNavigate();
     const token = localStorage.getItem('access_token');
     const { data, isLoading: usersLoading, error } = useListUsers(token);
-    const usersList: IUser[] = useMemo(() => data?.data?.data, [data]);
-    const [selectedUser, setSelectedUser] = useState<IUser>();
+    const usersList: TUserDB[] = useMemo(() => data?.data?.data, [data]);
+    const [selectedUser, setSelectedUser] = useState<TUserDB>();
     const [open, setOpen] = useState(false);
 
     const handleOpen = () => setOpen(true);
