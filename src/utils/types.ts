@@ -83,3 +83,17 @@ export type TOcupationsDB = {
     updatedAt: string;
     id: string;
 };
+
+// Marital Status
+export type TMaritalStatusDBResponse = {
+    success: boolean;
+    data: TMaritalStatusDB[];
+};
+
+export type TMaritalStatusDB = {
+    name: string;
+    status: boolean;
+    createdAt: string;
+    updatedAt: string;
+    id: string;
+};
