@@ -86,16 +86,10 @@ function DashboardHeader() {
                         </Typography>
 
                         <div className="flex items-center">
-                            <FuseSvgIcon
-                                size={20}
-                                color="action"
-                            >
+                            <FuseSvgIcon size={20} color="action">
                                 heroicons-solid:bell
                             </FuseSvgIcon>
-                            <Typography
-                                className="mx-6 leading-6 truncate"
-                                color="text.secondary"
-                            >
+                            <Typography className="mx-6 leading-6 truncate" color="text.secondary">
                                 You have 2 new messages and 15 new tasks
                             </Typography>
                         </div>
@@ -129,22 +123,14 @@ function DashboardHeader() {
                         borderColor: (theme) => theme.palette.divider
                     }}
                     endIcon={
-                        <FuseSvgIcon
-                            size={20}
-                            color="action"
-                        >
+                        <FuseSvgIcon size={20} color="action">
                             heroicons-solid:chevron-down
                         </FuseSvgIcon>
                     }
                 >
                     {_.find(projects, ['id', selectedProject.id])?.name}
                 </Button>
-                <Menu
-                    id="project-menu"
-                    anchorEl={selectedProject.menuEl}
-                    open={Boolean(selectedProject.menuEl)}
-                    onClose={handleCloseProjectMenu}
-                >
+                <Menu id="project-menu" anchorEl={selectedProject.menuEl} open={Boolean(selectedProject.menuEl)} onClose={handleCloseProjectMenu}>
                     {projects &&
                         projects.map((project) => (
                             <MenuItem

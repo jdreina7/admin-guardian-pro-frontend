@@ -4,6 +4,7 @@ import { styled } from '@mui/material/styles';
 import FuseLoading from '@fuse/core/FuseLoading';
 
 import { Backdrop, Box, Fade, Modal } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import UsersHeader from './components/UsersHeader';
 import UsersTable from './components/UsersTable';
 import { useListUsers } from '../../../api/hooks';
@@ -34,9 +35,11 @@ const style = {
  * Users page.
  */
 function Users() {
+    const navigate = useNavigate();
     const token = localStorage.getItem('access_token');
     const { data, isLoading: usersLoading, error } = useListUsers(token);
     const usersList: IUser[] = useMemo(() => data?.data?.data, [data]);
+    const [selectedUser, setSelectedUser] = useState<IUser>();
     const [open, setOpen] = useState(false);
 
     const handleOpen = () => setOpen(true);
@@ -51,7 +54,8 @@ function Users() {
             header={<UsersHeader usersQuantity={usersList?.length} />}
             content={
                 <>
-                    <UsersTable users={usersList} handleOpen={handleOpen} />
+                    {!error && <UsersTable users={usersList} handleOpen={handleOpen} setSelectedUser={setSelectedUser} />}
+                    {error && navigate('/500', { replace: true })}
 
                     <Modal
                         aria-labelledby="transition-modal-title"
@@ -68,20 +72,7 @@ function Users() {
                     >
                         <Fade in={open}>
                             <Box sx={style}>
-                                <UserForm />
-                                {/* <Typography
-                                    id="transition-modal-title"
-                                    variant="h6"
-                                    component="h2"
-                                >
-                                    Text in a modal
-                                </Typography>
-                                <Typography
-                                    id="transition-modal-description"
-                                    sx={{ mt: 2 }}
-                                >
-                                    Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-                                </Typography> */}
+                                <UserForm data={selectedUser} />
                             </Box>
                         </Fade>
                     </Modal>
