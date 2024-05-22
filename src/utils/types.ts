@@ -112,3 +112,18 @@ export type TGendersDB = {
     updatedAt: string;
     id: string;
 };
+
+// Roles
+export type TRolesDBResponse = {
+    success: boolean;
+    data: TRolesDB[];
+};
+
+export type TRolesDB = {
+    name: string;
+    description: string;
+    status: boolean;
+    createdAt: string;
+    updatedAt: string;
+    id: string;
+};

@@ -3,3 +3,4 @@ export * as identificationTypes from './identificationTypes';
 export * as ocupations from './ocupations';
 export * as maritalStatus from './maritalStatus';
 export * as genders from './genders';
+export * as roles from './roles';
