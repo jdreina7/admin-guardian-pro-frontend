@@ -16,6 +16,7 @@ const rowHeight = 60;
 type UsersTableProps = {
     users: IUser[];
     handleOpen: () => void;
+    setSelectedUser: (user: IUser) => void;
 };
 
 type UsersDataTable = {
@@ -55,7 +56,7 @@ const customFilterUserColumn = (userData: IUser) => {
 };
 
 function UsersTable(props: UsersTableProps) {
-    const { users, handleOpen } = props;
+    const { users, handleOpen, setSelectedUser } = props;
     const gridStyle = useMemo(() => ({ height: '90%', width: '100%' }), []);
     const [rowData, setRowData] = useState([]);
 
@@ -79,9 +80,12 @@ function UsersTable(props: UsersTableProps) {
                     filterOptions: ['contains'],
                     maxNumConditions: 1
                 },
-                onCellClicked: (event) => {
+                onCellClicked: (p) => {
                     handleOpen();
-                }
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+                    setSelectedUser(p.data?.name as IUser);
+                },
+                cellStyle: { cursor: 'pointer' }
             },
             {
                 field: 'identification',
@@ -90,9 +94,12 @@ function UsersTable(props: UsersTableProps) {
                     filterOptions: ['contains'],
                     maxNumConditions: 1
                 },
-                onCellClicked: (event) => {
-                    console.log('120 event.data >>> ', event.data);
-                }
+                onCellClicked: (p) => {
+                    handleOpen();
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+                    setSelectedUser(p.data?.name as IUser);
+                },
+                cellStyle: { cursor: 'pointer' }
             },
             {
                 field: 'role',
@@ -101,9 +108,12 @@ function UsersTable(props: UsersTableProps) {
                     filterOptions: ['contains'],
                     maxNumConditions: 1
                 },
-                onCellClicked: (event) => {
-                    console.log('120 event.data >>> ', event.data);
-                }
+                onCellClicked: (p) => {
+                    handleOpen();
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+                    setSelectedUser(p.data?.name as IUser);
+                },
+                cellStyle: { cursor: 'pointer' }
             },
             {
                 field: 'email',
@@ -112,9 +122,12 @@ function UsersTable(props: UsersTableProps) {
                     filterOptions: ['contains'],
                     maxNumConditions: 1
                 },
-                onCellClicked: (event) => {
-                    console.log('120 event.data >>> ', event.data);
-                }
+                onCellClicked: (p) => {
+                    handleOpen();
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+                    setSelectedUser(p.data?.name as IUser);
+                },
+                cellStyle: { cursor: 'pointer' }
             },
             {
                 field: 'contact',
@@ -123,11 +136,23 @@ function UsersTable(props: UsersTableProps) {
                     filterOptions: ['contains'],
                     maxNumConditions: 1
                 },
-                onCellClicked: (event) => {
-                    console.log('120 event.data >>> ', event.data);
-                }
+                onCellClicked: (p) => {
+                    handleOpen();
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+                    setSelectedUser(p.data?.name as IUser);
+                },
+                cellStyle: { cursor: 'pointer' }
             },
-            { field: 'status', cellRenderer: StatusChip },
+            {
+                field: 'status',
+                cellRenderer: StatusChip,
+                onCellClicked: (p) => {
+                    handleOpen();
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+                    setSelectedUser(p.data?.name as IUser);
+                },
+                cellStyle: { cursor: 'pointer' }
+            },
             {
                 field: 'actions',
                 cellRenderer: UserActionsCell

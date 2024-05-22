@@ -1,12 +1,12 @@
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import Swal from 'sweetalert2';
 import { Box, Button, Divider, FormControl, FormHelperText, Grid, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material';
-import { useState } from 'react';
+import { forwardRef, useState } from 'react';
 import { DatePicker } from '@mui/x-date-pickers';
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
 import _ from 'lodash';
+import { IMaskInput } from 'react-imask';
 import { IUserCreateForm } from '../../../../utils/types';
 
 /**
@@ -54,42 +54,107 @@ export const DataSchema = z.object({
 
 export type Data = z.infer<typeof DataSchema>;
 
-const defaultValues = {
-    identificationTypeId: '',
-    email: '',
-    firstName: '',
-    middleName: '',
-    lastName: '',
-    address: '',
-    city: '',
-    birthday: '',
-    userImg: '',
-    username: '',
-    status: false
-};
-
 // ***********************************************
 
-export function UserForm() {
+interface CustomProps {
+    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    onFocus: (event: React.FocusEvent<HTMLInputElement>) => void;
+    onBlur: (event: React.FocusEvent<HTMLInputElement>) => void;
+    value: string;
+}
+
+const TextMaskCustom = forwardRef<HTMLInputElement, CustomProps>(function TextMaskCustom(props, ref) {
+    const { onChange, onFocus, onBlur, value, ...other } = props;
+    // const inputRef = useRef(null);
+
+    return (
+        <IMaskInput
+            {...other}
+            mask={Number}
+            radix="."
+            value={value}
+            mapToRadix={['.']}
+            scale={2}
+            thousandsSeparator="." // any single char
+            padFractionalZeros={false} // if true, then pads zeros at end to the length of scale
+            normalizeZeros
+            min={1}
+            max={9999999999}
+            autofix
+            onFocus={onFocus}
+            onBlur={onBlur}
+            onChange={onChange}
+        />
+    );
+});
+
+export function UserForm({ data }) {
+    console.log('92 data >>> ', data);
+    let defaultValues = {
+        identificationTypeId: '',
+        email: '',
+        firstName: '',
+        middleName: '',
+        lastName: '',
+        address: '',
+        city: '',
+        birthday: '',
+        userImg: '',
+        username: '',
+        status: false
+    };
+
+    if (data) {
+        defaultValues = {
+            identificationTypeId: '',
+            email: '',
+            firstName: '',
+            middleName: '',
+            lastName: '',
+            address: '',
+            city: '',
+            birthday: '',
+            userImg: '',
+            username: '',
+            status: false
+        };
+    }
+
     const { control, formState, handleSubmit } = useForm<IUserCreateForm>({
         mode: 'onChange',
         defaultValues,
         resolver: zodResolver(DataSchema)
     });
-
-    const [idType, setIdType] = useState();
+    const [userIdValue, setUserIdValue] = useState('');
+    // eslint-disable-next-line no-unneeded-ternary
+    // const shrink = useMemo(() => false, [userIdValue]);
+    const [shrink, setShrink] = useState(false);
 
     const { isValid, dirtyFields, errors } = formState;
-
-    const sweetAlerts = (options: object) => {
-        Swal.fire({ ...options });
-    };
 
     function onSubmit(formData: IUserCreateForm) {
         // const dataForSave: IUser = {};
 
         alert(formData);
     }
+
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setUserIdValue(event.target.value as never);
+    };
+
+    const handleFocus = (event: React.FocusEvent<HTMLInputElement>) => {
+        if (event?.type === 'focus') {
+            setShrink(true);
+        }
+    };
+
+    const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+        if (event?.type === 'blur') {
+            if (userIdValue.length <= 0) {
+                setShrink(false);
+            }
+        }
+    };
 
     return (
         <div className="flex flex-col min-w-0">
@@ -136,13 +201,34 @@ export function UserForm() {
                                 <TextField
                                     {...field}
                                     label="User ID"
-                                    type="number"
                                     error={!!errors.uid}
                                     helperText={errors?.uid?.message}
                                     variant="outlined"
+                                    value={userIdValue}
                                     required
                                     fullWidth
+                                    InputProps={{
+                                        ...field,
+                                        inputComponent: TextMaskCustom as never,
+                                        onChange: handleChange,
+                                        error: !!errors.uid,
+                                        onFocus: handleFocus,
+                                        onBlur: handleBlur
+                                    }}
+                                    InputLabelProps={{ shrink }}
                                 />
+                                // <FormControl variant="outlined">
+                                //     <InputLabel htmlFor="userId">User ID</InputLabel>
+                                //     <Input
+                                //         {...field}
+                                //         value={values.textmask}
+                                //         onChange={handleChange}
+                                //         name="textmask"
+                                //         id="userId"
+                                //         inputComponent={TextMaskCustom as never}
+                                //         error={!!errors.uid}
+                                //     />
+                                // </FormControl>
                             )}
                         />
                     </Grid>
