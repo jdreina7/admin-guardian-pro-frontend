@@ -19,7 +19,7 @@ const Root = styled(FusePageSimple)(({ theme }) => ({
 */
 function Dashboard() {
     const user = useSelector(selectUser);
-    const { t } = useTranslation('dashboard');
+    const { t, i18n } = useTranslation('dashboard');
 
     setTimeout(() => {
         return <FuseLoading />;
@@ -31,8 +31,7 @@ function Dashboard() {
             content={
                 <div className="w-full p-12 pt-16 sm:pt-24 lg:ltr:pr-0 lg:rtl:pl-0">
                     <p>
-                        Hello <b>{user?.role}</b> user! <br/>
-                    {t('COMPOSE')}
+                        {t('COMPOSE', {rol: user?.role}  )}
                     </p>
                 </div>
             }

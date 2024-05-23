@@ -1,9 +1,14 @@
+import { useSelector } from "react-redux";
+import { selectUser } from "../auth/user/store/userSlice";
+
+//const user = useSelector(selectUser);
+
 const locale = {
 	GRETTING: 'Bienvenido',
 	TASKQUANTITY: 'Tienes 2 mensajes y 15 tareas nuevas, las revisamos?',
 	BTNMESG: 'Mensajes',
 	BTNSTG: 'Configuraciones',
-	COMPOSE: 'Compose',
+	COMPOSE: "Hola {{rol}},  estamos felices de tenerte aqui de nuevo!!",
 	FILTERS: 'Filters',
 	LABELS: 'Labels',
 	NO_MESSAGES: 'There are no messages!',

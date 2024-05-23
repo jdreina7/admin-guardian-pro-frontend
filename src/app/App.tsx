@@ -11,7 +11,10 @@ import { selectMainTheme } from '@fuse/core/FuseSettings/store/fuseSettingsSlice
 import MockAdapterProvider from '@mock-api/MockAdapterProvider';
 import withAppProviders from './withAppProviders';
 import { AuthRouteProvider } from './auth/AuthRouteProvider';
+import i18next from 'i18next';
 
+import en from './i18n/en';
+import es from './i18n/es';
 // import axios from 'axios';
 /**
  * Axios HTTP Request defaults
@@ -19,6 +22,9 @@ import { AuthRouteProvider } from './auth/AuthRouteProvider';
 // axios.defaults.baseURL = "";
 // axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 // axios.defaults.headers.common['Content-Type'] = 'application/x-www-form-urlencoded';
+
+i18next.addResourceBundle('en', 'dashboard', en);
+i18next.addResourceBundle('es', 'dashboard', es);
 
 const emotionCacheOptions = {
     rtl: {
