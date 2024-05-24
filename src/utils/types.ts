@@ -3,7 +3,7 @@ import { IGenericInterface, IIdentificationType } from './interfaces';
 
 // Users
 export type TUserCreateForm = {
-    uid: number;
+    uid: string;
     identificationTypeId: string;
     email: string;
     firstName: string;
@@ -19,7 +19,7 @@ export type TUserCreateForm = {
     maritalStatusId: string;
     ocupationId: string;
     roleId: string;
-    status: boolean;
+    status: string;
 };
 
 export type TUserDB = {

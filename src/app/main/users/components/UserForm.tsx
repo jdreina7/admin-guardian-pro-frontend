@@ -10,12 +10,16 @@ import { IMaskInput } from 'react-imask';
 import FuseLoading from '@fuse/core/FuseLoading';
 
 import { useListIdentificationsTypes, useListOcupations, useListMaritalStatus, useListGenders, useListRoles } from '../../../../api/hooks';
-import { TGendersDB, TIdentificationTypeDB, TMaritalStatusDB, TOcupationsDB, TRolesDB, TUserCreateForm } from '../../../../utils/types';
+import { TGendersDB, TIdentificationTypeDB, TMaritalStatusDB, TOcupationsDB, TRolesDB, TUserCreateForm, TUserDB } from '../../../../utils/types';
 
 const statusData = [
     { name: 'Active', value: 'true', id: 'joiuj98uiojl' },
     { name: 'Inactive', value: 'false', id: '787hhhuhudxdfsz' }
 ];
+
+type UsersFormProps = {
+    data: TUserDB;
+};
 
 /**
  * Form Validation Schema
@@ -54,7 +58,7 @@ export const DataSchema = z.object({
     maritalStatusId: z.string(),
     ocupationId: z.string(),
     roleId: z.string(),
-    status: z.boolean()
+    status: z.string()
     // lastLogin: z.string(),
     // shortcuts: z.array(z.string())
     // id: z.string()
@@ -96,8 +100,8 @@ const TextMaskCustom = forwardRef<HTMLInputElement, CustomProps>(function TextMa
     );
 });
 
-export function UserForm({ data }) {
-    console.log('92 data >>> ', data);
+export function UserForm(data: UsersFormProps) {
+    console.log('92 data >>> ', data?.data);
     const token = localStorage.getItem('access_token');
     // Call to APi for the selects data
     const { data: idTypesData, isLoading: idTypesLoading } = useListIdentificationsTypes(token);
@@ -115,6 +119,9 @@ export function UserForm({ data }) {
 
     const [isLoading, setIsLoading] = useState(true);
 
+    const [userIdValue, setUserIdValue] = useState('');
+    const [shrink, setShrink] = useState(false);
+
     useEffect(() => {
         if (idTypesLoading || ocupationsLoading || maritalStatusLoading || gendersLoading || rolesLoading) {
             setIsLoading(true);
@@ -123,46 +130,37 @@ export function UserForm({ data }) {
         }
     }, [idTypesLoading, ocupationsLoading, maritalStatusLoading, gendersLoading, rolesLoading]);
 
-    let defaultValues = {
-        identificationTypeId: '',
-        email: '',
-        firstName: '',
-        middleName: '',
-        lastName: '',
-        address: '',
-        city: '',
-        birthday: '',
-        userImg: '',
-        username: '',
-        status: false
-    };
+    useEffect(() => {
+        if (data?.data && data?.data?.uid) {
+            setShrink(true);
+        }
+    }, [data]);
 
-    if (data) {
-        defaultValues = {
-            identificationTypeId: '',
-            email: '',
-            firstName: '',
-            middleName: '',
-            lastName: '',
-            address: '',
-            city: '',
-            birthday: '',
-            userImg: '',
-            username: '',
-            status: false
-        };
-    }
+    const defaultValues = {
+        identificationTypeId: data?.data ? data?.data?.identificationTypeId?.id : '',
+        genderId: data?.data ? data?.data?.genderId?.id : '',
+        maritalStatusId: data?.data ? data?.data?.maritalStatusId?.id : '',
+        ocupationId: data?.data ? data?.data?.ocupationId?.id : '',
+        roleId: data?.data ? data?.data?.roleId?.id : '',
+        uid: data?.data ? `${data?.data?.uid}` : '',
+        email: data?.data ? data?.data?.email : '',
+        firstName: data?.data ? data?.data?.firstName : '',
+        middleName: data?.data ? data?.data?.middleName : '',
+        lastName: data?.data ? data?.data?.lastName : '',
+        address: data?.data ? data?.data?.address : '',
+        city: data?.data ? data?.data?.city : '',
+        birthday: data?.data ? data?.data?.birthday : '',
+        userImg: '',
+        username: data?.data ? data?.data?.username : '',
+        status: data?.data ? `${data?.data?.status}` : 'true',
+        contactPhone: data?.data ? data?.data?.contactPhone : null
+    };
 
     const { control, formState, handleSubmit } = useForm<TUserCreateForm>({
         mode: 'onChange',
         defaultValues,
         resolver: zodResolver(DataSchema)
     });
-    const [userIdValue, setUserIdValue] = useState('');
-    // eslint-disable-next-line no-unneeded-ternary
-    // const shrink = useMemo(() => false, [userIdValue]);
-    const [shrink, setShrink] = useState(false);
-
     const { isValid, dirtyFields, errors } = formState;
 
     function onSubmit(formData: TUserCreateForm) {
@@ -222,7 +220,7 @@ export function UserForm({ data }) {
                                     >
                                         {idTypes.map((idType: TIdentificationTypeDB) => (
                                             <MenuItem key={idType?.id} value={idType?.id}>
-                                                {idType?.type}
+                                                {idType?.type.toUpperCase()}
                                             </MenuItem>
                                         ))}
                                     </Select>
