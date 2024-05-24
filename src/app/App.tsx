@@ -61,10 +61,7 @@ function App() {
         <MockAdapterProvider>
             <QueryClientProvider client={queryClient}>
                 <CacheProvider value={createCache(emotionCacheOptions[langDirection] as Options)}>
-                    <FuseTheme
-                        theme={mainTheme}
-                        direction={langDirection}
-                    >
+                    <FuseTheme theme={mainTheme} direction={langDirection}>
                         <AuthRouteProvider>
                             <SnackbarProvider
                                 maxSnack={5}

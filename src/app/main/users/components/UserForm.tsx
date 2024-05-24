@@ -2,17 +2,19 @@ import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Box, Button, Divider, FormControl, FormHelperText, Grid, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material';
-import { forwardRef, useState } from 'react';
+import { forwardRef, useEffect, useMemo, useState } from 'react';
 import { DatePicker } from '@mui/x-date-pickers';
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
 import _ from 'lodash';
 import { IMaskInput } from 'react-imask';
+import FuseLoading from '@fuse/core/FuseLoading';
+
 import { useListIdentificationsTypes, useListOcupations, useListMaritalStatus, useListGenders, useListRoles } from '../../../../api/hooks';
-import { TUserCreateForm } from '../../../../utils/types';
+import { TGendersDB, TIdentificationTypeDB, TMaritalStatusDB, TOcupationsDB, TRolesDB, TUserCreateForm } from '../../../../utils/types';
 
 const statusData = [
-    { name: 'Active', value: true },
-    { name: 'Inactive', value: false }
+    { name: 'Active', value: 'true', id: 'joiuj98uiojl' },
+    { name: 'Inactive', value: 'false', id: '787hhhuhudxdfsz' }
 ];
 
 /**
@@ -97,11 +99,29 @@ const TextMaskCustom = forwardRef<HTMLInputElement, CustomProps>(function TextMa
 export function UserForm({ data }) {
     console.log('92 data >>> ', data);
     const token = localStorage.getItem('access_token');
+    // Call to APi for the selects data
     const { data: idTypesData, isLoading: idTypesLoading } = useListIdentificationsTypes(token);
     const { data: ocupationsData, isLoading: ocupationsLoading } = useListOcupations(token);
     const { data: maritalStatusData, isLoading: maritalStatusLoading } = useListMaritalStatus(token);
     const { data: gendersData, isLoading: gendersLoading } = useListGenders(token);
     const { data: rolesData, isLoading: rolesLoading } = useListRoles(token);
+
+    // Using memo for store the info
+    const idTypes: TIdentificationTypeDB[] = useMemo(() => idTypesData?.data?.data, [idTypesData]);
+    const ocupations: TOcupationsDB[] = useMemo(() => ocupationsData?.data?.data, [ocupationsData]);
+    const maritalStatus: TMaritalStatusDB[] = useMemo(() => maritalStatusData?.data?.data, [maritalStatusData]);
+    const genders: TGendersDB[] = useMemo(() => gendersData?.data?.data, [gendersData]);
+    const roles: TRolesDB[] = useMemo(() => rolesData?.data?.data, [rolesData]);
+
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        if (idTypesLoading || ocupationsLoading || maritalStatusLoading || gendersLoading || rolesLoading) {
+            setIsLoading(true);
+        } else {
+            setIsLoading(false);
+        }
+    }, [idTypesLoading, ocupationsLoading, maritalStatusLoading, gendersLoading, rolesLoading]);
 
     let defaultValues = {
         identificationTypeId: '',
@@ -169,6 +189,10 @@ export function UserForm({ data }) {
         }
     };
 
+    if (isLoading) {
+        return <FuseLoading />;
+    }
+
     return (
         <div className="flex flex-col min-w-0">
             <Typography variant="h4" gutterBottom>
@@ -196,9 +220,11 @@ export function UserForm({ data }) {
                                         variant="outlined"
                                         fullWidth
                                     >
-                                        <MenuItem value="10">CC</MenuItem>
-                                        <MenuItem value="20">CE</MenuItem>
-                                        <MenuItem value="30">Passport</MenuItem>
+                                        {idTypes.map((idType: TIdentificationTypeDB) => (
+                                            <MenuItem key={idType?.id} value={idType?.id}>
+                                                {idType?.type}
+                                            </MenuItem>
+                                        ))}
                                     </Select>
                                     <FormHelperText>{errors?.identificationTypeId?.message}</FormHelperText>
                                 </FormControl>
@@ -230,18 +256,6 @@ export function UserForm({ data }) {
                                     }}
                                     InputLabelProps={{ shrink }}
                                 />
-                                // <FormControl variant="outlined">
-                                //     <InputLabel htmlFor="userId">User ID</InputLabel>
-                                //     <Input
-                                //         {...field}
-                                //         value={values.textmask}
-                                //         onChange={handleChange}
-                                //         name="textmask"
-                                //         id="userId"
-                                //         inputComponent={TextMaskCustom as never}
-                                //         error={!!errors.uid}
-                                //     />
-                                // </FormControl>
                             )}
                         />
                     </Grid>
@@ -329,9 +343,11 @@ export function UserForm({ data }) {
                                 <FormControl error={!!errors.genderId} required fullWidth>
                                     <InputLabel id="genderIdLabel">Gender</InputLabel>
                                     <Select {...field} labelId="genderIdLabel" id="genderId" label="Gender" variant="outlined" fullWidth>
-                                        <MenuItem value="10">Male</MenuItem>
-                                        <MenuItem value="20">Female</MenuItem>
-                                        <MenuItem value="30">Prefer not answer</MenuItem>
+                                        {genders.map((gender: TGendersDB) => (
+                                            <MenuItem key={gender?.id} value={gender?.id}>
+                                                {gender?.name}
+                                            </MenuItem>
+                                        ))}
                                     </Select>
                                     <FormHelperText>{errors?.genderId?.message}</FormHelperText>
                                 </FormControl>
@@ -354,9 +370,11 @@ export function UserForm({ data }) {
                                         variant="outlined"
                                         fullWidth
                                     >
-                                        <MenuItem value="10">Married</MenuItem>
-                                        <MenuItem value="20">Single</MenuItem>
-                                        <MenuItem value="30">Divorced</MenuItem>
+                                        {maritalStatus.map((ms: TMaritalStatusDB) => (
+                                            <MenuItem key={ms?.id} value={ms?.id}>
+                                                {ms?.name}
+                                            </MenuItem>
+                                        ))}
                                     </Select>
                                     <FormHelperText>{errors?.maritalStatusId?.message}</FormHelperText>
                                 </FormControl>
@@ -372,8 +390,11 @@ export function UserForm({ data }) {
                                 <FormControl error={!!errors.ocupationId} required fullWidth>
                                     <InputLabel id="ocupationIdLabel">Ocupation</InputLabel>
                                     <Select {...field} labelId="ocupationIdLabel" id="ocupationId" label="Ocupation" variant="outlined" fullWidth>
-                                        <MenuItem value="10">Student</MenuItem>
-                                        <MenuItem value="20">Employee</MenuItem>
+                                        {ocupations.map((ocupation: TOcupationsDB) => (
+                                            <MenuItem key={ocupation?.id} value={ocupation?.id}>
+                                                {ocupation?.name}
+                                            </MenuItem>
+                                        ))}
                                     </Select>
                                     <FormHelperText>{errors?.ocupationId?.message}</FormHelperText>
                                 </FormControl>
@@ -389,8 +410,11 @@ export function UserForm({ data }) {
                                 <FormControl error={!!errors.roleId} required fullWidth>
                                     <InputLabel id="roleLabel">Role</InputLabel>
                                     <Select {...field} labelId="roleLabel" id="roleId" label="Role" variant="outlined" fullWidth>
-                                        <MenuItem value="10">User</MenuItem>
-                                        <MenuItem value="20">Admin</MenuItem>
+                                        {roles.map((rol: TRolesDB) => (
+                                            <MenuItem key={rol?.id} value={rol?.id}>
+                                                {rol?.name}
+                                            </MenuItem>
+                                        ))}
                                     </Select>
                                     <FormHelperText>{errors?.roleId?.message}</FormHelperText>
                                 </FormControl>
@@ -406,8 +430,11 @@ export function UserForm({ data }) {
                                 <FormControl error={!!errors.status} required fullWidth>
                                     <InputLabel id="statusLabel">Status</InputLabel>
                                     <Select {...field} labelId="statusLabel" id="statusId" label="Status" variant="outlined" fullWidth>
-                                        <MenuItem value="10">Active</MenuItem>
-                                        <MenuItem value="20">Inactive</MenuItem>
+                                        {statusData.map((status) => (
+                                            <MenuItem key={status?.id} value={status?.value}>
+                                                {status?.name}
+                                            </MenuItem>
+                                        ))}
                                     </Select>
                                     <FormHelperText>{errors?.status?.message}</FormHelperText>
                                 </FormControl>
