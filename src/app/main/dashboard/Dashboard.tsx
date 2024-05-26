@@ -19,7 +19,7 @@ const Root = styled(FusePageSimple)(({ theme }) => ({
 */
 function Dashboard() {
     const user = useSelector(selectUser);
-    const { t, i18n } = useTranslation('dashboard');
+    const { t, i18n } = useTranslation();
 
     setTimeout(() => {
         return <FuseLoading />;

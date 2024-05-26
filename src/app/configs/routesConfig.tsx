@@ -6,10 +6,12 @@ import { FuseRouteConfigsType, FuseRoutesType } from '@fuse/utils/FuseUtils';
 import SignInConfig from '../main/sign-in/SignInConfig';
 import SignUpConfig from '../main/sign-up/SignUpConfig';
 import SignOutConfig from '../main/sign-out/SignOutConfig';
-import Error404Page from '../main/404/Error404Page';
+import Error404Page from '../main/error/Error404Page';
 import DashboardConfig from '../main/dashboard/DashboardConfig';
+import UsersConfig from '../main/users/UsersConfig';
+import Error500Page from '../main/error/Error500Page';
 
-const routeConfigs: FuseRouteConfigsType = [DashboardConfig, SignOutConfig, SignInConfig, SignUpConfig];
+const routeConfigs: FuseRouteConfigsType = [DashboardConfig, UsersConfig, SignOutConfig, SignInConfig, SignUpConfig];
 
 /**
  * The routes of the application.
@@ -22,8 +24,16 @@ const routes: FuseRoutesType = [
         auth: settingsConfig.defaultAuth
     },
     {
+        path: 'users',
+        element: <Navigate to="/users" />
+    },
+    {
         path: 'loading',
         element: <FuseLoading />
+    },
+    {
+        path: '500',
+        element: <Error500Page />
     },
     {
         path: '404',

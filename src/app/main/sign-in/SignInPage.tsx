@@ -15,10 +15,7 @@ import { IAPIErrorResponse } from 'src/utils/interfaces';
  */
 const schema = z.object({
     email: z.string().email('You must enter a valid email').nonempty('You must enter an email'),
-    password: z
-        .string()
-        .min(6, 'Password is too short - must be at least 6 chars.')
-        .nonempty('Please enter your password.')
+    password: z.string().min(6, 'Password is too short - must be at least 6 chars.').nonempty('Please enter your password.')
 });
 
 type FormType = {
@@ -62,54 +59,33 @@ function SignInPage() {
             .catch((error: AxiosError<IAPIErrorResponse>) => {
                 const errorData: IAPIErrorResponse = error.response.data;
 
-                sweetAlerts({ icon: 'error', text: errorData?.message });
+                sweetAlerts({
+                    icon: 'error',
+                    text: errorData?.message ? errorData?.message : 'Error trying to connect with the backend API. Please contact the support team.'
+                });
             });
     }
 
     return (
         <div className="flex min-w-0 flex-auto flex-col items-center sm:justify-center md:p-32">
-            <video
-                className="fixed w-full z-[-1]"
-                style={{ filter: 'blur(3px)' }}
-                autoPlay
-                loop
-                muted
-            >
-                <source
-                    src={sample}
-                    type="video/mp4"
-                />
+            <video className="fixed w-full z-[-1]" style={{ filter: 'blur(3px)' }} autoPlay loop muted>
+                <source src={sample} type="video/mp4" />
             </video>
             <Paper className="flex min-h-full w-full overflow-hidden rounded-0 sm:min-h-auto sm:w-auto sm:rounded-2xl sm:shadow md:max-w-6xl">
                 <Box
                     className="relative hidden h-full flex-auto items-center justify-center overflow-hidden md:flex"
                     // sx={{ backgroundColor: 'primary.main' }}
                 >
-                    <img
-                        className="w-3/5"
-                        src="assets/images/logo/logo512.svg"
-                        alt="logo"
-                    />
+                    <img className="w-3/5" src="assets/images/logo/logo512.svg" alt="logo" />
                 </Box>
 
                 <div className="w-full px-16 py-32 ltr:border-l-1 rtl:border-r-1 sm:w-auto sm:p-48 md:p-64">
                     <div className="mx-auto w-full max-w-320 sm:mx-0 sm:w-320">
-                        <img
-                            className="m-auto md:hidden sm:block xs:block"
-                            src="assets/images/logo/logo192.svg"
-                            alt="logo"
-                        />
+                        <img className="m-auto md:hidden sm:block xs:block" src="assets/images/logo/logo192.svg" alt="logo" />
 
-                        <Typography className="mt-32 text-4xl font-extrabold leading-tight tracking-tight">
-                            Sign in
-                        </Typography>
+                        <Typography className="mt-32 text-4xl font-extrabold leading-tight tracking-tight">Sign in</Typography>
 
-                        <form
-                            name="loginForm"
-                            noValidate
-                            className="mt-32 flex w-full flex-col justify-center"
-                            onSubmit={handleSubmit(onSubmit)}
-                        >
+                        <form name="loginForm" noValidate className="mt-32 flex w-full flex-col justify-center" onSubmit={handleSubmit(onSubmit)}>
                             <Controller
                                 name="email"
                                 control={control}
@@ -153,23 +129,12 @@ function SignInPage() {
                                     control={control}
                                     render={({ field }) => (
                                         <FormControl>
-                                            <FormControlLabel
-                                                label="Remember me"
-                                                control={
-                                                    <Checkbox
-                                                        size="small"
-                                                        {...field}
-                                                    />
-                                                }
-                                            />
+                                            <FormControlLabel label="Remember me" control={<Checkbox size="small" {...field} />} />
                                         </FormControl>
                                     )}
                                 />
 
-                                <Link
-                                    className="text-md font-medium"
-                                    to="/pages/auth/forgot-password"
-                                >
+                                <Link className="text-md font-medium" to="/pages/auth/forgot-password">
                                     Forgot password?
                                 </Link>
                             </div>
