@@ -17,88 +17,88 @@ import ToolbarLayout3 from './components/ToolbarLayout3';
 import { Layout3ConfigDefaultsType } from './Layout3Config';
 
 const Root = styled('div')<{ config: Layout3ConfigDefaultsType }>(({ config }) => ({
-	...(config.mode === 'boxed' && {
-		clipPath: 'inset(0)',
-		maxWidth: `${config.containerWidth}px`,
-		margin: '0 auto',
-		boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
-	}),
-	...(config.mode === 'container' && {
-		'& .container': {
-			maxWidth: `${config.containerWidth}px`,
-			width: '100%',
-			margin: '0 auto'
-		}
-	})
+    ...(config.mode === 'boxed' && {
+        clipPath: 'inset(0)',
+        maxWidth: `${config.containerWidth}px`,
+        margin: '0 auto',
+        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
+    }),
+    ...(config.mode === 'container' && {
+        '& .container': {
+            maxWidth: `${config.containerWidth}px`,
+            width: '100%',
+            margin: '0 auto'
+        }
+    })
 }));
 
 type Layout3Props = {
-	children?: ReactNode;
+    children?: ReactNode;
 };
 
 /**
  * The layout 3.
  */
 function Layout3(props: Layout3Props) {
-	const { children } = props;
+    const { children } = props;
 
-	const config = useSelector(selectFuseCurrentLayoutConfig) as Layout3ConfigDefaultsType;
+    const config = useSelector(selectFuseCurrentLayoutConfig) as Layout3ConfigDefaultsType;
 
-	const appContext = useContext(AppContext);
+    const appContext = useContext(AppContext);
 
-	const { routes } = appContext;
+    const { routes } = appContext;
 
-	return (
-		<Root
-			id="fuse-layout"
-			className="flex w-full"
-			config={config}
-		>
-			{config.leftSidePanel.display && <LeftSideLayout3 />}
+    return (
+        <Root
+            id="fuse-layout"
+            className="flex w-full"
+            config={config}
+        >
+            {config.leftSidePanel.display && <LeftSideLayout3 />}
 
-			<div className="flex min-w-0 flex-auto flex-col">
-				<main
-					id="fuse-main"
-					className="relative flex min-h-full min-w-0 flex-auto flex-col"
-				>
-					{config.navbar.display && (
-						<NavbarWrapperLayout3
-							className={clsx(config?.navbar?.style === 'fixed' ? 'sticky top-0 z-50' : '')}
-						/>
-					)}
+            <div className="flex min-w-0 flex-auto flex-col">
+                <main
+                    id="fuse-main"
+                    className="relative flex min-h-full min-w-0 flex-auto flex-col"
+                >
+                    {config.navbar.display && (
+                        <NavbarWrapperLayout3
+                            className={clsx(config?.navbar?.style === 'fixed' ? 'sticky top-0 z-50' : '')}
+                        />
+                    )}
 
-					{config.toolbar.display && (
-						<ToolbarLayout3
-							className={clsx(
-								config.toolbar.style === 'fixed' && 'sticky top-0',
-								config.toolbar.position === 'above' && 'z-40 order-first'
-							)}
-						/>
-					)}
+                    {config.toolbar.display && (
+                        <ToolbarLayout3
+                            className={clsx(
+                                config.toolbar.style === 'fixed' && 'sticky top-0',
+                                config.toolbar.position === 'above' && 'z-40 order-first'
+                            )}
+                        />
+                    )}
 
-					<div className="sticky top-0 z-99">
-						<Configurator />
-					</div>
+                    <div className="sticky top-0 z-99">
+                        <Configurator />
+                    </div>
 
-					<div className="relative z-10 flex min-h-0 flex-auto flex-col">
-						<FuseSuspense>{useRoutes(routes)}</FuseSuspense>
+                    <div className="relative z-10 flex min-h-0 flex-auto flex-col">
+                        <FuseSuspense>{useRoutes(routes)}</FuseSuspense>
 
-						<Suspense>
-							<FuseDialog />
-						</Suspense>
-						{children}
-					</div>
+                        <Suspense>
+                            <FuseDialog />
+                        </Suspense>
+                        {children}
+                    </div>
 
-					{config.footer.display && (
-						<FooterLayout3 className={config.footer.style === 'fixed' ? 'sticky bottom-0' : ''} />
-					)}
-				</main>
-			</div>
+                    {config.footer.display && (
+                        <FooterLayout3 className={config.footer.style === 'fixed' ? 'sticky bottom-0' : ''} />
+                    )}
+                </main>
+            </div>
 
-			{config.rightSidePanel.display && <RightSideLayout3 />}
-			<FuseMessage />
-		</Root>
-	);
+            {config.rightSidePanel.display && <RightSideLayout3 />}
+            <FuseMessage />
+        </Root>
+    );
 }
 
 export default memo(Layout3);

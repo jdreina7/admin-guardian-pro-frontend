@@ -44,6 +44,7 @@ function Layout1(props: Layout1Props) {
     const config = useSelector(selectFuseCurrentLayoutConfig) as Layout1ConfigDefaultsType;
     const appContext = useContext(AppContext);
     const { routes } = appContext;
+    const token = localStorage.getItem('access_token');
 
     return (
         <Root
@@ -70,7 +71,7 @@ function Layout1(props: Layout1Props) {
 
                     <div
                         className="relative z-10 flex min-h-0 flex-auto flex-col"
-                        style={{ backgroundColor: '#09105A' }}
+                        style={token ? { backgroundColor: '#FFFFFF' } : { backgroundColor: '#000000' }}
                     >
                         <FuseSuspense>{useRoutes(routes)}</FuseSuspense>
 
