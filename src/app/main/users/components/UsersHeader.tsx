@@ -38,7 +38,7 @@ function UsersHeader(props: UsersHeaderProps) {
                         className="text-14 font-medium ml-2"
                         color="text.secondary"
                     >
-                        {`${users} users`}
+                        {`${users} ${t('USERTITTLE')}`}
                     </Typography>
                 </motion.span>
             </div>

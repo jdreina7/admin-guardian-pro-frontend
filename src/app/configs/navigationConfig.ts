@@ -1,31 +1,28 @@
-import i18next from 'i18next';
 import { FuseNavItemType } from '@fuse/core/FuseNavigation/types/FuseNavItemType';
-import ar from './navigation-i18n/ar';
-import en from './navigation-i18n/en';
-import tr from './navigation-i18n/tr';
-
-i18next.addResourceBundle('en', 'navigation', en);
-i18next.addResourceBundle('tr', 'navigation', tr);
-i18next.addResourceBundle('ar', 'navigation', ar);
+import i18n from 'i18next';
 
 /**
  * The navigationConfig object is an array of navigation items for the Fuse application.
  */
-const navigationConfig: FuseNavItemType[] = [
+
+//const { t } = useTranslation();
+const getTranslationFunction = (key: string): string  => i18n.t(key);
+
+const navigationConfig : FuseNavItemType[] = [
     {
         id: 'dashboard',
-        title: 'Dashboard',
+        title: `${getTranslationFunction('DASHTITTLE')}`,
         type: 'item',
         icon: 'heroicons-outline:home',
-        translate: 'dashboard',
+        translate: `${getTranslationFunction('DASHTITTLE')}`,
         url: 'dashboard'
     },
     {
         id: 'users',
-        title: 'Users',
+        title: `${getTranslationFunction('USERTITTLE')}` ,
         type: 'item',
         icon: 'feather:users',
-        translate: 'users',
+        translate:`${getTranslationFunction('USERTITTLE')}`,
         url: 'users'
     }
 ];

@@ -5,6 +5,7 @@ import { selectUser } from "../app/auth/user/store/userSlice";
 
 const locale = {
 	USERTITTLE: 'Users',
+	DASHTITTLE: 'Dashboard33',
 	GRETTING: 'Welcome back',
 	TASKQUANTITY: 'You have 2 new messages and 15 new tasks',
 	BTNMESG: 'Messages',
