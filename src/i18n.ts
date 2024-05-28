@@ -3,6 +3,7 @@ import { initReactI18next } from 'react-i18next';
 
 import en from './i18n/en';
 import es from './i18n/es';
+
 /**
  * resources is an object that contains all the translations for the different languages.
  */
