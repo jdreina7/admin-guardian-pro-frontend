@@ -9,12 +9,15 @@ import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
 import { darken } from '@mui/material/styles';
 import { useSelector } from 'react-redux';
 import { selectUser } from 'src/app/auth/user/store/userSlice';
+import { useTranslation } from 'react-i18next';
 
 /**
  * The DashboardHeader page.
  */
 function DashboardHeader() {
     const user = useSelector(selectUser);
+
+    const { t } = useTranslation();
 
     const projects = [
         {
@@ -82,21 +85,18 @@ function DashboardHeader() {
                     </Avatar>
                     <div className="flex flex-col min-w-0 mx-16">
                         <Typography className="text-2xl md:text-5xl font-semibold tracking-tight leading-7 md:leading-snug truncate">
-                            {`Welcome back, ${user.data.displayName}!`}
+                            { t('GRETTING') + `, ${user.data.displayName}!`}
                         </Typography>
 
                         <div className="flex items-center">
-                            <FuseSvgIcon
-                                size={20}
-                                color="action"
-                            >
+                            <FuseSvgIcon size={20} color="action">
                                 heroicons-solid:bell
                             </FuseSvgIcon>
                             <Typography
                                 className="mx-6 leading-6 truncate"
                                 color="text.secondary"
                             >
-                                You have 2 new messages and 15 new tasks
+                                {t('TASKQUANTITY')}
                             </Typography>
                         </div>
                     </div>
@@ -108,7 +108,7 @@ function DashboardHeader() {
                         color="primary"
                         startIcon={<FuseSvgIcon size={20}>heroicons-solid:mail</FuseSvgIcon>}
                     >
-                        Messages
+                        {t('BTNMESG')}
                     </Button>
                     <Button
                         className="whitespace-nowrap"
@@ -116,7 +116,7 @@ function DashboardHeader() {
                         color="secondary"
                         startIcon={<FuseSvgIcon size={20}>heroicons-solid:cog</FuseSvgIcon>}
                     >
-                        Settings
+                        {t('BTNSTG')}
                     </Button>
                 </div>
             </div>
@@ -129,22 +129,14 @@ function DashboardHeader() {
                         borderColor: (theme) => theme.palette.divider
                     }}
                     endIcon={
-                        <FuseSvgIcon
-                            size={20}
-                            color="action"
-                        >
+                        <FuseSvgIcon size={20} color="action">
                             heroicons-solid:chevron-down
                         </FuseSvgIcon>
                     }
                 >
                     {_.find(projects, ['id', selectedProject.id])?.name}
                 </Button>
-                <Menu
-                    id="project-menu"
-                    anchorEl={selectedProject.menuEl}
-                    open={Boolean(selectedProject.menuEl)}
-                    onClose={handleCloseProjectMenu}
-                >
+                <Menu id="project-menu" anchorEl={selectedProject.menuEl} open={Boolean(selectedProject.menuEl)} onClose={handleCloseProjectMenu}>
                     {projects &&
                         projects.map((project) => (
                             <MenuItem

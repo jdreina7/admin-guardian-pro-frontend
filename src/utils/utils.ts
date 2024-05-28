@@ -1,5 +1,6 @@
 import { User } from 'src/app/auth/user';
 import { IUserDB } from './interfaces';
+import i18n from 'i18next';
 
 /**
  * Function for map the DB data to state user object
@@ -26,3 +27,5 @@ export const transformUserDataToUserModel = async (data: IUserDB, token: string)
 
     return userData;
 };
+
+

@@ -6,7 +6,7 @@ import { PartialDeep } from 'type-fest';
 import { DEFAULT_LOGIN_PATH, DEFAULT_USERS_PATH } from '../../../../utils/contants';
 import { transformUserDataToUserModel } from '../../../../utils/utils';
 import { User } from '../../user';
-import { IUserDB } from '../../../../utils/types';
+import { IUser } from '../../../../utils/types';
 
 const defaultAuthConfig = {
     tokenStorageKey: 'access_token',
@@ -182,7 +182,7 @@ const useJwtAuth = <SignInPayload, SignUpPayload>(props: JwtAuthProps<User>): Jw
                 try {
                     setIsLoading(true);
 
-                    const response: AxiosResponse<IUserDB> = await axios.get(`${authConfig.getUserUrl}/${userId}`, {
+                    const response: AxiosResponse<IUser> = await axios.get(`${authConfig.getUserUrl}/${userId}`, {
                         headers: { Authorization: `Bearer ${accessToken}` }
                     });
 

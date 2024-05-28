@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux';
 import withSlices from 'app/store/withSlices';
 import { navigationSlice, selectNavigation } from './store/navigationSlice';
 import { navbarCloseMobile } from '../navbar/store/navbarSlice';
+import { useTranslation } from 'react-i18next';
 
 /**
  * Navigation
