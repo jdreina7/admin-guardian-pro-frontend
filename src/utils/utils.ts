@@ -1,5 +1,5 @@
 import { User } from 'src/app/auth/user';
-import { IUserDB } from './interfaces';
+import { TUserDB, TUserDBResponse } from './types';
 
 /**
  * Function for map the DB data to state user object
@@ -7,8 +7,8 @@ import { IUserDB } from './interfaces';
  * @param token Access token
  * @returns Transformed data
  */
-export const transformUserDataToUserModel = async (data: IUserDB, token: string): Promise<User> => {
-    const userLogedData = data.data;
+export const transformUserDataToUserModel = async (data: TUserDBResponse, token: string): Promise<User> => {
+    const userLogedData = data?.data as unknown as TUserDB;
 
     const userData = {
         uid: userLogedData?.id,
@@ -25,4 +25,15 @@ export const transformUserDataToUserModel = async (data: IUserDB, token: string)
     };
 
     return userData;
+};
+
+/**
+ * Function for transform a string to capitalize the first letter
+ * @param word String to transform
+ * @returns capitalized string
+ */
+export const capitalizeFirstLetter = (word: string): string => {
+    const capitalizedWord = word[0].toUpperCase() + word.slice(1);
+
+    return capitalizedWord;
 };

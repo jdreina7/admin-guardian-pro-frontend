@@ -19,6 +19,7 @@ function UserActionsCell(params: UserActionsCellProps) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const user = params?.data?.name;
     const currentUser = useMemo(() => user, [user]);
+    const currentUserStatus = useMemo(() => user?.status, [user]);
 
     const alertUser = () => {
         alert(currentUser?.id);
@@ -27,11 +28,20 @@ function UserActionsCell(params: UserActionsCellProps) {
     return (
         <Box className="flex items-center justify-around w-full h-full">
             <Button className="w-full h-full" onClick={alertUser}>
-                <Tooltip title="Edit">
-                    <FuseSvgIcon className="cursor-pointer" size={22} color="info">
-                        feather:edit
-                    </FuseSvgIcon>
-                </Tooltip>
+                {currentUserStatus && (
+                    <Tooltip title="Inactive">
+                        <FuseSvgIcon className="cursor-pointer" size={22} color="error">
+                            material-solid:person_off
+                        </FuseSvgIcon>
+                    </Tooltip>
+                )}
+                {!currentUserStatus && (
+                    <Tooltip title="Active">
+                        <FuseSvgIcon className="cursor-pointer" size={22} color="success">
+                            material-solid:person
+                        </FuseSvgIcon>
+                    </Tooltip>
+                )}
             </Button>
 
             <Button className="w-full h-full" onClick={alertUser}>

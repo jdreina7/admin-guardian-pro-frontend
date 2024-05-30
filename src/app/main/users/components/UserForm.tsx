@@ -2,13 +2,14 @@ import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Box, Button, Divider, FormControl, FormHelperText, Grid, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material';
-import { forwardRef, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { DatePicker } from '@mui/x-date-pickers';
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
-import _ from 'lodash';
-import { IMaskInput } from 'react-imask';
+import { IMaskMixin } from 'react-imask';
 import FuseLoading from '@fuse/core/FuseLoading';
+import moment from 'moment';
 
+import { capitalizeFirstLetter } from 'src/utils/utils';
 import { useListIdentificationsTypes, useListOcupations, useListMaritalStatus, useListGenders, useListRoles } from '../../../../api/hooks';
 import { TGendersDB, TIdentificationTypeDB, TMaritalStatusDB, TOcupationsDB, TRolesDB, TUserCreateForm, TUserDB } from '../../../../utils/types';
 
@@ -18,14 +19,13 @@ const statusData = [
 ];
 
 type UsersFormProps = {
-    data: TUserDB;
+    currentUser: TUserDB;
+    handleClose: (close: boolean) => void;
 };
 
 /**
  * Form Validation Schema
  */
-
-// ***********************************************
 export const IdSchema = z.object({
     name: z.string(),
     id: z.string()
@@ -41,68 +41,43 @@ export const IdentificationTypeIdSchema = z.object({
 export type IdentificationTypeId = z.infer<typeof IdentificationTypeIdSchema>;
 
 export const DataSchema = z.object({
-    uid: z.number().min(7, 'You must enter an user identification number'),
+    uid: z.string().min(7, 'User ID is mandatory'),
     identificationTypeId: z.string(),
     email: z.string().email('You must enter a valid email').min(1, 'You must enter an email'),
     firstName: z.string().min(3, 'FirstName is too short - must be at least 3 chars.'),
-    middleName: z.string(),
+    middleName: z.string().optional(),
     lastName: z.string().min(3, 'LastName is too short - must be at least 3 chars.'),
     genderId: z.string(),
-    contactPhone: z.number(),
-    address: z.string(),
-    city: z.string(),
-    birthday: z.string(),
-    userImg: z.string(),
-    username: z.string(),
-    // password: z.string(),
+    contactPhone: z.string().optional(),
+    address: z.string().optional(),
+    city: z.string().optional(),
+    birthday: z.string().optional(),
+    username: z.string().optional(),
     maritalStatusId: z.string(),
     ocupationId: z.string(),
     roleId: z.string(),
     status: z.string()
-    // lastLogin: z.string(),
-    // shortcuts: z.array(z.string())
-    // id: z.string()
 });
 
 export type Data = z.infer<typeof DataSchema>;
-
 // ***********************************************
 
-interface CustomProps {
-    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    onFocus: (event: React.FocusEvent<HTMLInputElement>) => void;
-    onBlur: (event: React.FocusEvent<HTMLInputElement>) => void;
-    value: string;
-}
-
-const TextMaskCustom = forwardRef<HTMLInputElement, CustomProps>(function TextMaskCustom(props, ref) {
-    const { onChange, onFocus, onBlur, value, ...other } = props;
-    // const inputRef = useRef(null);
-
-    return (
-        <IMaskInput
-            {...other}
-            mask={Number}
-            radix="."
-            value={value}
-            mapToRadix={['.']}
-            scale={2}
-            thousandsSeparator="." // any single char
-            padFractionalZeros={false} // if true, then pads zeros at end to the length of scale
-            normalizeZeros
-            min={1}
-            max={9999999999}
-            autofix
-            onFocus={onFocus}
-            onBlur={onBlur}
-            onChange={onChange}
-        />
-    );
+/**
+ * Imask use for the User ID field1
+ */
+const IMaskUIInput = IMaskMixin(({ ...props }) => {
+    // eslint-disable-next-line prettier/prettier, @typescript-eslint/no-explicit-any
+    return <TextField {...props as any } variant="outlined" />;
 });
 
 export function UserForm(data: UsersFormProps) {
-    console.log('92 data >>> ', data?.data);
+    const { handleClose, currentUser } = data;
+
     const token = localStorage.getItem('access_token');
+
+    const [userIdValue, setUserIdValue] = useState('');
+    // const [usrBirthday, setUsrBirthday] = useState('');
+
     // Call to APi for the selects data
     const { data: idTypesData, isLoading: idTypesLoading } = useListIdentificationsTypes(token);
     const { data: ocupationsData, isLoading: ocupationsLoading } = useListOcupations(token);
@@ -116,12 +91,48 @@ export function UserForm(data: UsersFormProps) {
     const maritalStatus: TMaritalStatusDB[] = useMemo(() => maritalStatusData?.data?.data, [maritalStatusData]);
     const genders: TGendersDB[] = useMemo(() => gendersData?.data?.data, [gendersData]);
     const roles: TRolesDB[] = useMemo(() => rolesData?.data?.data, [rolesData]);
+    const roleDefault: TRolesDB = useMemo(() => roles?.find((rol) => rol?.name === 'user'), [roles]);
+    const usrBirthday = useMemo(() => {
+        const date = moment(currentUser?.birthday);
+        return date.format();
+    }, [currentUser]);
+    console.log('99 finalDate >>> ', usrBirthday);
 
     const [isLoading, setIsLoading] = useState(true);
 
-    const [userIdValue, setUserIdValue] = useState('');
-    const [shrink, setShrink] = useState(false);
+    /**
+     * Form data and validation Section
+     */
+    const defaultValues = {
+        identificationTypeId: currentUser ? currentUser?.identificationTypeId?.id : '',
+        genderId: currentUser ? currentUser?.genderId?.id : '',
+        maritalStatusId: currentUser ? currentUser?.maritalStatusId?.id : '',
+        ocupationId: currentUser ? currentUser?.ocupationId?.id : '',
+        roleId: currentUser ? currentUser?.roleId?.id : roleDefault?.id,
+        uid: currentUser ? `${currentUser?.uid}` : '',
+        email: currentUser ? currentUser?.email : '',
+        firstName: currentUser ? currentUser?.firstName : '',
+        middleName: currentUser ? currentUser?.middleName : '',
+        lastName: currentUser ? currentUser?.lastName : '',
+        address: currentUser ? currentUser?.address : '',
+        city: currentUser ? currentUser?.city : '',
+        birthday: currentUser ? currentUser?.birthday : '',
+        username: currentUser ? currentUser?.username : '',
+        status: currentUser ? `${currentUser?.status}` : 'true',
+        contactPhone: currentUser ? `${currentUser?.contactPhone}` : ''
+    };
 
+    const { control, formState, handleSubmit, clearErrors, setValue } = useForm<TUserCreateForm>({
+        mode: 'onChange',
+        defaultValues,
+        resolver: zodResolver(DataSchema)
+    });
+
+    const { isValid, errors } = formState;
+
+    /**
+     * UseEffects Section
+     */
     useEffect(() => {
         if (idTypesLoading || ocupationsLoading || maritalStatusLoading || gendersLoading || rolesLoading) {
             setIsLoading(true);
@@ -131,61 +142,43 @@ export function UserForm(data: UsersFormProps) {
     }, [idTypesLoading, ocupationsLoading, maritalStatusLoading, gendersLoading, rolesLoading]);
 
     useEffect(() => {
-        if (data?.data && data?.data?.uid) {
-            setShrink(true);
+        if (currentUser && currentUser?.uid) {
+            setUserIdValue(`${currentUser?.uid}`);
         }
     }, [data]);
 
-    const defaultValues = {
-        identificationTypeId: data?.data ? data?.data?.identificationTypeId?.id : '',
-        genderId: data?.data ? data?.data?.genderId?.id : '',
-        maritalStatusId: data?.data ? data?.data?.maritalStatusId?.id : '',
-        ocupationId: data?.data ? data?.data?.ocupationId?.id : '',
-        roleId: data?.data ? data?.data?.roleId?.id : '',
-        uid: data?.data ? `${data?.data?.uid}` : '',
-        email: data?.data ? data?.data?.email : '',
-        firstName: data?.data ? data?.data?.firstName : '',
-        middleName: data?.data ? data?.data?.middleName : '',
-        lastName: data?.data ? data?.data?.lastName : '',
-        address: data?.data ? data?.data?.address : '',
-        city: data?.data ? data?.data?.city : '',
-        birthday: data?.data ? data?.data?.birthday : '',
-        userImg: '',
-        username: data?.data ? data?.data?.username : '',
-        status: data?.data ? `${data?.data?.status}` : 'true',
-        contactPhone: data?.data ? data?.data?.contactPhone : null
-    };
+    // useEffect(() => {
+    //     if (currentUser && currentUser?.birthday) {
+    //         setUsrBirthday(moment(currentUser?.birthday));
+    //     }
 
-    const { control, formState, handleSubmit } = useForm<TUserCreateForm>({
-        mode: 'onChange',
-        defaultValues,
-        resolver: zodResolver(DataSchema)
-    });
-    const { isValid, dirtyFields, errors } = formState;
+    //     console.log('151 usrBirthday >>> ', usrBirthday);
+    // }, [data]);
 
+    useEffect(() => {
+        if (userIdValue?.length > 6) {
+            clearErrors('uid');
+            setValue('uid', userIdValue, { shouldDirty: true });
+        }
+    }, [userIdValue]);
+
+    /**
+     * Form functions section
+     */
     function onSubmit(formData: TUserCreateForm) {
         // const dataForSave: IUser = {};
 
-        alert(formData);
+        alert(JSON.stringify(formData));
     }
 
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setUserIdValue(event.target.value as never);
+    const handleChange = (val: string) => {
+        setUserIdValue(val);
     };
 
-    const handleFocus = (event: React.FocusEvent<HTMLInputElement>) => {
-        if (event?.type === 'focus') {
-            setShrink(true);
-        }
-    };
-
-    const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
-        if (event?.type === 'blur') {
-            if (userIdValue.length <= 0) {
-                setShrink(false);
-            }
-        }
-    };
+    // const handleBirthdayChange = (val: string) => {
+    //     console.log('131 b >>> ', val);
+    //     console.log('173 moment(val).format >>> ', moment(val).format('DD/MM/YYYY'));
+    // };
 
     if (isLoading) {
         return <FuseLoading />;
@@ -235,24 +228,22 @@ export function UserForm(data: UsersFormProps) {
                             name="uid"
                             control={control}
                             render={({ field }) => (
-                                <TextField
+                                <IMaskUIInput
                                     {...field}
+                                    mask={Number}
+                                    radix="."
+                                    value={userIdValue}
+                                    mapToRadix={['.']}
+                                    thousandsSeparator="."
+                                    min={1}
+                                    max={9999999999}
+                                    color="primary"
                                     label="User ID"
                                     error={!!errors.uid}
                                     helperText={errors?.uid?.message}
-                                    variant="outlined"
-                                    value={userIdValue}
                                     required
                                     fullWidth
-                                    InputProps={{
-                                        ...field,
-                                        inputComponent: TextMaskCustom as never,
-                                        onChange: handleChange,
-                                        error: !!errors.uid,
-                                        onFocus: handleFocus,
-                                        onBlur: handleBlur
-                                    }}
-                                    InputLabelProps={{ shrink }}
+                                    onAccept={handleChange}
                                 />
                             )}
                         />
@@ -308,6 +299,7 @@ export function UserForm(data: UsersFormProps) {
                                     error={!!errors.middleName}
                                     helperText={errors?.middleName?.message}
                                     variant="outlined"
+                                    required={false}
                                     fullWidth
                                 />
                             )}
@@ -338,7 +330,7 @@ export function UserForm(data: UsersFormProps) {
                             name="genderId"
                             control={control}
                             render={({ field }) => (
-                                <FormControl error={!!errors.genderId} required fullWidth>
+                                <FormControl error={!!errors.genderId} fullWidth>
                                     <InputLabel id="genderIdLabel">Gender</InputLabel>
                                     <Select {...field} labelId="genderIdLabel" id="genderId" label="Gender" variant="outlined" fullWidth>
                                         {genders.map((gender: TGendersDB) => (
@@ -358,7 +350,7 @@ export function UserForm(data: UsersFormProps) {
                             name="maritalStatusId"
                             control={control}
                             render={({ field }) => (
-                                <FormControl error={!!errors.maritalStatusId} required fullWidth>
+                                <FormControl error={!!errors.maritalStatusId} fullWidth>
                                     <InputLabel id="maritalStatus">Marital Status</InputLabel>
                                     <Select
                                         {...field}
@@ -385,7 +377,7 @@ export function UserForm(data: UsersFormProps) {
                             name="ocupationId"
                             control={control}
                             render={({ field }) => (
-                                <FormControl error={!!errors.ocupationId} required fullWidth>
+                                <FormControl error={!!errors.ocupationId} fullWidth>
                                     <InputLabel id="ocupationIdLabel">Ocupation</InputLabel>
                                     <Select {...field} labelId="ocupationIdLabel" id="ocupationId" label="Ocupation" variant="outlined" fullWidth>
                                         {ocupations.map((ocupation: TOcupationsDB) => (
@@ -410,7 +402,7 @@ export function UserForm(data: UsersFormProps) {
                                     <Select {...field} labelId="roleLabel" id="roleId" label="Role" variant="outlined" fullWidth>
                                         {roles.map((rol: TRolesDB) => (
                                             <MenuItem key={rol?.id} value={rol?.id}>
-                                                {rol?.name}
+                                                {capitalizeFirstLetter(rol?.name)}
                                             </MenuItem>
                                         ))}
                                     </Select>
@@ -522,10 +514,11 @@ export function UserForm(data: UsersFormProps) {
                         <Controller
                             name="birthday"
                             control={control}
-                            render={({ field: { onChange, value } }) => (
+                            render={({ field }) => (
                                 <DatePicker
-                                    value={new Date(value)}
-                                    onChange={onChange}
+                                    {...field}
+                                    value={usrBirthday}
+                                    format="dd-MM-yyyy"
                                     slotProps={{
                                         textField: {
                                             id: 'birthday',
@@ -551,17 +544,18 @@ export function UserForm(data: UsersFormProps) {
 
                 <Divider variant="middle" className="mt-28 mb-28" />
 
-                <Box className="flex items-center">
-                    <Button className="mx-8" variant="contained" color="secondary" type="submit" disabled={_.isEmpty(dirtyFields) || !isValid}>
-                        Submit
+                <Box className="flex w-full items-center justify-end">
+                    <Button className="mx-10" variant="contained" color="primary" type="submit" disabled={Object.keys(errors).length > 0 || !isValid}>
+                        Save
                     </Button>
 
                     <Button
+                        variant="contained"
                         className="mx-8"
                         type="button"
-                        // onClick={() => {
-                        //     reset(defaultValues);
-                        // }}
+                        onClick={() => {
+                            handleClose(true);
+                        }}
                     >
                         Cancel
                     </Button>

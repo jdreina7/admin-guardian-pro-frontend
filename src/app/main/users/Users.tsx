@@ -43,7 +43,10 @@ function Users() {
     const [open, setOpen] = useState(false);
 
     const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
+    const handleClose = () => {
+        setOpen(false);
+        setSelectedUser(undefined);
+    };
 
     if (usersLoading) {
         return <FuseLoading />;
@@ -51,7 +54,7 @@ function Users() {
 
     return (
         <Root
-            header={<UsersHeader usersQuantity={usersList?.length} />}
+            header={<UsersHeader usersQuantity={usersList?.length} handleOpen={handleOpen} />}
             content={
                 <>
                     {!error && <UsersTable users={usersList} handleOpen={handleOpen} setSelectedUser={setSelectedUser} />}
@@ -72,7 +75,7 @@ function Users() {
                     >
                         <Fade in={open}>
                             <Box sx={style}>
-                                <UserForm data={selectedUser} />
+                                <UserForm currentUser={selectedUser} handleClose={handleClose} />
                             </Box>
                         </Fade>
                     </Modal>

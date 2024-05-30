@@ -10,11 +10,10 @@ export type TUserCreateForm = {
     middleName: string;
     lastName: string;
     genderId: string;
-    contactPhone: number;
+    contactPhone: string;
     address: string;
     city: string;
     birthday: string;
-    userImg: string;
     username: string;
     maritalStatusId: string;
     ocupationId: string;
