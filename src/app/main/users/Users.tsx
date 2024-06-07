@@ -8,8 +8,9 @@ import { useNavigate } from 'react-router-dom';
 import UsersHeader from './components/UsersHeader';
 import UsersTable from './components/UsersTable';
 import { useListUsers } from '../../../api/hooks';
-import { TUserDB } from '../../../utils/types';
+import { TModalConstants, TUserDB } from '../../../utils/types';
 import { UserForm } from './components/UserForm';
+import useSwalWrapper from '../../../utils/vendors/sweetalert2/hooks';
 
 const Root = styled(FusePageSimple)(({ theme }) => ({
     '& .FusePageSimple-header': {
@@ -36,6 +37,7 @@ const style = {
  */
 function Users() {
     const navigate = useNavigate();
+    const sweetAlert = useSwalWrapper();
     const token = localStorage.getItem('access_token');
     const { data, isLoading: usersLoading, error } = useListUsers(token);
     const usersList: TUserDB[] = useMemo(() => data?.data?.data, [data]);
@@ -44,6 +46,27 @@ function Users() {
 
     const handleOpen = () => setOpen(true);
     const handleClose = () => {
+        setOpen(false);
+        setSelectedUser(undefined);
+    };
+
+    const onSuccess = (data: TModalConstants) => {
+        sweetAlert.fire({
+            icon: data?.msgIcon,
+            text: data?.msgText
+        });
+
+        setOpen(false);
+        setSelectedUser(undefined);
+    };
+
+    const onError = (data: TModalConstants) => {
+        sweetAlert.fire({
+            icon: data?.msgIcon,
+            title: data?.msgTitle,
+            text: data?.msgText
+        });
+
         setOpen(false);
         setSelectedUser(undefined);
     };
@@ -75,7 +98,7 @@ function Users() {
                     >
                         <Fade in={open}>
                             <Box sx={style}>
-                                <UserForm currentUser={selectedUser} handleClose={handleClose} />
+                                <UserForm currentUser={selectedUser} handleClose={handleClose} onError={onError} onSuccess={onSuccess} />
                             </Box>
                         </Fade>
                     </Modal>

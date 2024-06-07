@@ -6,34 +6,31 @@ import layout3, { Layout3ConfigDefaultsType } from './layout3/Layout3Config';
 /**
  * The type definition for the theme layout defaults.
  */
-export type themeLayoutDefaultsProps =
-	| Layout1ConfigDefaultsType
-	| Layout3ConfigDefaultsType
-	| Layout2ConfigDefaultsType;
+export type themeLayoutDefaultsProps = Layout1ConfigDefaultsType | Layout3ConfigDefaultsType | Layout2ConfigDefaultsType;
 
 /**
  * The type definition for the theme layout.
  */
 export type themeLayoutProps = {
-	title: string;
-	defaults: themeLayoutDefaultsProps;
-	form?: ThemeFormConfigTypes;
+    title: string;
+    defaults: themeLayoutDefaultsProps;
+    form?: ThemeFormConfigTypes;
 };
 
 /**
  * The type definition for the theme layout configs.
  */
 export type themeLayoutConfigsProps = {
-	[key: string]: themeLayoutProps;
+    [key: string]: themeLayoutProps;
 };
 
 /**
  * The theme layout configs.
  */
 const themeLayoutConfigs: themeLayoutConfigsProps = {
-	layout1: layout1 as themeLayoutProps,
-	layout2: layout2 as themeLayoutProps,
-	layout3: layout3 as themeLayoutProps
+    layout1: layout1 as themeLayoutProps,
+    layout2: layout2 as themeLayoutProps,
+    layout3: layout3 as themeLayoutProps
 };
 
 export default themeLayoutConfigs;

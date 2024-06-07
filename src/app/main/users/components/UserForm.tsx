@@ -8,10 +8,26 @@ import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
 import { IMaskMixin } from 'react-imask';
 import FuseLoading from '@fuse/core/FuseLoading';
 import moment from 'moment';
+import { AxiosError, AxiosResponse } from 'axios';
 
 import { capitalizeFirstLetter } from 'src/utils/utils';
+import { useCreateUser, useUpdateUser } from 'src/api/hooks/useUsers';
 import { useListIdentificationsTypes, useListOcupations, useListMaritalStatus, useListGenders, useListRoles } from '../../../../api/hooks';
-import { TGendersDB, TIdentificationTypeDB, TMaritalStatusDB, TOcupationsDB, TRolesDB, TUserCreateForm, TUserDB } from '../../../../utils/types';
+import {
+    TGendersDB,
+    TIdentificationTypeDB,
+    TMaritalStatusDB,
+    TModalConstants,
+    TOcupationsDB,
+    TRolesDB,
+    TUserCreateForm,
+    TUserDB,
+    TUserDBForStore,
+    TUserDBResponse
+} from '../../../../utils/types';
+import { IAPIErrorResponse } from '../../../../utils/interfaces';
+
+const TMP_PASSWORD: string = 'TmpPass@1';
 
 const statusData = [
     { name: 'Active', value: 'true', id: 'joiuj98uiojl' },
@@ -21,6 +37,8 @@ const statusData = [
 type UsersFormProps = {
     currentUser: TUserDB;
     handleClose: (close: boolean) => void;
+    onSuccess: (data: TModalConstants) => void;
+    onError: (data: TModalConstants) => void;
 };
 
 /**
@@ -52,7 +70,7 @@ export const DataSchema = z.object({
     address: z.string().optional(),
     city: z.string().optional(),
     birthday: z.string().optional(),
-    username: z.string().optional(),
+    username: z.string().min(5, 'The username is required and must be at least 5 characters long.'),
     maritalStatusId: z.string(),
     ocupationId: z.string(),
     roleId: z.string(),
@@ -71,7 +89,7 @@ const IMaskUIInput = IMaskMixin(({ ...props }) => {
 });
 
 export function UserForm(data: UsersFormProps) {
-    const { handleClose, currentUser } = data;
+    const { handleClose, currentUser, onSuccess, onError } = data;
 
     const token = localStorage.getItem('access_token');
 
@@ -85,6 +103,9 @@ export function UserForm(data: UsersFormProps) {
     const { data: gendersData, isLoading: gendersLoading } = useListGenders(token);
     const { data: rolesData, isLoading: rolesLoading } = useListRoles(token);
 
+    const { mutateAsync: updateUser, isPending: isUpdatingUser, error: updateUserError } = useUpdateUser(token, currentUser?.id);
+    const { mutateAsync: createUser, isPending: isCreatingUser } = useCreateUser(token);
+
     // Using memo for store the info
     const idTypes: TIdentificationTypeDB[] = useMemo(() => idTypesData?.data?.data, [idTypesData]);
     const ocupations: TOcupationsDB[] = useMemo(() => ocupationsData?.data?.data, [ocupationsData]);
@@ -92,11 +113,7 @@ export function UserForm(data: UsersFormProps) {
     const genders: TGendersDB[] = useMemo(() => gendersData?.data?.data, [gendersData]);
     const roles: TRolesDB[] = useMemo(() => rolesData?.data?.data, [rolesData]);
     const roleDefault: TRolesDB = useMemo(() => roles?.find((rol) => rol?.name === 'user'), [roles]);
-    const usrBirthday = useMemo(() => {
-        const date = moment(currentUser?.birthday);
-        return date.format();
-    }, [currentUser]);
-    console.log('99 finalDate >>> ', usrBirthday);
+    const usrBirthday = useMemo(() => currentUser?.birthday, [currentUser]);
 
     const [isLoading, setIsLoading] = useState(true);
 
@@ -147,14 +164,6 @@ export function UserForm(data: UsersFormProps) {
         }
     }, [data]);
 
-    // useEffect(() => {
-    //     if (currentUser && currentUser?.birthday) {
-    //         setUsrBirthday(moment(currentUser?.birthday));
-    //     }
-
-    //     console.log('151 usrBirthday >>> ', usrBirthday);
-    // }, [data]);
-
     useEffect(() => {
         if (userIdValue?.length > 6) {
             clearErrors('uid');
@@ -162,23 +171,65 @@ export function UserForm(data: UsersFormProps) {
         }
     }, [userIdValue]);
 
+    useEffect(() => {
+        if (isUpdatingUser || isCreatingUser) {
+            setIsLoading(true);
+        }
+    }, [isUpdatingUser, isCreatingUser]);
+
+    useEffect(() => {
+        if (updateUserError) {
+            const error: Partial<AxiosError> = { ...updateUserError };
+            const errData: IAPIErrorResponse = { ...(error?.response?.data as IAPIErrorResponse) };
+
+            onError({
+                msgIcon: 'error',
+                msgTitle: `${error?.response?.status} - ${error?.response?.statusText}`,
+                msgText: `${errData?.message} - ${errData?.invalidValue?.uid}`
+            });
+        }
+    }, [updateUserError]);
+
     /**
      * Form functions section
      */
-    function onSubmit(formData: TUserCreateForm) {
-        // const dataForSave: IUser = {};
+    const onSubmit = async (formData: TUserCreateForm) => {
+        const uIWithoutDots: string = formData?.uid?.split('.').join('');
+        const finalUid: number = +uIWithoutDots;
+        const finalContactPhone: number = +formData.contactPhone;
+        const finalStatus: boolean = formData.status === 'true';
 
-        alert(JSON.stringify(formData));
-    }
+        const dataForSave: TUserDBForStore = {
+            ...formData,
+            uid: finalUid,
+            contactPhone: finalContactPhone,
+            status: finalStatus,
+            password: TMP_PASSWORD
+        };
+
+        const resp: AxiosResponse<TUserDBResponse> = currentUser ? await updateUser(dataForSave) : await createUser(dataForSave);
+
+        if (resp?.data?.success) {
+            onSuccess({
+                msgIcon: 'success',
+                msgText: currentUser ? 'User updated!' : 'User created!'
+            });
+        } else {
+            onError({
+                msgIcon: 'error',
+                msgText: `Ups! Something went wrong - ${resp?.statusText}`
+            });
+        }
+    };
 
     const handleChange = (val: string) => {
         setUserIdValue(val);
     };
 
-    // const handleBirthdayChange = (val: string) => {
-    //     console.log('131 b >>> ', val);
-    //     console.log('173 moment(val).format >>> ', moment(val).format('DD/MM/YYYY'));
-    // };
+    const handleBirthdayChange = (val: string) => {
+        console.log('131 b >>> ', val);
+        console.log('173 moment(val).format >>> ', moment(val).format('DD/MM/YYYY'));
+    };
 
     if (isLoading) {
         return <FuseLoading />;
@@ -187,7 +238,7 @@ export function UserForm(data: UsersFormProps) {
     return (
         <div className="flex flex-col min-w-0">
             <Typography variant="h4" gutterBottom>
-                Edit User
+                {currentUser ? 'Edit User' : 'Create User'}
             </Typography>
             <Divider variant="middle" />
 
@@ -431,6 +482,25 @@ export function UserForm(data: UsersFormProps) {
                             )}
                         />
                     </Grid>
+
+                    <Grid item xs={4} md={4}>
+                        <Controller
+                            name="username"
+                            control={control}
+                            render={({ field }) => (
+                                <TextField
+                                    {...field}
+                                    label="Username/Nick"
+                                    type="text"
+                                    error={!!errors.username}
+                                    helperText={errors?.username?.message}
+                                    variant="outlined"
+                                    fullWidth
+                                    required
+                                />
+                            )}
+                        />
+                    </Grid>
                 </Grid>
 
                 <Divider textAlign="left" className="mb-32">
@@ -476,24 +546,6 @@ export function UserForm(data: UsersFormProps) {
 
                     <Grid item xs={4} md={4}>
                         <Controller
-                            name="username"
-                            control={control}
-                            render={({ field }) => (
-                                <TextField
-                                    {...field}
-                                    label="Username/Nick"
-                                    type="text"
-                                    error={!!errors.username}
-                                    helperText={errors?.username?.message}
-                                    variant="outlined"
-                                    fullWidth
-                                />
-                            )}
-                        />
-                    </Grid>
-
-                    <Grid item xs={4} md={4}>
-                        <Controller
                             name="contactPhone"
                             control={control}
                             render={({ field }) => (
@@ -518,6 +570,7 @@ export function UserForm(data: UsersFormProps) {
                                 <DatePicker
                                     {...field}
                                     value={usrBirthday}
+                                    onChange={handleBirthdayChange}
                                     format="dd-MM-yyyy"
                                     slotProps={{
                                         textField: {
@@ -546,7 +599,7 @@ export function UserForm(data: UsersFormProps) {
 
                 <Box className="flex w-full items-center justify-end">
                     <Button className="mx-10" variant="contained" color="primary" type="submit" disabled={Object.keys(errors).length > 0 || !isValid}>
-                        Save
+                        {currentUser ? 'Update' : 'Create'}
                     </Button>
 
                     <Button

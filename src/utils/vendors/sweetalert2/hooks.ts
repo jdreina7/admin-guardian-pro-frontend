@@ -17,7 +17,8 @@ const useSwalWrapper = () => {
             cancelButton: `${sweetAlertStyles.cancelButton}`,
             footer: `${sweetAlertStyles.footer}`
         },
-        buttonsStyling: false
+        buttonsStyling: true,
+        text: `${sweetAlertStyles.title}`
     });
 
     return withReactContent(FinalSwal);

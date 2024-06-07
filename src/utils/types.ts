@@ -1,4 +1,5 @@
 import { FuseSettingsConfigType } from '@fuse/core/FuseSettings/FuseSettings';
+import { SweetAlertIcon } from 'sweetalert2';
 import { IGenericInterface, IIdentificationType } from './interfaces';
 
 // Users
@@ -21,8 +22,35 @@ export type TUserCreateForm = {
     status: string;
 };
 
-export type TUserDB = {
+export type TUserDBForStore = {
     uid: number;
+    identificationTypeId: string;
+    email: string;
+    firstName: string;
+    middleName: string;
+    lastName: string;
+    genderId: string;
+    contactPhone: number;
+    address: string;
+    city: string;
+    birthday: string;
+    userImg?: string;
+    username: string;
+    password?: string;
+    maritalStatusId: string;
+    ocupationId: string;
+    roleId: string;
+    status: boolean;
+    lastLogin?: string;
+    settings?: Partial<FuseSettingsConfigType>;
+    shortcuts?: string[];
+    createdAt?: string;
+    updatedAt?: string;
+    id?: string;
+};
+
+export type TUserDB = {
+    uid: number | string;
     identificationTypeId: IIdentificationType;
     email: string;
     firstName: string;
@@ -33,19 +61,19 @@ export type TUserDB = {
     address: string;
     city: string;
     birthday: string;
-    userImg: string;
+    userImg?: string;
     username: string;
-    password: string;
+    password?: string;
     maritalStatusId: IGenericInterface;
     ocupationId: IGenericInterface;
     roleId: IGenericInterface;
     status: boolean;
-    lastLogin: string;
-    settings: Partial<FuseSettingsConfigType>;
-    shortcuts: string[];
-    createdAt: string;
-    updatedAt: string;
-    id: string;
+    lastLogin?: string;
+    settings?: Partial<FuseSettingsConfigType>;
+    shortcuts?: string[];
+    createdAt?: string;
+    updatedAt?: string;
+    id?: string;
 };
 
 export type TUserDBResponse = {
@@ -125,4 +153,14 @@ export type TRolesDB = {
     createdAt: string;
     updatedAt: string;
     id: string;
+};
+
+// SwwetAlert2
+export type TModalConstants = {
+    modalTitle?: string;
+    modalSubmitBtnText?: string;
+    successMsg?: string;
+    msgIcon?: SweetAlertIcon;
+    msgText?: string;
+    msgTitle?: string;
 };

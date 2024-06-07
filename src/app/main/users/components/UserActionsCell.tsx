@@ -1,9 +1,10 @@
 import { CustomCellRendererProps } from 'ag-grid-react';
 import { Box, Button, Tooltip } from '@mui/material';
-
 import { useMemo } from 'react';
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
+
 import { TUserDB } from '../../../../utils/types';
+import useSwalWrapper from '../../../../utils/vendors/sweetalert2/hooks';
 
 interface UserActionsCellProps extends CustomCellRendererProps {
     data: {
@@ -16,13 +17,17 @@ interface UserActionsCellProps extends CustomCellRendererProps {
  * The user actions.
  */
 function UserActionsCell(params: UserActionsCellProps) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const swal = useSwalWrapper();
     const user = params?.data?.name;
     const currentUser = useMemo(() => user, [user]);
     const currentUserStatus = useMemo(() => user?.status, [user]);
 
     const alertUser = () => {
-        alert(currentUser?.id);
+        swal.fire({
+            titleText: 'Hola Juan',
+            text: `Esto es una prueba - ${currentUser?.id}`,
+            confirmButtonText: 'Listo'
+        });
     };
 
     return (

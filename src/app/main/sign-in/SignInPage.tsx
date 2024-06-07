@@ -7,8 +7,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Box, Button, Checkbox, FormControl, FormControlLabel, Paper, TextField, Typography } from '@mui/material';
 import sample from 'public/assets/images/videos/login-video.mp4';
 import { useAuth } from 'src/app/auth/AuthRouteProvider';
-import Swal from 'sweetalert2';
-import { IAPIErrorResponse } from 'src/utils/interfaces';
+import { IAPIErrorResponse } from '../../../utils/interfaces';
+import useSwalWrapper from '../../../utils/vendors/sweetalert2/hooks';
 
 /**
  * Form Validation Schema
@@ -35,6 +35,7 @@ const defaultValues = {
  */
 function SignInPage() {
     const { jwtService } = useAuth();
+    const swal = useSwalWrapper();
 
     const { control, formState, handleSubmit } = useForm<FormType>({
         mode: 'onChange',
@@ -43,10 +44,6 @@ function SignInPage() {
     });
 
     const { isValid, dirtyFields, errors } = formState;
-
-    const sweetAlerts = (options: object) => {
-        Swal.fire({ ...options });
-    };
 
     function onSubmit(formData: FormType) {
         const { email, password } = formData;
@@ -59,7 +56,7 @@ function SignInPage() {
             .catch((error: AxiosError<IAPIErrorResponse>) => {
                 const errorData: IAPIErrorResponse = error.response.data;
 
-                sweetAlerts({
+                swal.fire({
                     icon: 'error',
                     text: errorData?.message ? errorData?.message : 'Error trying to connect with the backend API. Please contact the support team.'
                 });

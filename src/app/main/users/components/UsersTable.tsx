@@ -34,7 +34,7 @@ const mapUserData = (users: TUserDB[]) => {
     users.forEach((user) => {
         const ob: UsersDataTable = {
             name: user,
-            identification: user?.uid,
+            identification: user?.uid as number,
             role: user?.roleId?.name,
             email: user?.email,
             contact: String(user?.contactPhone),
