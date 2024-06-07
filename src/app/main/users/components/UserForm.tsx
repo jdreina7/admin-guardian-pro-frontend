@@ -113,7 +113,8 @@ export function UserForm(data: UsersFormProps) {
     const genders: TGendersDB[] = useMemo(() => gendersData?.data?.data, [gendersData]);
     const roles: TRolesDB[] = useMemo(() => rolesData?.data?.data, [rolesData]);
     const roleDefault: TRolesDB = useMemo(() => roles?.find((rol) => rol?.name === 'user'), [roles]);
-    const usrBirthday = useMemo(() => currentUser?.birthday, [currentUser]);
+    const usrBirthday = useMemo(() => (currentUser?.birthday ? moment(currentUser?.birthday, 'DD/MM/YYYY').toDate() : ''), [currentUser]);
+    const [newUsrBirthday, setNewUsrBirthday] = useState<string>('');
 
     const [isLoading, setIsLoading] = useState(true);
 
@@ -204,7 +205,8 @@ export function UserForm(data: UsersFormProps) {
             uid: finalUid,
             contactPhone: finalContactPhone,
             status: finalStatus,
-            password: TMP_PASSWORD
+            password: TMP_PASSWORD,
+            birthday: newUsrBirthday?.length > 0 ? newUsrBirthday : currentUser?.birthday
         };
 
         const resp: AxiosResponse<TUserDBResponse> = currentUser ? await updateUser(dataForSave) : await createUser(dataForSave);
@@ -226,9 +228,8 @@ export function UserForm(data: UsersFormProps) {
         setUserIdValue(val);
     };
 
-    const handleBirthdayChange = (val: string) => {
-        console.log('131 b >>> ', val);
-        console.log('173 moment(val).format >>> ', moment(val).format('DD/MM/YYYY'));
+    const handleBirthdayChange = (date: Date | null) => {
+        setNewUsrBirthday(moment(date).format('DD/MM/YYYY'));
     };
 
     if (isLoading) {
@@ -571,7 +572,7 @@ export function UserForm(data: UsersFormProps) {
                                     {...field}
                                     value={usrBirthday}
                                     onChange={handleBirthdayChange}
-                                    format="dd-MM-yyyy"
+                                    format="dd/MM/yyyy"
                                     slotProps={{
                                         textField: {
                                             id: 'birthday',
