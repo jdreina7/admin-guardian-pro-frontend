@@ -5,6 +5,7 @@ import FuseLoading from '@fuse/core/FuseLoading';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../../auth/user/store/userSlice';
 import DashboardHeader from './DashboardHeader';
+import { useTranslation } from 'react-i18next';
 
 const Root = styled(FusePageSimple)(({ theme }) => ({
     '& .FusePageSimple-header': {
@@ -15,9 +16,10 @@ const Root = styled(FusePageSimple)(({ theme }) => ({
 
 /**
  * The Dashboard page.
- */
+*/
 function Dashboard() {
     const user = useSelector(selectUser);
+    const { t, i18n } = useTranslation();
 
     setTimeout(() => {
         return <FuseLoading />;
@@ -29,7 +31,7 @@ function Dashboard() {
             content={
                 <div className="w-full p-12 pt-16 sm:pt-24 lg:ltr:pr-0 lg:rtl:pl-0">
                     <p>
-                        Hello <b>{user?.role}</b> user!
+                        {t('COMPOSE', {rol: user?.role}  )}
                     </p>
                 </div>
             }

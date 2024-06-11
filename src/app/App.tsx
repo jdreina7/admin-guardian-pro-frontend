@@ -14,6 +14,7 @@ import { selectCurrentLanguageDirection } from 'app/store/i18nSlice';
 import themeLayouts from 'app/theme-layouts/themeLayouts';
 import withAppProviders from './withAppProviders';
 import { AuthRouteProvider } from './auth/AuthRouteProvider';
+import i18next from 'i18next';
 
 // import axios from 'axios';
 /**
@@ -22,6 +23,9 @@ import { AuthRouteProvider } from './auth/AuthRouteProvider';
 axios.defaults.baseURL = `${import.meta.env.VITE_API_URL}`;
 axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 axios.defaults.headers.common['Content-Type'] = 'application/x-www-form-urlencoded';
+
+//i18next.addResourceBundle('en', 'dashboard', en);
+//i18next.addResourceBundle('es', 'dashboard', es);
 
 const emotionCacheOptions = {
     rtl: {
