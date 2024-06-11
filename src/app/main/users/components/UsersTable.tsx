@@ -57,7 +57,7 @@ const customFilterUserColumn = (userData: TUserDB) => {
 
 function UsersTable(props: UsersTableProps) {
     const { users, handleOpen, setSelectedUser } = props;
-    const gridStyle = useMemo(() => ({ height: '90%', width: '100%' }), []);
+    const gridStyle = useMemo(() => ({ height: '95.6%', width: '100%' }), []);
     const [rowData, setRowData] = useState([]);
 
     useEffect(() => {
