@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
 import { Button } from '@mui/material';
 import Typography from '@mui/material/Typography';
@@ -24,11 +23,11 @@ function UsersHeader(props: UsersHeaderProps) {
         <div className="flex justify-between p-24 sm:p-32 w-full border-b-1">
             <div className="flex flex-col">
                 <motion.span initial={{ x: -20 }} animate={{ x: 0, transition: { delay: 0.2 } }}>
-                    <Typography className="text-24 md:text-32 font-extrabold tracking-tight leading-none">{t('USERTITTLE')}</Typography>
+                    <Typography className="text-24 md:text-32 font-extrabold tracking-tight leading-none">{t('users_title')}</Typography>
                 </motion.span>
                 <motion.span initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1, transition: { delay: 0.2 } }}>
                     <Typography component={motion.span} className="text-14 font-medium ml-2" color="text.secondary">
-                        {`${users} ${t('USERTITTLE')}`}
+                        {`${users} ${t('users_title')}`}
                     </Typography>
                 </motion.span>
             </div>
@@ -36,7 +35,7 @@ function UsersHeader(props: UsersHeaderProps) {
                 <FuseSvgIcon mr={2} size={22}>
                     material-solid:person_add_alt_1
                 </FuseSvgIcon>
-                Add new user
+                {t('add_new_user_btn')}
             </Button>
         </div>
     );

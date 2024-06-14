@@ -2,7 +2,6 @@ import { useMemo, useState } from 'react';
 import FusePageSimple from '@fuse/core/FusePageSimple';
 import { styled } from '@mui/material/styles';
 import FuseLoading from '@fuse/core/FuseLoading';
-import { useTranslation } from 'react-i18next';
 
 import { Backdrop, Box, Fade, Modal } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
@@ -37,7 +36,6 @@ const style = {
  * Users page.
  */
 function Users() {
-    const { t, i18n } = useTranslation();
     const navigate = useNavigate();
     const sweetAlert = useSwalWrapper();
     const token = localStorage.getItem('access_token');
