@@ -8,8 +8,9 @@ import Button from '@mui/material/Button';
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
 import { darken } from '@mui/material/styles';
 import { useSelector } from 'react-redux';
-import { selectUser } from 'src/app/auth/user/store/userSlice';
 import { useTranslation } from 'react-i18next';
+
+import { selectUser } from '../../auth/user/store/userSlice';
 
 /**
  * The DashboardHeader page.
@@ -85,18 +86,15 @@ function DashboardHeader() {
                     </Avatar>
                     <div className="flex flex-col min-w-0 mx-16">
                         <Typography className="text-2xl md:text-5xl font-semibold tracking-tight leading-7 md:leading-snug truncate">
-                            { t('GRETTING') + `, ${user.data.displayName}!`}
+                            {`${t('gretting')}, ${user.data.displayName}!`}
                         </Typography>
 
                         <div className="flex items-center">
                             <FuseSvgIcon size={20} color="action">
                                 heroicons-solid:bell
                             </FuseSvgIcon>
-                            <Typography
-                                className="mx-6 leading-6 truncate"
-                                color="text.secondary"
-                            >
-                                {t('TASKQUANTITY')}
+                            <Typography className="mx-6 leading-6 truncate" color="text.secondary">
+                                {t('taskquantity')}
                             </Typography>
                         </div>
                     </div>
@@ -108,7 +106,7 @@ function DashboardHeader() {
                         color="primary"
                         startIcon={<FuseSvgIcon size={20}>heroicons-solid:mail</FuseSvgIcon>}
                     >
-                        {t('BTNMESG')}
+                        {t('btnmesg')}
                     </Button>
                     <Button
                         className="whitespace-nowrap"
@@ -116,7 +114,7 @@ function DashboardHeader() {
                         color="secondary"
                         startIcon={<FuseSvgIcon size={20}>heroicons-solid:cog</FuseSvgIcon>}
                     >
-                        {t('BTNSTG')}
+                        {t('btnstg')}
                     </Button>
                 </div>
             </div>

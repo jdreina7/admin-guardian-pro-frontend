@@ -4,12 +4,19 @@ import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/styles/ag-grid.css'; // Mandatory CSS required by the grid
 import 'ag-grid-community/styles/ag-theme-quartz.css';
 import { ColDef } from 'ag-grid-community';
+import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import FuseLoading from '@fuse/core/FuseLoading';
+
+import es from '../../../../i18n/es/es';
+import en from '../../../../i18n/en/en';
 
 import StatusChip from '../../../shared-components/status-chips/StatusChip';
 import UserNameCell from './UserNameCell';
 
 import { TUserDB } from '../../../../utils/types';
 import UserActionsCell from './UserActionsCell';
+import { selectCurrentLanguageId } from '../../../store/i18nSlice';
 
 const rowHeight = 60;
 
@@ -34,7 +41,7 @@ const mapUserData = (users: TUserDB[]) => {
     users.forEach((user) => {
         const ob: UsersDataTable = {
             name: user,
-            identification: user?.uid,
+            identification: user?.uid as number,
             role: user?.roleId?.name,
             email: user?.email,
             contact: String(user?.contactPhone),
@@ -56,9 +63,12 @@ const customFilterUserColumn = (userData: TUserDB) => {
 };
 
 function UsersTable(props: UsersTableProps) {
+    const { t } = useTranslation();
+    const currentLanguage = useSelector(selectCurrentLanguageId);
     const { users, handleOpen, setSelectedUser } = props;
-    const gridStyle = useMemo(() => ({ height: '90%', width: '100%' }), []);
+    const gridStyle = useMemo(() => ({ height: '95.6%', width: '100%' }), []);
     const [rowData, setRowData] = useState([]);
+    const [isDestroyed, setIsDestroyed] = useState(false);
 
     useEffect(() => {
         if (users) {
@@ -67,11 +77,26 @@ function UsersTable(props: UsersTableProps) {
         }
     }, [users]);
 
+    const recreateGrid = () => {
+        setIsDestroyed(false);
+    };
+
+    const localeText = useMemo<{
+        [key: string]: string;
+    }>(() => {
+        setIsDestroyed(true);
+        const lng = currentLanguage === 'en' ? en : es;
+
+        setTimeout(() => recreateGrid(), 0);
+
+        return lng;
+    }, [currentLanguage, t]);
+
     const columnDefs: ColDef[] = useMemo(() => {
         return [
             {
                 field: 'name',
-                headerName: 'User Name',
+                headerValueGetter: () => t('fullname'),
                 cellRenderer: UserNameCell,
                 filter: 'name',
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
@@ -89,6 +114,7 @@ function UsersTable(props: UsersTableProps) {
             },
             {
                 field: 'identification',
+                headerValueGetter: () => t('identification'),
                 filter: 'identification',
                 filterParams: {
                     filterOptions: ['contains'],
@@ -103,6 +129,7 @@ function UsersTable(props: UsersTableProps) {
             },
             {
                 field: 'role',
+                headerValueGetter: () => t('role'),
                 filter: 'role',
                 filterParams: {
                     filterOptions: ['contains'],
@@ -117,6 +144,7 @@ function UsersTable(props: UsersTableProps) {
             },
             {
                 field: 'email',
+                headerValueGetter: () => t('email'),
                 filter: 'email',
                 filterParams: {
                     filterOptions: ['contains'],
@@ -131,6 +159,7 @@ function UsersTable(props: UsersTableProps) {
             },
             {
                 field: 'contact',
+                headerValueGetter: () => t('contact'),
                 filter: 'contact',
                 filterParams: {
                     filterOptions: ['contains'],
@@ -145,6 +174,7 @@ function UsersTable(props: UsersTableProps) {
             },
             {
                 field: 'status',
+                headerValueGetter: () => t('status'),
                 cellRenderer: StatusChip,
                 onCellClicked: (p) => {
                     handleOpen();
@@ -155,10 +185,11 @@ function UsersTable(props: UsersTableProps) {
             },
             {
                 field: 'actions',
+                headerValueGetter: () => t('actions'),
                 cellRenderer: UserActionsCell
             }
         ];
-    }, [users]);
+    }, [users, t]);
 
     const defaultColDef = useMemo<ColDef>(() => {
         return {
@@ -166,7 +197,7 @@ function UsersTable(props: UsersTableProps) {
         };
     }, []);
 
-    return (
+    return !isDestroyed ? (
         <div className="w-full h-full bg-white">
             <div className="h-full mx-auto p-8 lg:px-12">
                 <div className="h-full mx-auto rounded-3xl ring-1 ring-gray-200 lg:mx-0 lg:flex lg:max-w-none">
@@ -174,6 +205,7 @@ function UsersTable(props: UsersTableProps) {
                         <AgGridReact
                             rowData={rowData}
                             columnDefs={columnDefs}
+                            localeText={localeText}
                             defaultColDef={defaultColDef}
                             pagination
                             paginationPageSize={10}
@@ -184,6 +216,8 @@ function UsersTable(props: UsersTableProps) {
                 </div>
             </div>
         </div>
+    ) : (
+        <FuseLoading />
     );
 }
 

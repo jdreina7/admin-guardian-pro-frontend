@@ -24,10 +24,7 @@ function NavbarToggleButton(props: NavbarToggleButtonProps) {
     const {
         className = '',
         children = (
-            <FuseSvgIcon
-                size={20}
-                color="action"
-            >
+            <FuseSvgIcon size={20} color="action">
                 {icon}
             </FuseSvgIcon>
         )
@@ -47,11 +44,7 @@ function NavbarToggleButton(props: NavbarToggleButtonProps) {
                 if (isMobile) {
                     dispatch(navbarToggleMobile());
                 } else if (config?.navbar?.style === 'style-2') {
-                    dispatch(
-                        setDefaultSettings(
-                            _.set({}, 'layout.config.navbar.folded', !settings?.layout?.config?.navbar?.folded)
-                        )
-                    );
+                    dispatch(setDefaultSettings(_.set({}, 'layout.config.navbar.folded', !settings?.layout?.config?.navbar?.folded)));
                 } else {
                     setIconPosition('heroicons-outline:chevron-left');
                     dispatch(navbarToggle());

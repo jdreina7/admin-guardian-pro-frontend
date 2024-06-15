@@ -6,7 +6,7 @@ import { PartialDeep } from 'type-fest';
 import { DEFAULT_LOGIN_PATH, DEFAULT_USERS_PATH } from '../../../../utils/contants';
 import { transformUserDataToUserModel } from '../../../../utils/utils';
 import { User } from '../../user';
-import { IUser } from '../../../../utils/types';
+import { TUserDBResponse } from '../../../../utils/types';
 
 const defaultAuthConfig = {
     tokenStorageKey: 'access_token',
@@ -182,7 +182,7 @@ const useJwtAuth = <SignInPayload, SignUpPayload>(props: JwtAuthProps<User>): Jw
                 try {
                     setIsLoading(true);
 
-                    const response: AxiosResponse<IUser> = await axios.get(`${authConfig.getUserUrl}/${userId}`, {
+                    const response: AxiosResponse<TUserDBResponse> = await axios.get(`${authConfig.getUserUrl}/${userId}`, {
                         headers: { Authorization: `Bearer ${accessToken}` }
                     });
 
@@ -208,15 +208,7 @@ const useJwtAuth = <SignInPayload, SignUpPayload>(props: JwtAuthProps<User>): Jw
                 setIsLoading(false);
             });
         }
-    }, [
-        isTokenValid,
-        setSession,
-        handleSignInSuccess,
-        handleSignInFailure,
-        handleError,
-        getAccessToken,
-        isAuthenticated
-    ]);
+    }, [isTokenValid, setSession, handleSignInSuccess, handleSignInFailure, handleError, getAccessToken, isAuthenticated]);
 
     /**
      * Sign in
@@ -289,10 +281,7 @@ const useJwtAuth = <SignInPayload, SignUpPayload>(props: JwtAuthProps<User>): Jw
      */
     const updateUser = useCallback(async (userData: PartialDeep<User>) => {
         try {
-            const response: AxiosResponse<User, PartialDeep<User>> = await axios.put(
-                authConfig.updateUserUrl,
-                userData
-            );
+            const response: AxiosResponse<User, PartialDeep<User>> = await axios.put(authConfig.updateUserUrl, userData);
 
             const updatedUserData = response?.data;
 

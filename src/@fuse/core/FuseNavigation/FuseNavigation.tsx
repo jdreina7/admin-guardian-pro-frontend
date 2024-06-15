@@ -83,24 +83,9 @@ function FuseNavigation(props: FuseNavigationProps) {
     return (
         <>
             {inputGlobalStyles}
-            {layout === 'horizontal' && (
-                <FuseNavHorizontalLayout1
-                    checkPermission={false}
-                    {...props}
-                />
-            )}
-            {layout === 'vertical' && (
-                <FuseNavVerticalLayout1
-                    checkPermission={false}
-                    {...props}
-                />
-            )}
-            {layout === 'vertical-2' && (
-                <FuseNavVerticalLayout2
-                    checkPermission={false}
-                    {...props}
-                />
-            )}
+            {layout === 'horizontal' && <FuseNavHorizontalLayout1 checkPermission={false} {...props} />}
+            {layout === 'vertical' && <FuseNavVerticalLayout1 checkPermission={false} {...props} />}
+            {layout === 'vertical-2' && <FuseNavVerticalLayout2 checkPermission={false} {...props} />}
         </>
     );
 }

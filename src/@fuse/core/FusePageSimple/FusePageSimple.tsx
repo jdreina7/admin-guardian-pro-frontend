@@ -201,117 +201,113 @@ const Root = styled('div')<FusePageSimpleProps>(({ theme, ...props }) => ({
  * The FusePageSimple component is a layout component that provides a simple page layout with a header, left sidebar, right sidebar, and content area.
  * It is designed to be used as a top-level component for an application or as a sub-component within a larger layout.
  */
-const FusePageSimple = forwardRef<
-    { toggleLeftSidebar: (T: boolean) => void; toggleRightSidebar: (T: boolean) => void },
-    FusePageSimpleProps
->((props, ref) => {
-    const {
-        scroll = 'page',
-        className,
-        header,
-        content,
-        leftSidebarContent,
-        rightSidebarContent,
-        leftSidebarOpen = false,
-        rightSidebarOpen = false,
-        rightSidebarWidth = 240,
-        leftSidebarWidth = 240,
-        leftSidebarVariant = 'permanent',
-        rightSidebarVariant = 'permanent',
-        rightSidebarOnClose,
-        leftSidebarOnClose
-    } = props;
+const FusePageSimple = forwardRef<{ toggleLeftSidebar: (T: boolean) => void; toggleRightSidebar: (T: boolean) => void }, FusePageSimpleProps>(
+    (props, ref) => {
+        const {
+            scroll = 'page',
+            className,
+            header,
+            content,
+            leftSidebarContent,
+            rightSidebarContent,
+            leftSidebarOpen = false,
+            rightSidebarOpen = false,
+            rightSidebarWidth = 240,
+            leftSidebarWidth = 240,
+            leftSidebarVariant = 'permanent',
+            rightSidebarVariant = 'permanent',
+            rightSidebarOnClose,
+            leftSidebarOnClose
+        } = props;
 
-    const leftSidebarRef = useRef<{ toggleSidebar: (T: boolean) => void }>(null);
-    const rightSidebarRef = useRef<{ toggleSidebar: (T: boolean) => void }>(null);
-    const rootRef = useRef(null);
+        const leftSidebarRef = useRef<{ toggleSidebar: (T: boolean) => void }>(null);
+        const rightSidebarRef = useRef<{ toggleSidebar: (T: boolean) => void }>(null);
+        const rootRef = useRef(null);
 
-    useImperativeHandle(ref, () => ({
-        rootRef,
-        toggleLeftSidebar: (val: boolean) => {
-            leftSidebarRef?.current?.toggleSidebar(val);
-        },
-        toggleRightSidebar: (val: boolean) => {
-            rightSidebarRef?.current?.toggleSidebar(val);
-        }
-    }));
+        useImperativeHandle(ref, () => ({
+            rootRef,
+            toggleLeftSidebar: (val: boolean) => {
+                leftSidebarRef?.current?.toggleSidebar(val);
+            },
+            toggleRightSidebar: (val: boolean) => {
+                rightSidebarRef?.current?.toggleSidebar(val);
+            }
+        }));
 
-    return (
-        <>
-            <GlobalStyles
-                styles={() => ({
-                    ...(scroll !== 'page' && {
-                        '#fuse-toolbar': {
-                            position: 'static'
-                        },
-                        '#fuse-footer': {
-                            position: 'static'
-                        }
-                    }),
-                    ...(scroll === 'page' && {
-                        '#fuse-toolbar': {
-                            position: 'sticky',
-                            top: 0
-                        },
-                        '#fuse-footer': {
-                            position: 'sticky',
-                            bottom: 0
-                        }
-                    })
-                })}
-            />
-            <Root
-                className={clsx('FusePageSimple-root', `FusePageSimple-scroll-${scroll}`, className)}
-                ref={rootRef}
-                scroll={scroll}
-                leftSidebarWidth={leftSidebarWidth}
-                rightSidebarWidth={rightSidebarWidth}
-            >
-                <div className="z-10 flex h-full flex-auto flex-col">
-                    <div className="FusePageSimple-wrapper">
-                        {leftSidebarContent && (
-                            <FusePageSimpleSidebar
-                                position="left"
-                                variant={leftSidebarVariant || 'permanent'}
-                                ref={leftSidebarRef}
-                                open={leftSidebarOpen}
-                                onClose={leftSidebarOnClose}
-                            >
-                                {leftSidebarContent}
-                            </FusePageSimpleSidebar>
-                        )}
-                        <div
-                            className="FusePageSimple-contentWrapper"
-
-                            // enable={scroll === 'page'}
-                        >
-                            {header && <FusePageSimpleHeader header={header} />}
-
-                            {content && (
-                                <FuseScrollbars
-                                    enable={scroll === 'content'}
-                                    className={clsx('FusePageSimple-content container')}
+        return (
+            <>
+                <GlobalStyles
+                    styles={() => ({
+                        ...(scroll !== 'page' && {
+                            '#fuse-toolbar': {
+                                position: 'static'
+                            },
+                            '#fuse-footer': {
+                                position: 'static'
+                            }
+                        }),
+                        ...(scroll === 'page' && {
+                            '#fuse-toolbar': {
+                                position: 'sticky',
+                                top: 0
+                            },
+                            '#fuse-footer': {
+                                position: 'sticky',
+                                bottom: 0
+                            }
+                        })
+                    })}
+                />
+                <Root
+                    className={clsx('FusePageSimple-root', `FusePageSimple-scroll-${scroll}`, className)}
+                    ref={rootRef}
+                    scroll={scroll}
+                    leftSidebarWidth={leftSidebarWidth}
+                    rightSidebarWidth={rightSidebarWidth}
+                >
+                    <div className="z-10 flex h-full flex-auto flex-col">
+                        <div className="FusePageSimple-wrapper">
+                            {leftSidebarContent && (
+                                <FusePageSimpleSidebar
+                                    position="left"
+                                    variant={leftSidebarVariant || 'permanent'}
+                                    ref={leftSidebarRef}
+                                    open={leftSidebarOpen}
+                                    onClose={leftSidebarOnClose}
                                 >
-                                    {content}
-                                </FuseScrollbars>
+                                    {leftSidebarContent}
+                                </FusePageSimpleSidebar>
+                            )}
+                            <div
+                                className="FusePageSimple-contentWrapper"
+
+                                // enable={scroll === 'page'}
+                            >
+                                {header && <FusePageSimpleHeader header={header} />}
+
+                                {content && (
+                                    <FuseScrollbars enable={scroll === 'content'} className={clsx('FusePageSimple-content container')}>
+                                        {content}
+                                    </FuseScrollbars>
+                                )}
+                            </div>
+                            {rightSidebarContent && (
+                                <FusePageSimpleSidebar
+                                    position="right"
+                                    variant={rightSidebarVariant || 'permanent'}
+                                    ref={rightSidebarRef}
+                                    open={rightSidebarOpen}
+                                    onClose={rightSidebarOnClose}
+                                >
+                                    {rightSidebarContent}
+                                </FusePageSimpleSidebar>
                             )}
                         </div>
-                        {rightSidebarContent && (
-                            <FusePageSimpleSidebar
-                                position="right"
-                                variant={rightSidebarVariant || 'permanent'}
-                                ref={rightSidebarRef}
-                                open={rightSidebarOpen}
-                                onClose={rightSidebarOnClose}
-                            >
-                                {rightSidebarContent}
-                            </FusePageSimpleSidebar>
-                        )}
                     </div>
-                </div>
-            </Root>
-        </>
-    );
-});
+                </Root>
+            </>
+        );
+    }
+);
 
 export default memo(styled(FusePageSimple)``);
