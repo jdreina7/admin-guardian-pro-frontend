@@ -35,6 +35,11 @@ type UsersDataTable = {
     status: boolean;
 };
 
+/**
+ * Function for mapping the DB users with the users grid format
+ * @param users The user DB collection from the API
+ * @returns Returns a mapped users data
+ */
 const mapUserData = (users: TUserDB[]) => {
     const data: Array<UsersDataTable> = [];
 
@@ -54,6 +59,11 @@ const mapUserData = (users: TUserDB[]) => {
     return data;
 };
 
+/**
+ * Function for create a composed filter for the fullname column on the grid
+ * @param userData User data object
+ * @returns Return a composed filter for the fullname column
+ */
 const customFilterUserColumn = (userData: TUserDB) => {
     const { firstName, middleName, lastName, email } = userData;
 
@@ -77,6 +87,9 @@ function UsersTable(props: UsersTableProps) {
         }
     }, [users]);
 
+    /**
+     * Pagination grid translation block
+     */
     const recreateGrid = () => {
         setIsDestroyed(false);
     };
@@ -91,12 +104,18 @@ function UsersTable(props: UsersTableProps) {
 
         return lng;
     }, [currentLanguage, t]);
+    /**
+     * End block
+     */
 
+    /**
+     * Ag-grid columns definition block
+     */
     const columnDefs: ColDef[] = useMemo(() => {
         return [
             {
                 field: 'name',
-                headerValueGetter: () => t('fullname'),
+                headerValueGetter: () => t('fullname'), // Translated value for the grid columns
                 cellRenderer: UserNameCell,
                 filter: 'name',
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
@@ -106,6 +125,7 @@ function UsersTable(props: UsersTableProps) {
                     maxNumConditions: 1
                 },
                 onCellClicked: (p) => {
+                    // function callback for open the edit user dialog
                     handleOpen();
                     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
                     setSelectedUser(p.data?.name as TUserDB);
@@ -190,7 +210,11 @@ function UsersTable(props: UsersTableProps) {
             }
         ];
     }, [users, t]);
+    /**
+     * End block
+     */
 
+    // this is necesary for improve the grid view
     const defaultColDef = useMemo<ColDef>(() => {
         return {
             flex: 1

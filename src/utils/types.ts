@@ -49,6 +49,33 @@ export type TUserDBForStore = {
     id?: string;
 };
 
+export type TUserDBForUpdate = {
+    uid?: number;
+    identificationTypeId?: string;
+    email?: string;
+    firstName?: string;
+    middleName?: string;
+    lastName?: string;
+    genderId?: string;
+    contactPhone?: number;
+    address?: string;
+    city?: string;
+    birthday?: string;
+    userImg?: string;
+    username?: string;
+    password?: string;
+    maritalStatusId?: string;
+    ocupationId?: string;
+    roleId?: string;
+    status?: boolean;
+    lastLogin?: string;
+    settings?: Partial<FuseSettingsConfigType>;
+    shortcuts?: string[];
+    createdAt?: string;
+    updatedAt?: string;
+    id?: string;
+};
+
 export type TUserDB = {
     uid: number | string;
     identificationTypeId: IIdentificationType;

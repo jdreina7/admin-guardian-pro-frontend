@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { TUserDBForStore } from 'src/utils/types';
+import { TUserDBForStore, TUserDBForUpdate } from 'src/utils/types';
 import { users } from '../queries';
 
 export const useListUsers = (token: string) => {
@@ -14,7 +14,7 @@ export const useUpdateUser = (token: string, userID: string) => {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: (data: TUserDBForStore) => users.updateUser({ accessToken: token, userId: userID, payload: data }),
+        mutationFn: (data: TUserDBForUpdate) => users.updateUser({ accessToken: token, userId: userID, payload: data }),
         onError: (error) => {
             // eslint-disable-next-line no-console
             console.error('Error editing user:', error);
