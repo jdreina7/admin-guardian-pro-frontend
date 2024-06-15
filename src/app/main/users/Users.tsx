@@ -50,6 +50,7 @@ function Users() {
         setSelectedUser(undefined);
     };
 
+    // Function for show an success message when user is created/updated
     const onSuccess = (data: TModalConstants) => {
         sweetAlert.fire({
             icon: data?.msgIcon,
@@ -60,6 +61,7 @@ function Users() {
         setSelectedUser(undefined);
     };
 
+    // Function for show an error message when user is created/updated
     const onError = (data: TModalConstants) => {
         sweetAlert.fire({
             icon: data?.msgIcon,

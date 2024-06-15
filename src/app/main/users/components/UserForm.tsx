@@ -11,8 +11,15 @@ import moment from 'moment';
 import { AxiosError, AxiosResponse } from 'axios';
 
 import { capitalizeFirstLetter } from 'src/utils/utils';
-import { useCreateUser, useUpdateUser } from 'src/api/hooks/useUsers';
-import { useListIdentificationsTypes, useListOcupations, useListMaritalStatus, useListGenders, useListRoles } from '../../../../api/hooks';
+import {
+    useCreateUser,
+    useUpdateUser,
+    useListIdentificationsTypes,
+    useListOcupations,
+    useListMaritalStatus,
+    useListGenders,
+    useListRoles
+} from '../../../../api/hooks';
 import {
     TGendersDB,
     TIdentificationTypeDB,
