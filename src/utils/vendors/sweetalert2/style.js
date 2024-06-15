@@ -68,7 +68,7 @@ const useStyles = makeStyles((theme) => ({
         cursor: 'pointer',
         color: theme.palette.common.white,
         boxSizing: 'border-box',
-        fontSize: '0.875rem',
+        fontSize: '1.5rem !important',
         lineHeight: 1.75,
         padding: theme.spacing(0.75, 2),
         borderRadius: 4,

@@ -32,9 +32,29 @@ function UserActionsCell(params: UserActionsCellProps) {
         });
     };
 
+    const handleChangeUserStatus = () => {
+        swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                swal.fire({
+                    title: 'Deleted!',
+                    text: 'Your file has been deleted.',
+                    icon: 'success'
+                });
+            }
+        });
+    };
+
     return (
         <Box className="flex items-center justify-around w-full h-full">
-            <Button className="w-full h-full" onClick={alertUser}>
+            <Button className="w-full h-full" onClick={handleChangeUserStatus}>
                 {currentUserStatus && (
                     <Tooltip title={t('deactivate_user')}>
                         <FuseSvgIcon className="cursor-pointer" size={22} color="error">
