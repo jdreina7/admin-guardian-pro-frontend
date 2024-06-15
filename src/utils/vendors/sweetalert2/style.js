@@ -3,20 +3,21 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 // A style sheet
 import { makeStyles } from '@mui/styles';
+// import themesConfig from 'app/configs/themesConfig';
 
 const useStyles = makeStyles((theme) => ({
     container: {
         zIndex: 1200
     },
     popup: {
-        width: '24em',
+        width: '40em',
         overflow: 'hidden',
         borderRadius: 8,
         color: theme.palette.text.primary,
         backgroundColor: theme.palette.background.paper
     },
     title: {
-        fontSize: '1.5rem',
+        fontSize: '2.5rem',
         fontWeight: '400',
         color: theme.typography.h1.color
     },
@@ -34,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
         margin: theme.spacing(0, 'auto', 2)
     },
     htmlContainer: {
-        fontSize: '1rem',
+        fontSize: '1.8rem !important',
         lineHeight: 1.5,
         margin: theme.spacing(1, 3, 0.5),
 
@@ -49,12 +50,13 @@ const useStyles = makeStyles((theme) => ({
         cursor: 'pointer',
         color: theme.palette.common.white,
         boxSizing: 'border-box',
-        fontSize: '0.875rem',
+        fontSize: '1.5rem !important',
         lineHeight: 1.75,
         padding: theme.spacing(0.75, 2),
         borderRadius: 4,
         fontFamily: 'inherit',
-        backgroundColor: theme.palette.primary.main,
+        // backgroundColor: theme.palette.secondary.main,
+        backgroundColor: '#334155 !important',
 
         '&:hover': {
             backgroundColor: theme.palette.primary.dark
@@ -66,7 +68,7 @@ const useStyles = makeStyles((theme) => ({
         cursor: 'pointer',
         color: theme.palette.common.white,
         boxSizing: 'border-box',
-        fontSize: '0.875rem',
+        fontSize: '1.5rem !important',
         lineHeight: 1.75,
         padding: theme.spacing(0.75, 2),
         borderRadius: 4,

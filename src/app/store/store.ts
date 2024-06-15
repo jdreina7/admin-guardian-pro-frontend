@@ -1,14 +1,6 @@
 import i18n from 'app/store/i18nSlice';
 import apiService from 'app/store/apiService';
-import {
-    ReducersMapObject,
-    configureStore,
-    Store,
-    combineSlices,
-    buildCreateSlice,
-    asyncThunkCreator,
-    Middleware
-} from '@reduxjs/toolkit';
+import { ReducersMapObject, configureStore, Store, combineSlices, buildCreateSlice, asyncThunkCreator, Middleware } from '@reduxjs/toolkit';
 import { createDynamicMiddleware } from '@reduxjs/toolkit/react';
 import { AppDispatchType } from 'app/store/types';
 import { useDispatch } from 'react-redux';

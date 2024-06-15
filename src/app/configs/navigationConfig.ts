@@ -1,7 +1,7 @@
 import { FuseNavItemType } from '@fuse/core/FuseNavigation/types/FuseNavItemType';
 import i18next from 'i18next';
-import es from './navigation-i18n/es';
-import en from './navigation-i18n/en';
+import es from '../../i18n/es/es';
+import en from '../../i18n/en/en';
 
 /**
  * The navigationConfig object is an array of navigation items for the Fuse application.
@@ -10,21 +10,21 @@ import en from './navigation-i18n/en';
 i18next.addResourceBundle('en', 'navigation', en);
 i18next.addResourceBundle('es', 'navigation', es);
 
-const navigationConfig : FuseNavItemType[] = [
+const navigationConfig: FuseNavItemType[] = [
     {
         id: 'dashboard',
-        title: 'DASHTITTLE',
+        title: 'dashboard_title',
         type: 'item',
         icon: 'heroicons-outline:home',
-        translate: 'DASHTITTLE',
+        translate: 'dashboard_title',
         url: 'dashboard'
     },
     {
         id: 'users',
-        title: 'USERTITTLE' ,
+        title: 'users_title',
         type: 'item',
         icon: 'feather:users',
-        translate:'USERTITTLE',
+        translate: 'users_title',
         url: 'users'
     }
 ];

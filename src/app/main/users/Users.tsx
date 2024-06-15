@@ -2,15 +2,15 @@ import { useMemo, useState } from 'react';
 import FusePageSimple from '@fuse/core/FusePageSimple';
 import { styled } from '@mui/material/styles';
 import FuseLoading from '@fuse/core/FuseLoading';
-import { useTranslation } from 'react-i18next';
 
 import { Backdrop, Box, Fade, Modal } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import UsersHeader from './components/UsersHeader';
 import UsersTable from './components/UsersTable';
 import { useListUsers } from '../../../api/hooks';
-import { TUserDB } from '../../../utils/types';
+import { TModalConstants, TUserDB } from '../../../utils/types';
 import { UserForm } from './components/UserForm';
+import useSwalWrapper from '../../../utils/vendors/sweetalert2/hooks';
 
 const Root = styled(FusePageSimple)(({ theme }) => ({
     '& .FusePageSimple-header': {
@@ -36,8 +36,8 @@ const style = {
  * Users page.
  */
 function Users() {
-    const { t, i18n } = useTranslation();
     const navigate = useNavigate();
+    const sweetAlert = useSwalWrapper();
     const token = localStorage.getItem('access_token');
     const { data, isLoading: usersLoading, error } = useListUsers(token);
     const usersList: TUserDB[] = useMemo(() => data?.data?.data, [data]);
@@ -45,7 +45,31 @@ function Users() {
     const [open, setOpen] = useState(false);
 
     const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
+    const handleClose = () => {
+        setOpen(false);
+        setSelectedUser(undefined);
+    };
+
+    const onSuccess = (data: TModalConstants) => {
+        sweetAlert.fire({
+            icon: data?.msgIcon,
+            text: data?.msgText
+        });
+
+        setOpen(false);
+        setSelectedUser(undefined);
+    };
+
+    const onError = (data: TModalConstants) => {
+        sweetAlert.fire({
+            icon: data?.msgIcon,
+            title: data?.msgTitle,
+            text: data?.msgText
+        });
+
+        setOpen(false);
+        setSelectedUser(undefined);
+    };
 
     if (usersLoading) {
         return <FuseLoading />;
@@ -53,7 +77,7 @@ function Users() {
 
     return (
         <Root
-            header={<UsersHeader usersQuantity={usersList?.length} />}
+            header={<UsersHeader usersQuantity={usersList?.length} handleOpen={handleOpen} />}
             content={
                 <>
                     {!error && <UsersTable users={usersList} handleOpen={handleOpen} setSelectedUser={setSelectedUser} />}
@@ -74,7 +98,7 @@ function Users() {
                     >
                         <Fade in={open}>
                             <Box sx={style}>
-                                <UserForm data={selectedUser} />
+                                <UserForm currentUser={selectedUser} handleClose={handleClose} onError={onError} onSuccess={onSuccess} />
                             </Box>
                         </Fade>
                     </Modal>

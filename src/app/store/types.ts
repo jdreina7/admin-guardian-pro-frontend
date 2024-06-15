@@ -56,9 +56,7 @@ export type AppThunkDispatchType<E = unknown> = ThunkDispatch<RootStateType, E, 
 /**
  * The type of a path to a specific type.
  */
-type PathToType<Str extends string, T> = Str extends `${infer Start}/${infer Rest}`
-    ? { [P in Start as P]: PathToType<Rest, T> }
-    : { [P in Str]: T };
+type PathToType<Str extends string, T> = Str extends `${infer Start}/${infer Rest}` ? { [P in Start as P]: PathToType<Rest, T> } : { [P in Str]: T };
 
 /**
  * The type of multiple paths to specific types.
@@ -77,10 +75,7 @@ export type RootStateWithSliceType<SliceType extends { name: string; getInitialS
     PathToType<SliceType['name'], ReturnType<SliceType['getInitialState']>>;
 
 export type RootStateType<
-    T extends
-        | string
-        | { name: string; getInitialState: () => unknown }
-        | Array<{ name: string; getInitialState: () => unknown }> = never,
+    T extends string | { name: string; getInitialState: () => unknown } | Array<{ name: string; getInitialState: () => unknown }> = never,
     State = never
 > = T extends string
     ? ExtendedRootStateType<T, State>

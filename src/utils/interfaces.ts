@@ -1,6 +1,7 @@
 export interface IAPIErrorResponse {
     message: string;
     success: boolean;
+    invalidValue?: IDuplicatedUIUserError;
 }
 
 export interface IIdentificationType {
@@ -27,4 +28,8 @@ export interface ISettings {
     layout: ILayout;
     theme: ITheme;
     _id: string;
+}
+
+export interface IDuplicatedUIUserError {
+    uid: number;
 }
