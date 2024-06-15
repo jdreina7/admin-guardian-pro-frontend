@@ -28,6 +28,13 @@ const locale = {
     page: 'Page',
     to: 'to',
     of: 'of',
+    are_you_sure_question: 'Are you sure?',
+    ok_btn_text: 'Accept',
+    cancel_btn_text: 'Cancel',
+    forbidden_title: 'Forbidden!',
+    done_title: 'Done!',
+    failed_title: 'Failed!',
+    error_text: 'Ups! Something went wrong',
 
     // Users
     users_title: 'Users',
@@ -41,7 +48,11 @@ const locale = {
     role: 'Role',
     email: 'Email',
     contact: 'Contact',
-    status: 'Status'
+    status: 'Status',
+    activate_user_status_text: 'This process will change the user status to ACTIVE.',
+    deactivate_user_status_text: 'This process will change the user status to INACTIVE.',
+    forbidden_update_your_own: 'You cannot change your own status while logged into the portal.',
+    user_status_updated: 'The user status has been updated.'
 };
 
 export default locale;
