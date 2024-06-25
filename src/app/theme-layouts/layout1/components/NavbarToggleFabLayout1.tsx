@@ -7,30 +7,30 @@ import { navbarToggle, navbarToggleMobile } from 'app/theme-layouts/shared-compo
 import NavbarToggleFab from 'app/theme-layouts/shared-components/navbar/NavbarToggleFab';
 
 type NavbarToggleFabLayout1Props = {
-	className?: string;
+    className?: string;
 };
 
 /**
  * The navbar toggle fab layout 1.
  */
 function NavbarToggleFabLayout1(props: NavbarToggleFabLayout1Props) {
-	const { className } = props;
+    const { className } = props;
 
-	const isMobile = useThemeMediaQuery((theme) => theme.breakpoints.down('lg'));
+    const isMobile = useThemeMediaQuery((theme) => theme.breakpoints.down('lg'));
 
-	const config = useSelector(selectFuseCurrentLayoutConfig) as Layout1ConfigDefaultsType;
+    const config = useSelector(selectFuseCurrentLayoutConfig) as Layout1ConfigDefaultsType;
 
-	const dispatch = useAppDispatch();
+    const dispatch = useAppDispatch();
 
-	return (
-		<NavbarToggleFab
-			className={className}
-			onClick={() => {
-				dispatch(isMobile ? navbarToggleMobile() : navbarToggle());
-			}}
-			position={config.navbar.position}
-		/>
-	);
+    return (
+        <NavbarToggleFab
+            className={className}
+            onClick={() => {
+                dispatch(isMobile ? navbarToggleMobile() : navbarToggle());
+            }}
+            position={config.navbar.position}
+        />
+    );
 }
 
 export default NavbarToggleFabLayout1;

@@ -11,6 +11,7 @@ import moment from 'moment';
 import { AxiosError, AxiosResponse } from 'axios';
 
 import { capitalizeFirstLetter } from 'src/utils/utils';
+import { useTranslation } from 'react-i18next';
 import {
     useCreateUser,
     useUpdateUser,
@@ -49,45 +50,6 @@ type UsersFormProps = {
 };
 
 /**
- * Form Validation Schema
- */
-export const IdSchema = z.object({
-    name: z.string(),
-    id: z.string()
-});
-
-export type Id = z.infer<typeof IdSchema>;
-
-export const IdentificationTypeIdSchema = z.object({
-    type: z.string(),
-    id: z.string()
-});
-
-export type IdentificationTypeId = z.infer<typeof IdentificationTypeIdSchema>;
-
-export const DataSchema = z.object({
-    uid: z.string().min(7, 'User ID is mandatory'),
-    identificationTypeId: z.string(),
-    email: z.string().email('You must enter a valid email').min(1, 'You must enter an email'),
-    firstName: z.string().min(3, 'FirstName is too short - must be at least 3 chars.'),
-    middleName: z.string().optional(),
-    lastName: z.string().min(3, 'LastName is too short - must be at least 3 chars.'),
-    genderId: z.string(),
-    contactPhone: z.string().optional(),
-    address: z.string().optional(),
-    city: z.string().optional(),
-    birthday: z.string().optional(),
-    username: z.string().min(5, 'The username is required and must be at least 5 characters long.'),
-    maritalStatusId: z.string(),
-    ocupationId: z.string(),
-    roleId: z.string(),
-    status: z.string()
-});
-
-export type Data = z.infer<typeof DataSchema>;
-// ***********************************************
-
-/**
  * Imask use for the User ID field1
  */
 const IMaskUIInput = IMaskMixin(({ ...props }) => {
@@ -96,6 +58,7 @@ const IMaskUIInput = IMaskMixin(({ ...props }) => {
 });
 
 export function UserForm(data: UsersFormProps) {
+    const { t } = useTranslation();
     const { handleClose, currentUser, onSuccess, onError } = data;
 
     const token = localStorage.getItem('access_token');
@@ -124,6 +87,29 @@ export function UserForm(data: UsersFormProps) {
     const [newUsrBirthday, setNewUsrBirthday] = useState<string>('');
 
     const [isLoading, setIsLoading] = useState(true);
+
+    /**
+     * Form Validation Schema
+     */
+    const DataSchema = z.object({
+        uid: z.string().min(7, t('user_form_validation_schema_userid')),
+        identificationTypeId: z.string(),
+        email: z.string().email(t('user_form_validation_schema_email_1')).min(1, t('user_form_validation_schema_email_2')),
+        firstName: z.string().min(3, t('user_form_validation_schema_first_name')),
+        middleName: z.string().optional(),
+        lastName: z.string().min(3, t('user_form_validation_schema_last_name')),
+        genderId: z.string(),
+        contactPhone: z.string().optional(),
+        address: z.string().optional(),
+        city: z.string().optional(),
+        birthday: z.string().optional(),
+        username: z.string().min(5, t('user_form_validation_schema_username')),
+        maritalStatusId: z.string(),
+        ocupationId: z.string(),
+        roleId: z.string(),
+        status: z.string()
+    });
+    // ***********************************************
 
     /**
      * Form data and validation Section
@@ -212,7 +198,7 @@ export function UserForm(data: UsersFormProps) {
             uid: finalUid,
             contactPhone: finalContactPhone,
             status: finalStatus,
-            password: TMP_PASSWORD,
+            password: TMP_PASSWORD, // TODO: User should change this password at the first time login
             birthday: newUsrBirthday?.length > 0 ? newUsrBirthday : currentUser?.birthday
         };
 
@@ -221,12 +207,12 @@ export function UserForm(data: UsersFormProps) {
         if (resp?.data?.success) {
             onSuccess({
                 msgIcon: 'success',
-                msgText: currentUser ? 'User updated!' : 'User created!'
+                msgText: currentUser ? t('user_updated') : t('user_created')
             });
         } else {
             onError({
                 msgIcon: 'error',
-                msgText: `Ups! Something went wrong - ${resp?.statusText}`
+                msgText: `${t('error_text')} - ${resp?.statusText}`
             });
         }
     };
@@ -246,13 +232,13 @@ export function UserForm(data: UsersFormProps) {
     return (
         <div className="flex flex-col min-w-0">
             <Typography variant="h4" gutterBottom>
-                {currentUser ? 'Edit User' : 'Create User'}
+                {currentUser ? t('user_form_edit_title') : t('user_form_create_title')}
             </Typography>
             <Divider variant="middle" />
 
             <form name="userForm" noValidate className="flex flex-col w-full h-full p-28" onSubmit={handleSubmit(onSubmit)}>
                 <Divider textAlign="left" className="mb-28">
-                    Principal Information
+                    {t('user_form_subtitle_1')}
                 </Divider>
                 <Grid container spacing={3} justifyContent="left" className="mb-28">
                     <Grid item xs={4} md={4}>
@@ -261,12 +247,12 @@ export function UserForm(data: UsersFormProps) {
                             control={control}
                             render={({ field }) => (
                                 <FormControl error={!!errors.identificationTypeId} required fullWidth>
-                                    <InputLabel id="idTypeLabel">Identification Type</InputLabel>
+                                    <InputLabel id="idTypeLabel">{t('user_form_identification_type')}</InputLabel>
                                     <Select
                                         {...field}
                                         labelId="idTypeLabel"
                                         id="identificationType"
-                                        label="Identification Type"
+                                        label={t('user_form_identification_type')}
                                         variant="outlined"
                                         fullWidth
                                     >
@@ -297,7 +283,7 @@ export function UserForm(data: UsersFormProps) {
                                     min={1}
                                     max={9999999999}
                                     color="primary"
-                                    label="User ID"
+                                    label={t('user_form_user_id')}
                                     error={!!errors.uid}
                                     helperText={errors?.uid?.message}
                                     required
@@ -315,7 +301,7 @@ export function UserForm(data: UsersFormProps) {
                             render={({ field }) => (
                                 <TextField
                                     {...field}
-                                    label="Email"
+                                    label={t('user_form_email')}
                                     type="email"
                                     error={!!errors.email}
                                     helperText={errors?.email?.message}
@@ -334,7 +320,7 @@ export function UserForm(data: UsersFormProps) {
                             render={({ field }) => (
                                 <TextField
                                     {...field}
-                                    label="First Name"
+                                    label={t('user_form_first_name')}
                                     type="text"
                                     error={!!errors.firstName}
                                     helperText={errors?.firstName?.message}
@@ -353,7 +339,7 @@ export function UserForm(data: UsersFormProps) {
                             render={({ field }) => (
                                 <TextField
                                     {...field}
-                                    label="Middle Name"
+                                    label={t('user_form_middle_name')}
                                     type="text"
                                     error={!!errors.middleName}
                                     helperText={errors?.middleName?.message}
@@ -372,7 +358,7 @@ export function UserForm(data: UsersFormProps) {
                             render={({ field }) => (
                                 <TextField
                                     {...field}
-                                    label="Last Name"
+                                    label={t('user_form_last_name')}
                                     type="text"
                                     error={!!errors.lastName}
                                     helperText={errors?.lastName?.message}
@@ -390,8 +376,15 @@ export function UserForm(data: UsersFormProps) {
                             control={control}
                             render={({ field }) => (
                                 <FormControl error={!!errors.genderId} fullWidth>
-                                    <InputLabel id="genderIdLabel">Gender</InputLabel>
-                                    <Select {...field} labelId="genderIdLabel" id="genderId" label="Gender" variant="outlined" fullWidth>
+                                    <InputLabel id="genderIdLabel">{t('user_form_gender')}</InputLabel>
+                                    <Select
+                                        {...field}
+                                        labelId="genderIdLabel"
+                                        id="genderId"
+                                        label={t('user_form_gender')}
+                                        variant="outlined"
+                                        fullWidth
+                                    >
                                         {genders.map((gender: TGendersDB) => (
                                             <MenuItem key={gender?.id} value={gender?.id}>
                                                 {gender?.name}
@@ -410,12 +403,12 @@ export function UserForm(data: UsersFormProps) {
                             control={control}
                             render={({ field }) => (
                                 <FormControl error={!!errors.maritalStatusId} fullWidth>
-                                    <InputLabel id="maritalStatus">Marital Status</InputLabel>
+                                    <InputLabel id="maritalStatus">{t('user_form_marital_status')}</InputLabel>
                                     <Select
                                         {...field}
                                         labelId="maritalStatus"
                                         id="maritalStatusId"
-                                        label="Marital Status"
+                                        label={t('user_form_marital_status')}
                                         variant="outlined"
                                         fullWidth
                                     >
@@ -437,8 +430,15 @@ export function UserForm(data: UsersFormProps) {
                             control={control}
                             render={({ field }) => (
                                 <FormControl error={!!errors.ocupationId} fullWidth>
-                                    <InputLabel id="ocupationIdLabel">Ocupation</InputLabel>
-                                    <Select {...field} labelId="ocupationIdLabel" id="ocupationId" label="Ocupation" variant="outlined" fullWidth>
+                                    <InputLabel id="ocupationIdLabel">{t('user_form_ocupation')}</InputLabel>
+                                    <Select
+                                        {...field}
+                                        labelId="ocupationIdLabel"
+                                        id="ocupationId"
+                                        label={t('user_form_ocupation')}
+                                        variant="outlined"
+                                        fullWidth
+                                    >
                                         {ocupations.map((ocupation: TOcupationsDB) => (
                                             <MenuItem key={ocupation?.id} value={ocupation?.id}>
                                                 {ocupation?.name}
@@ -457,8 +457,8 @@ export function UserForm(data: UsersFormProps) {
                             control={control}
                             render={({ field }) => (
                                 <FormControl error={!!errors.roleId} required fullWidth>
-                                    <InputLabel id="roleLabel">Role</InputLabel>
-                                    <Select {...field} labelId="roleLabel" id="roleId" label="Role" variant="outlined" fullWidth>
+                                    <InputLabel id="roleLabel">{t('user_form_role')}</InputLabel>
+                                    <Select {...field} labelId="roleLabel" id="roleId" label={t('user_form_role')} variant="outlined" fullWidth>
                                         {roles.map((rol: TRolesDB) => (
                                             <MenuItem key={rol?.id} value={rol?.id}>
                                                 {capitalizeFirstLetter(rol?.name)}
@@ -477,8 +477,8 @@ export function UserForm(data: UsersFormProps) {
                             control={control}
                             render={({ field }) => (
                                 <FormControl error={!!errors.status} required fullWidth>
-                                    <InputLabel id="statusLabel">Status</InputLabel>
-                                    <Select {...field} labelId="statusLabel" id="statusId" label="Status" variant="outlined" fullWidth>
+                                    <InputLabel id="statusLabel">{t('user_form_status')}</InputLabel>
+                                    <Select {...field} labelId="statusLabel" id="statusId" label={t('user_form_status')} variant="outlined" fullWidth>
                                         {statusData.map((status) => (
                                             <MenuItem key={status?.id} value={status?.value}>
                                                 {status?.name}
@@ -498,7 +498,7 @@ export function UserForm(data: UsersFormProps) {
                             render={({ field }) => (
                                 <TextField
                                     {...field}
-                                    label="Username/Nick"
+                                    label={t('user_form_username')}
                                     type="text"
                                     error={!!errors.username}
                                     helperText={errors?.username?.message}
@@ -512,7 +512,7 @@ export function UserForm(data: UsersFormProps) {
                 </Grid>
 
                 <Divider textAlign="left" className="mb-32">
-                    Other Information
+                    {t('user_form_subtitle_2')}
                 </Divider>
 
                 <Grid container spacing={3} justifyContent="left">
@@ -523,7 +523,7 @@ export function UserForm(data: UsersFormProps) {
                             render={({ field }) => (
                                 <TextField
                                     {...field}
-                                    label="Address"
+                                    label={t('user_form_address')}
                                     type="text"
                                     error={!!errors.address}
                                     helperText={errors?.address?.message}
@@ -541,7 +541,7 @@ export function UserForm(data: UsersFormProps) {
                             render={({ field }) => (
                                 <TextField
                                     {...field}
-                                    label="City"
+                                    label={t('user_form_city')}
                                     type="text"
                                     error={!!errors.city}
                                     helperText={errors?.city?.message}
@@ -559,7 +559,7 @@ export function UserForm(data: UsersFormProps) {
                             render={({ field }) => (
                                 <TextField
                                     {...field}
-                                    label="Contact Phone"
+                                    label={t('user_form_contact_phone')}
                                     type="text"
                                     error={!!errors.contactPhone}
                                     helperText={errors?.contactPhone?.message}
@@ -583,7 +583,7 @@ export function UserForm(data: UsersFormProps) {
                                     slotProps={{
                                         textField: {
                                             id: 'birthday',
-                                            label: 'Birthday',
+                                            label: t('user_form_birthday'),
                                             InputLabelProps: {
                                                 shrink: true
                                             },
@@ -607,7 +607,7 @@ export function UserForm(data: UsersFormProps) {
 
                 <Box className="flex w-full items-center justify-end">
                     <Button className="mx-10" variant="contained" color="primary" type="submit" disabled={Object.keys(errors).length > 0 || !isValid}>
-                        {currentUser ? 'Update' : 'Create'}
+                        {currentUser ? t('update_btn_text') : t('create_btn_text')}
                     </Button>
 
                     <Button
@@ -618,7 +618,7 @@ export function UserForm(data: UsersFormProps) {
                             handleClose(true);
                         }}
                     >
-                        Cancel
+                        {t('cancel_btn_text')}
                     </Button>
                 </Box>
             </form>

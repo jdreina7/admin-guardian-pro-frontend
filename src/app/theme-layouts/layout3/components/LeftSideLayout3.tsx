@@ -6,14 +6,11 @@ import NavigationShortcuts from '../../shared-components/navigation/NavigationSh
  * The left side layout 3.
  */
 function LeftSideLayout3() {
-	return (
-		<FuseSidePanel>
-			<NavigationShortcuts
-				className="px-8 py-16"
-				variant="vertical"
-			/>
-		</FuseSidePanel>
-	);
+    return (
+        <FuseSidePanel>
+            <NavigationShortcuts className="px-8 py-16" variant="vertical" />
+        </FuseSidePanel>
+    );
 }
 
 export default memo(LeftSideLayout3);

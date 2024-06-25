@@ -46,13 +46,8 @@ function UserNavbarHeader() {
                     {user?.data?.displayName?.charAt(0)}
                 </Avatar>
             </div>
-            <Typography className="username whitespace-nowrap text-14 font-medium">
-                {user?.data?.displayName}
-            </Typography>
-            <Typography
-                className="email whitespace-nowrap text-13 font-medium"
-                color="text.secondary"
-            >
+            <Typography className="username whitespace-nowrap text-14 font-medium">{user?.data?.displayName}</Typography>
+            <Typography className="email whitespace-nowrap text-13 font-medium" color="text.secondary">
                 {user.data.email}
             </Typography>
         </Root>

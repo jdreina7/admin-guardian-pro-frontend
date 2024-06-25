@@ -6,11 +6,11 @@ const QuickPanel = lazy(() => import('app/theme-layouts/shared-components/quickP
  * The right side layout 1.
  */
 function RightSideLayout1() {
-	return (
-		<Suspense>
-			<QuickPanel />
-		</Suspense>
-	);
+    return (
+        <Suspense>
+            <QuickPanel />
+        </Suspense>
+    );
 }
 
 export default memo(RightSideLayout1);

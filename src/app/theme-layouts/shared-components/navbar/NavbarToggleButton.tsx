@@ -18,8 +18,8 @@ type NavbarToggleButtonProps = {
  * The navbar toggle button.
  */
 function NavbarToggleButton(props: NavbarToggleButtonProps) {
-    const [iconPosition, setIconPosition] = useState('heroicons-outline:chevron-right');
-    const icon = useMemo(() => iconPosition, [iconPosition]);
+    const [iconPosition, setIconPosition] = useState(true);
+    const icon = useMemo(() => (iconPosition ? 'heroicons-outline:chevron-right' : 'heroicons-outline:chevron-left'), [iconPosition]);
 
     const {
         className = '',
@@ -46,7 +46,7 @@ function NavbarToggleButton(props: NavbarToggleButtonProps) {
                 } else if (config?.navbar?.style === 'style-2') {
                     dispatch(setDefaultSettings(_.set({}, 'layout.config.navbar.folded', !settings?.layout?.config?.navbar?.folded)));
                 } else {
-                    setIconPosition('heroicons-outline:chevron-left');
+                    setIconPosition(false);
                     dispatch(navbarToggle());
                 }
             }}
