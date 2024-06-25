@@ -10,14 +10,10 @@ const Root = styled('div')(({ theme }) => ({
     backgroundColor: theme.palette.background.default,
     color: theme.palette.text.primary,
     '& ::-webkit-scrollbar-thumb': {
-        boxShadow: `inset 0 0 0 20px ${
-            theme.palette.mode === 'light' ? 'rgba(0, 0, 0, 0.24)' : 'rgba(255, 255, 255, 0.24)'
-        }`
+        boxShadow: `inset 0 0 0 20px ${theme.palette.mode === 'light' ? 'rgba(0, 0, 0, 0.24)' : 'rgba(255, 255, 255, 0.24)'}`
     },
     '& ::-webkit-scrollbar-thumb:active': {
-        boxShadow: `inset 0 0 0 20px ${
-            theme.palette.mode === 'light' ? 'rgba(0, 0, 0, 0.37)' : 'rgba(255, 255, 255, 0.37)'
-        }`
+        boxShadow: `inset 0 0 0 20px ${theme.palette.mode === 'light' ? 'rgba(0, 0, 0, 0.37)' : 'rgba(255, 255, 255, 0.37)'}`
     }
 }));
 
@@ -51,20 +47,13 @@ function NavbarStyle1Content(props: NavbarStyle1ContentProps) {
                 <NavbarToggleButton className="h-40 w-40 p-0" />
             </div>
 
-            <StyledContent
-                className="flex min-h-0 flex-1 flex-col"
-                option={{ suppressScrollX: true, wheelPropagation: false }}
-            >
+            <StyledContent className="flex min-h-0 flex-1 flex-col" option={{ suppressScrollX: true, wheelPropagation: false }}>
                 <UserNavbarHeader />
 
                 <Navigation layout="vertical" />
 
                 <div className="flex-0 flex items-center justify-center py-48 opacity-10">
-                    <img
-                        className="w-full max-w-64"
-                        src="assets/images/logo/favicon.svg"
-                        alt="footer logo"
-                    />
+                    <img className="w-full max-w-64" src="assets/images/logo/favicon.svg" alt="footer logo" />
                 </div>
             </StyledContent>
         </Root>

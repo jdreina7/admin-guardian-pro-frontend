@@ -108,6 +108,16 @@ export type TUserDBResponse = {
     data: TUserDB[];
 };
 
+export type TDeleteUserDBResponse = {
+    success: boolean;
+    data: string;
+};
+
+export type TUserDBDeleteResponse = {
+    success: boolean;
+    data: string;
+};
+
 // Identifications Types
 export type TIdentificationTypesDBResponse = {
     success: boolean;

@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-import { TUserDB, TUserDBResponse } from 'src/utils/types';
+import { TDeleteUserDBResponse, TUserDB, TUserDBResponse } from 'src/utils/types';
 
 export const listUsers = async ({ accessToken }) => {
     const params = new URLSearchParams();
@@ -36,6 +36,19 @@ export const createUser = async ({ accessToken, payload }) => {
 
     const data: TUserDB = { ...(payload as TUserDB) };
     const response: AxiosResponse<TUserDBResponse> = await axios.post(`/users`, data, config);
+
+    return response;
+};
+
+export const deleteUser = async ({ accessToken, userId }) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'application/json'
+        }
+    };
+
+    const response: AxiosResponse<TDeleteUserDBResponse> = await axios.delete(`/users/${userId}`, config);
 
     return response;
 };
