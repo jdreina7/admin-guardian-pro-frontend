@@ -12,11 +12,12 @@ import es from '../../../../i18n/es/es';
 import en from '../../../../i18n/en/en';
 
 import StatusChip from '../../../shared-components/status-chips/StatusChip';
-import UserNameCell from './UserNameCell';
+import UserNameCell from './cells-components/UserNameCell';
 
 import { TUserDB } from '../../../../utils/types';
-import UserActionsCell from './UserActionsCell';
+import UserActionsCell from './cells-components/UserActionsCell';
 import { selectCurrentLanguageId } from '../../../store/i18nSlice';
+import ContactPhoneCell from './cells-components/ContactPhoneCell';
 
 const rowHeight = 60;
 
@@ -160,7 +161,7 @@ function UsersTable(props: UsersTableProps) {
                     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
                     setSelectedUser(p.data?.name as TUserDB);
                 },
-                cellStyle: { cursor: 'pointer' }
+                cellStyle: { cursor: 'pointer', textTransform: 'capitalize' }
             },
             {
                 field: 'email',
@@ -180,6 +181,7 @@ function UsersTable(props: UsersTableProps) {
             {
                 field: 'contact',
                 headerValueGetter: () => t('contact'),
+                cellRenderer: ContactPhoneCell,
                 filter: 'contact',
                 filterParams: {
                     filterOptions: ['contains'],

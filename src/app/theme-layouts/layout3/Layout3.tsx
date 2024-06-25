@@ -49,23 +49,12 @@ function Layout3(props: Layout3Props) {
     const { routes } = appContext;
 
     return (
-        <Root
-            id="fuse-layout"
-            className="flex w-full"
-            config={config}
-        >
+        <Root id="fuse-layout" className="flex w-full" config={config}>
             {config.leftSidePanel.display && <LeftSideLayout3 />}
 
             <div className="flex min-w-0 flex-auto flex-col">
-                <main
-                    id="fuse-main"
-                    className="relative flex min-h-full min-w-0 flex-auto flex-col"
-                >
-                    {config.navbar.display && (
-                        <NavbarWrapperLayout3
-                            className={clsx(config?.navbar?.style === 'fixed' ? 'sticky top-0 z-50' : '')}
-                        />
-                    )}
+                <main id="fuse-main" className="relative flex min-h-full min-w-0 flex-auto flex-col">
+                    {config.navbar.display && <NavbarWrapperLayout3 className={clsx(config?.navbar?.style === 'fixed' ? 'sticky top-0 z-50' : '')} />}
 
                     {config.toolbar.display && (
                         <ToolbarLayout3
@@ -89,9 +78,7 @@ function Layout3(props: Layout3Props) {
                         {children}
                     </div>
 
-                    {config.footer.display && (
-                        <FooterLayout3 className={config.footer.style === 'fixed' ? 'sticky bottom-0' : ''} />
-                    )}
+                    {config.footer.display && <FooterLayout3 className={config.footer.style === 'fixed' ? 'sticky bottom-0' : ''} />}
                 </main>
             </div>
 

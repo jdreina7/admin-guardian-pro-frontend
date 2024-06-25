@@ -35,6 +35,12 @@ const locale = {
     done_title: 'Hecho!',
     failed_title: 'Fallido!',
     error_text: 'Ups! algo salió mal',
+    warning_title: 'ADVERTENCIA',
+    deleted_title: 'Eliminado!',
+    active_text: 'Activo',
+    inactive_text: 'Inactivo',
+    create_btn_text: 'Crear',
+    update_btn_text: 'Actualizar',
 
     // Users
     users_title: 'Usuarios',
@@ -52,7 +58,38 @@ const locale = {
     activate_user_status_text: 'Este proceso cambiará el estado del usuario a ACTIVO.',
     deactivate_user_status_text: 'Este proceso cambiará el estado del usuario a INACTIVO.',
     forbidden_update_your_own: 'No puedes cambiar tu propio estado mientras estás conectado en el portal.',
-    user_status_updated: 'El estado del usuario ha sido actualizado.'
+    user_status_updated: 'El estado del usuario ha sido actualizado.',
+    user_updated: 'La información del usuario ha sido actualizada.',
+    delete_user_text:
+        'Usted esta a punto de eliminar al usuario {{user_to_delete}}, este procedimiento no se puede deshacer, aun asi, desea continuar?',
+    user_deleted_text: 'El usuario ha sido eliminado.',
+    user_created: 'El usuario ha sido creado satisfactoriamente!',
+    user_form_edit_title: 'Editar Usuario',
+    user_form_create_title: 'Crear Usuario',
+    user_form_subtitle_1: 'Información Principal',
+    user_form_subtitle_2: 'Información Adicional',
+    user_form_identification_type: 'Tipo de Identificación',
+    user_form_user_id: 'ID de Usuario',
+    user_form_email: 'Email',
+    user_form_first_name: 'Primer Nombre',
+    user_form_middle_name: 'Segundo Nombre',
+    user_form_last_name: 'Apellidos',
+    user_form_gender: 'Género',
+    user_form_marital_status: 'Estado civil',
+    user_form_ocupation: 'Ocupación',
+    user_form_role: 'Rol',
+    user_form_status: 'Estado',
+    user_form_username: 'Nombre de usuario',
+    user_form_address: 'Dirección',
+    user_form_city: 'Ciudad',
+    user_form_contact_phone: 'Número de contácto',
+    user_form_birthday: 'Fecha de Nacimiento',
+    user_form_validation_schema_userid: 'El User ID es requerido',
+    user_form_validation_schema_email_1: 'Debe ingresar un email válido',
+    user_form_validation_schema_email_2: 'El email es requerido',
+    user_form_validation_schema_first_name: 'Primer Nombre demasiado corto - Debe contener mínimo 3 caractéres.',
+    user_form_validation_schema_last_name: 'Apellido demasiado corto - Debe contener mínimo 3 caractéres.',
+    user_form_validation_schema_username: 'El Nombre de usuario es requerido y debe tener al menos 5 caractéres.'
 };
 
 export default locale;

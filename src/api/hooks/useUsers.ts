@@ -49,3 +49,23 @@ export const useCreateUser = (token: string) => {
         retry: false
     });
 };
+
+export const useDeleteUser = (token: string, userID: string) => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: () => users.deleteUser({ accessToken: token, userId: userID }),
+        onError: (error) => {
+            // eslint-disable-next-line no-console
+            console.error('Error deleting user:', error);
+
+            throw error;
+        },
+        onSettled: () => {
+            queryClient.invalidateQueries({
+                queryKey: ['list-users']
+            });
+        },
+        retry: false
+    });
+};

@@ -3,13 +3,13 @@ import { CustomCellRendererProps } from 'ag-grid-react';
 import { Box, Chip } from '@mui/material';
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
 import { OverridableStringUnion } from '@mui/types';
+import { useTranslation } from 'react-i18next';
 
 interface StatusChipProp extends CustomCellRendererProps {
     status: boolean;
 }
 
 type chipObject = {
-    isActive: string;
     iconColor: string;
     chipColor: OverridableStringUnion<'default' | 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning'>;
     icon: string;
@@ -19,10 +19,10 @@ type chipObject = {
  * Status chip
  */
 function StatusChip(params: StatusChipProp) {
+    const { t } = useTranslation();
     const status: boolean = params?.value as boolean;
-    const { isActive, iconColor, chipColor, icon }: chipObject = useMemo(() => {
+    const { iconColor, chipColor, icon }: chipObject = useMemo(() => {
         return {
-            isActive: status ? 'Active' : 'Inactive',
             iconColor: status ? 'success' : 'error',
             chipColor: status ? 'success' : 'error',
             icon: status ? 'heroicons-outline:check-circle' : 'heroicons-outline:x-circle'
@@ -34,16 +34,12 @@ function StatusChip(params: StatusChipProp) {
             <Chip
                 variant="outlined"
                 icon={
-                    <FuseSvgIcon
-                        className="text-48"
-                        size={24}
-                        bgcolor={iconColor}
-                    >
+                    <FuseSvgIcon className="text-48" size={24} bgcolor={iconColor}>
                         {icon}
                     </FuseSvgIcon>
                 }
                 color={chipColor}
-                label={isActive}
+                label={status ? t('active_text') : t('inactive_text')}
             />
         </Box>
     );
