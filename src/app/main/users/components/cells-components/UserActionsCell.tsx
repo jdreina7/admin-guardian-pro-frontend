@@ -111,7 +111,7 @@ function UserActionsCell(params: UserActionsCellProps) {
 
                 if (resp?.data?.success) {
                     swal.fire({
-                        title: t('delete_title'),
+                        title: t('deleted_title'),
                         text: t('user_deleted_text'),
                         icon: 'success'
                     });

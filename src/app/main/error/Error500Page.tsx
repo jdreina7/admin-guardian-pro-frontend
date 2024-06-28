@@ -4,15 +4,19 @@ import Box from '@mui/material/Box';
 import { Button } from '@mui/material';
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
 import { useNavigate } from 'react-router';
+import { useTranslation } from 'react-i18next';
+
+import { DEFAULT_DASHBOARD_PATH } from '../../../utils/contants';
 
 /**
  * The error 500 page.
  */
 function Error500Page() {
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     const handleRedirect = () => {
-        navigate('/dashboard');
+        navigate(DEFAULT_DASHBOARD_PATH);
     };
 
     return (
@@ -211,13 +215,13 @@ function Error500Page() {
                         variant="h1"
                         className="mt-48 text-center text-4xl font-extrabold leading-tight tracking-tight sm:mt-96 md:text-7xl md:leading-none"
                     >
-                        Something went wrong!
+                        {t('error_text')}
                     </Typography>
                 </motion.div>
 
                 <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0, transition: { delay: 0.2 } }}>
                     <Typography variant="h5" color="text.secondary" className="mt-8 text-center text-lg font-medium tracking-tight md:text-xl">
-                        Server Error 500. Our staff has been notified, thank you for your understanding.
+                        {t('error_500_text')}
                     </Typography>
                 </motion.div>
 
@@ -228,7 +232,7 @@ function Error500Page() {
                     onClick={handleRedirect}
                     startIcon={<FuseSvgIcon size={20}>heroicons-solid:home</FuseSvgIcon>}
                 >
-                    Back to Dashboard
+                    {t('return_to_dashboard_btn_text')}
                 </Button>
             </div>
         </div>

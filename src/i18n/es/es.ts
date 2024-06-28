@@ -41,6 +41,9 @@ const locale = {
     inactive_text: 'Inactivo',
     create_btn_text: 'Crear',
     update_btn_text: 'Actualizar',
+    return_to_dashboard_btn_text: 'Regresar al Escritorio',
+    error_403_text: 'Te extraviaste?',
+    error_500_text: 'Error 500 del Servidor. Nuestro equipo ha sido notificado de la falla, agradecemos su comprensión.',
 
     // Users
     users_title: 'Usuarios',
