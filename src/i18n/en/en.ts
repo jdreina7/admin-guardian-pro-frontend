@@ -41,6 +41,9 @@ const locale = {
     inactive_text: 'Inactive',
     create_btn_text: 'Create',
     update_btn_text: 'Update',
+    return_to_dashboard_btn_text: 'Back to Dashboard',
+    error_403_text: 'Are you lost?',
+    error_500_text: 'Server Error 500. Our staff has been notified, thank you for your understanding.',
 
     // Users
     users_title: 'Users',
