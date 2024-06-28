@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import FusePageSimple from '@fuse/core/FusePageSimple';
 import { styled } from '@mui/material/styles';
 import FuseLoading from '@fuse/core/FuseLoading';
+import { AxiosError } from 'axios';
 
 import { Backdrop, Box, Fade, Modal } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
@@ -11,6 +12,7 @@ import { useListUsers } from '../../../api/hooks';
 import { TModalConstants, TUserDB } from '../../../utils/types';
 import { UserForm } from './components/UserForm';
 import useSwalWrapper from '../../../utils/vendors/sweetalert2/hooks';
+import { ERROR_PAGE_403, ERROR_PAGE_404, ERROR_PAGE_500 } from '../../../utils/contants';
 
 const Root = styled(FusePageSimple)(({ theme }) => ({
     '& .FusePageSimple-header': {
@@ -43,6 +45,20 @@ function Users() {
     const usersList: TUserDB[] = useMemo(() => data?.data?.data, [data]);
     const [selectedUser, setSelectedUser] = useState<TUserDB>();
     const [open, setOpen] = useState(false);
+
+    const errorUrl: string = useMemo(() => {
+        const respError = error as AxiosError;
+
+        if (respError?.response?.status === 403) {
+            return ERROR_PAGE_403;
+        }
+
+        if (respError?.response?.status === 404) {
+            return ERROR_PAGE_404;
+        }
+
+        return ERROR_PAGE_500;
+    }, [error]);
 
     const handleOpen = () => setOpen(true);
     const handleClose = () => {
@@ -83,7 +99,7 @@ function Users() {
             content={
                 <>
                     {!error && <UsersTable users={usersList} handleOpen={handleOpen} setSelectedUser={setSelectedUser} />}
-                    {error && navigate('/500', { replace: true })}
+                    {error && navigate(errorUrl, { replace: true })}
 
                     <Modal
                         aria-labelledby="transition-modal-title"

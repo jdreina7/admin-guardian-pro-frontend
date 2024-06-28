@@ -10,6 +10,7 @@ import Error404Page from '../main/error/Error404Page';
 import DashboardConfig from '../main/dashboard/DashboardConfig';
 import UsersConfig from '../main/users/UsersConfig';
 import Error500Page from '../main/error/Error500Page';
+import Error403Page from '../main/error/Error403Page';
 
 const routeConfigs: FuseRouteConfigsType = [DashboardConfig, UsersConfig, SignOutConfig, SignInConfig, SignUpConfig];
 
@@ -34,6 +35,10 @@ const routes: FuseRoutesType = [
     {
         path: '500',
         element: <Error500Page />
+    },
+    {
+        path: '403',
+        element: <Error403Page />
     },
     {
         path: '404',
