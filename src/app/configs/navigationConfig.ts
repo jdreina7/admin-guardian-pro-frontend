@@ -25,7 +25,8 @@ const navigationConfig: FuseNavItemType[] = [
         type: 'item',
         icon: 'feather:users',
         translate: 'users_title',
-        url: 'users'
+        url: 'users',
+        auth: ['admin', 'superadmin']
     }
 ];
 
