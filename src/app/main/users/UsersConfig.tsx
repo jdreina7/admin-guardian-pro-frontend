@@ -11,6 +11,7 @@ const UsersConfig = {
             config: {}
         }
     },
+    auth: ['admin', 'superadmin'],
     routes: [
         {
             path: 'users',

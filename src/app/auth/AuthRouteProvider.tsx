@@ -2,14 +2,7 @@ import React, { createContext, useCallback, useContext, useMemo } from 'react';
 import FuseAuthorization from '@fuse/core/FuseAuthorization';
 import { useAppDispatch } from 'app/store/store';
 import FuseSplashScreen from '@fuse/core/FuseSplashScreen/FuseSplashScreen';
-import {
-    resetUser,
-    selectUser,
-    selectUserRole,
-    setUser,
-    updateUser,
-    userSlice
-} from 'src/app/auth/user/store/userSlice';
+import { resetUser, selectUser, selectUserRole, setUser, updateUser, userSlice } from 'src/app/auth/user/store/userSlice';
 import BrowserRouter from '@fuse/core/BrowserRouter';
 import { PartialDeep } from 'type-fest';
 import { useSelector } from 'react-redux';
