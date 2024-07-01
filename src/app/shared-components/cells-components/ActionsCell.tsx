@@ -5,9 +5,9 @@ import { useMemo } from 'react';
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
 import { useTranslation } from 'react-i18next';
 
-import { TUserDB, TUserDBDeleteResponse, TUserDBResponse } from '../../../../../utils/types';
-import useSwalWrapper from '../../../../../utils/vendors/sweetalert2/hooks';
-import { useUpdateUser, useDeleteUser } from '../../../../../api/hooks';
+import { TUserDB, TUserDBDeleteResponse, TUserDBResponse } from '../../../utils/types';
+import useSwalWrapper from '../../../utils/vendors/sweetalert2/hooks';
+import { useUpdateUser, useDeleteUser } from '../../../api/hooks';
 
 interface UserActionsCellProps extends CustomCellRendererProps {
     data: {
@@ -24,7 +24,6 @@ const validateLoggedUser = async (loggedUsrId: string, updateUserId: string) => 
  * The user actions.
  */
 function ActionsCell(params: UserActionsCellProps) {
-    console.log('27 params >>> ', params);
     const { t } = useTranslation();
     const swal = useSwalWrapper();
     const user = params?.data?.name;

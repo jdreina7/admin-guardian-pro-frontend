@@ -26,7 +26,6 @@ const formatPhoneNumber = (number: number): string => {
  * Format the user contact phone
  */
 function ContactPhoneCell(params: ContactPhoneCellProps) {
-    console.log('29 params >>> ', params);
     const userPhone: number = params?.value as number;
     const usrPhoneNumber: string = useMemo(() => formatPhoneNumber(userPhone), [userPhone]);
 

@@ -7,11 +7,12 @@ import { AxiosError } from 'axios';
 import { Backdrop, Box, Fade, Modal } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import RolesHeader from './components/RolesHeader';
-import UsersTable from './components/UsersTable';
+
 import { useListRoles } from '../../../api/hooks';
 import { TModalConstants, TRolesDB } from '../../../utils/types';
 import useSwalWrapper from '../../../utils/vendors/sweetalert2/hooks';
 import { ERROR_PAGE_403, ERROR_PAGE_404, ERROR_PAGE_500 } from '../../../utils/contants';
+import RolesTable from './components/RolesTable';
 
 const Root = styled(FusePageSimple)(({ theme }) => ({
     '& .FusePageSimple-header': {
@@ -34,16 +35,18 @@ const style = {
 };
 
 /**
- * Users page.
+ * Roles page.
  */
-function Users() {
+function Roles() {
     const navigate = useNavigate();
     const sweetAlert = useSwalWrapper();
     const token = localStorage.getItem('access_token');
     const { data, isLoading: rolesLoading, error } = useListRoles(token);
     const rolesList: TRolesDB[] = useMemo(() => data?.data?.data, [data]);
-    const [selectedUser, setSelectedUser] = useState<TRolesDB>();
+    const [selectedRole, setSelectedRole] = useState<TRolesDB>();
     const [open, setOpen] = useState(false);
+
+    console.log('49 selectedRole >>> ', selectedRole);
 
     const errorUrl: string = useMemo(() => {
         const respError = error as AxiosError;
@@ -62,7 +65,7 @@ function Users() {
     const handleOpen = () => setOpen(true);
     const handleClose = () => {
         setOpen(false);
-        setSelectedUser(undefined);
+        setSelectedRole(undefined);
     };
 
     // Function for show an success message when user is created/updated
@@ -73,7 +76,7 @@ function Users() {
         });
 
         setOpen(false);
-        setSelectedUser(undefined);
+        setSelectedRole(undefined);
     };
 
     // Function for show an error message when user is created/updated
@@ -85,7 +88,7 @@ function Users() {
         });
 
         setOpen(false);
-        setSelectedUser(undefined);
+        setSelectedRole(undefined);
     };
 
     if (rolesLoading) {
@@ -97,7 +100,7 @@ function Users() {
             header={<RolesHeader rolesQuantity={rolesList?.length} handleOpen={handleOpen} />}
             content={
                 <>
-                    {!error && <UsersTable users={rolesList} handleOpen={handleOpen} setSelectedUser={setSelectedUser} />}
+                    {!error && <RolesTable roles={rolesList} handleOpen={handleOpen} setSelectedRole={setSelectedRole} />}
                     {error && navigate(errorUrl, { replace: true })}
 
                     <Modal
@@ -115,7 +118,7 @@ function Users() {
                     >
                         <Fade in={open}>
                             <Box sx={style}>
-                                <UserForm currentUser={selectedUser} handleClose={handleClose} onError={onError} onSuccess={onSuccess} />
+                                {/* <UserForm currentUser={selectedUser} handleClose={handleClose} onError={onError} onSuccess={onSuccess} /> */}
                             </Box>
                         </Fade>
                     </Modal>
@@ -125,4 +128,4 @@ function Users() {
     );
 }
 
-export default Users;
+export default Roles;

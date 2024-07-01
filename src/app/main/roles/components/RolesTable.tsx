@@ -8,13 +8,13 @@ import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import FuseLoading from '@fuse/core/FuseLoading';
 
+import ActionsCell from 'app/shared-components/cells-components/ActionsCell';
 import es from '../../../../i18n/es/es';
 import en from '../../../../i18n/en/en';
 
 import StatusChip from '../../../shared-components/status-chips/StatusChip';
 
 import { TRolesDB } from '../../../../utils/types';
-import UserActionsCell from './cells-components/UserActionsCell';
 import { selectCurrentLanguageId } from '../../../store/i18nSlice';
 
 const rowHeight = 60;
@@ -53,6 +53,7 @@ const mapRolesData = (roles: TRolesDB[]) => {
 };
 
 function RolesTable(props: RolesTableProps) {
+    console.log('56 props >>> ', props);
     const { t } = useTranslation();
     const currentLanguage = useSelector(selectCurrentLanguageId);
     const { roles, handleOpen, setSelectedRole } = props;
@@ -138,7 +139,7 @@ function RolesTable(props: RolesTableProps) {
             {
                 field: 'actions',
                 headerValueGetter: () => t('actions'),
-                cellRenderer: UserActionsCell
+                cellRenderer: ActionsCell
             }
         ];
     }, [roles, t]);

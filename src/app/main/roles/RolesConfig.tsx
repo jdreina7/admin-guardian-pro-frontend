@@ -14,7 +14,7 @@ const RolesConfig = {
     auth: ['superadmin'],
     routes: [
         {
-            path: 'users',
+            path: 'roles',
             element: <Roles />
         }
     ]

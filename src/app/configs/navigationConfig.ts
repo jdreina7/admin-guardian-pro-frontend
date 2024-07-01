@@ -23,7 +23,7 @@ const navigationConfig: FuseNavItemType[] = [
         id: 'roles',
         title: 'roles_title',
         type: 'item',
-        icon: 'heroicons-outline:key',
+        icon: 'material-solid:shield',
         translate: 'roles_title',
         url: 'roles',
         auth: ['superadmin']

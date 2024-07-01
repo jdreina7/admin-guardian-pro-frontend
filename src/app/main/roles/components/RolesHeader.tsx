@@ -33,9 +33,9 @@ function RolesHeader(props: RolesHeaderProps) {
             </div>
             <Button color="primary" variant="contained" onClick={handleOpen}>
                 <FuseSvgIcon mr={2} size={22}>
-                    material-solid:person_add_alt_1
+                    material-solid:add_moderator
                 </FuseSvgIcon>
-                {t('add_new_user_btn')}
+                {t('add_new_role_btn')}
             </Button>
         </div>
     );

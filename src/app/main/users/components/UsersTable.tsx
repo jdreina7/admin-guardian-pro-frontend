@@ -12,12 +12,12 @@ import es from '../../../../i18n/es/es';
 import en from '../../../../i18n/en/en';
 
 import StatusChip from '../../../shared-components/status-chips/StatusChip';
-import UserNameCell from './cells-components/UserNameCell';
+import UserNameCell from '../../../shared-components/cells-components/UserNameCell';
 
 import { TUserDB } from '../../../../utils/types';
-import ActionsCell from './cells-components/ActionsCell';
+import ActionsCell from '../../../shared-components/cells-components/ActionsCell';
 import { selectCurrentLanguageId } from '../../../store/i18nSlice';
-import ContactPhoneCell from './cells-components/ContactPhoneCell';
+import ContactPhoneCell from '../../../shared-components/cells-components/ContactPhoneCell';
 
 const rowHeight = 60;
 

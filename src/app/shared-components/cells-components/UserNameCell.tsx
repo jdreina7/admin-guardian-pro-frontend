@@ -6,7 +6,7 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemText from '@mui/material/ListItemText';
 import { Box } from '@mui/material';
 
-import { TUserDB } from '../../../../../utils/types';
+import { TUserDB } from '../../../utils/types';
 
 interface UserNameCellProps extends CustomCellRendererProps {
     user: TUserDB;
@@ -16,7 +16,6 @@ interface UserNameCellProps extends CustomCellRendererProps {
  * The user name item.
  */
 function UserNameCell(params: UserNameCellProps) {
-    console.log('19 params >>> ', params);
     const user = params?.value as TUserDB;
     const userFullName: string = useMemo(() => `${user?.firstName} ${user?.middleName} ${user?.lastName}`, [user]);
 
