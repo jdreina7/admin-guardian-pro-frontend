@@ -47,7 +47,7 @@ const locale = {
 
     // Users
     users_title: 'Usuarios',
-    add_new_user_btn: 'Añadir nuevo usuario',
+    add_new_user_btn: 'Agregar nuevo usuario',
     activate_user: 'Activar usuario',
     deactivate_user: 'Desactivar usuario',
     delete_user: 'Eliminar usuario',
@@ -92,7 +92,13 @@ const locale = {
     user_form_validation_schema_email_2: 'El email es requerido',
     user_form_validation_schema_first_name: 'Primer Nombre demasiado corto - Debe contener mínimo 3 caractéres.',
     user_form_validation_schema_last_name: 'Apellido demasiado corto - Debe contener mínimo 3 caractéres.',
-    user_form_validation_schema_username: 'El Nombre de usuario es requerido y debe tener al menos 5 caractéres.'
+    user_form_validation_schema_username: 'El Nombre de usuario es requerido y debe tener al menos 5 caractéres.',
+
+    // Roles
+    roles_title: 'Roles',
+    add_new_role_btn: 'Agregar nuevo Rol',
+    role_name: 'Nombre del Rol',
+    role_description: 'Descripción'
 };
 
 export default locale;

@@ -23,7 +23,8 @@ const validateLoggedUser = async (loggedUsrId: string, updateUserId: string) => 
 /**
  * The user actions.
  */
-function UserActionsCell(params: UserActionsCellProps) {
+function ActionsCell(params: UserActionsCellProps) {
+    console.log('27 params >>> ', params);
     const { t } = useTranslation();
     const swal = useSwalWrapper();
     const user = params?.data?.name;
@@ -156,4 +157,4 @@ function UserActionsCell(params: UserActionsCellProps) {
     );
 }
 
-export default UserActionsCell;
+export default ActionsCell;

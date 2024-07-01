@@ -12,46 +12,38 @@ import es from '../../../../i18n/es/es';
 import en from '../../../../i18n/en/en';
 
 import StatusChip from '../../../shared-components/status-chips/StatusChip';
-import UserNameCell from './cells-components/UserNameCell';
 
-import { TUserDB } from '../../../../utils/types';
-import ActionsCell from './cells-components/ActionsCell';
+import { TRolesDB } from '../../../../utils/types';
+import UserActionsCell from './cells-components/UserActionsCell';
 import { selectCurrentLanguageId } from '../../../store/i18nSlice';
-import ContactPhoneCell from './cells-components/ContactPhoneCell';
 
 const rowHeight = 60;
 
-type UsersTableProps = {
-    users: TUserDB[];
+type RolesTableProps = {
+    roles: TRolesDB[];
     handleOpen: () => void;
-    setSelectedUser: (user: TUserDB) => void;
+    setSelectedRole: (role: TRolesDB) => void;
 };
 
 type UsersDataTable = {
-    name: TUserDB;
-    identification: number;
-    role: string;
-    email: string;
-    contact: string;
+    name: string;
+    description: string;
     status: boolean;
 };
 
 /**
- * Function for mapping the DB users with the users grid format
- * @param users The user DB collection from the API
- * @returns Returns a mapped users data
+ * Function for mapping the DB roles with the roles grid format
+ * @param roles The role DB collection from the API
+ * @returns Returns a mapped roles data
  */
-const mapUserData = (users: TUserDB[]) => {
+const mapRolesData = (roles: TRolesDB[]) => {
     const data: Array<UsersDataTable> = [];
 
-    users.forEach((user) => {
+    roles.forEach((role) => {
         const ob: UsersDataTable = {
-            name: user,
-            identification: user?.uid as number,
-            role: user?.roleId?.name,
-            email: user?.email,
-            contact: String(user?.contactPhone),
-            status: user?.status
+            name: role?.name,
+            description: role?.description,
+            status: role?.status
         };
 
         data.push(ob);
@@ -60,33 +52,20 @@ const mapUserData = (users: TUserDB[]) => {
     return data;
 };
 
-/**
- * Function for create a composed filter for the fullname column on the grid
- * @param userData User data object
- * @returns Return a composed filter for the fullname column
- */
-const customFilterUserColumn = (userData: TUserDB) => {
-    const { firstName, middleName, lastName, email } = userData;
-
-    const composedFilter = `${firstName} ${middleName} ${lastName} ${email}`;
-
-    return composedFilter;
-};
-
-function UsersTable(props: UsersTableProps) {
+function RolesTable(props: RolesTableProps) {
     const { t } = useTranslation();
     const currentLanguage = useSelector(selectCurrentLanguageId);
-    const { users, handleOpen, setSelectedUser } = props;
+    const { roles, handleOpen, setSelectedRole } = props;
     const gridStyle = useMemo(() => ({ height: '95.6%', width: '100%' }), []);
     const [rowData, setRowData] = useState([]);
     const [isDestroyed, setIsDestroyed] = useState(false);
 
     useEffect(() => {
-        if (users) {
-            const data = mapUserData(users);
+        if (roles) {
+            const data = mapRolesData(roles);
             setRowData(data);
         }
-    }, [users]);
+    }, [roles]);
 
     /**
      * Pagination grid translation block
@@ -116,11 +95,8 @@ function UsersTable(props: UsersTableProps) {
         return [
             {
                 field: 'name',
-                headerValueGetter: () => t('fullname'), // Translated value for the grid columns
-                cellRenderer: UserNameCell,
+                headerValueGetter: () => t('role_name'), // Translated value for the grid columns
                 filter: 'name',
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-                filterValueGetter: (p) => customFilterUserColumn(p.data?.name as TUserDB),
                 filterParams: {
                     filterOptions: ['contains'],
                     maxNumConditions: 1
@@ -129,14 +105,14 @@ function UsersTable(props: UsersTableProps) {
                     // function callback for open the edit user dialog
                     handleOpen();
                     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-                    setSelectedUser(p.data?.name as TUserDB);
+                    setSelectedRole(p.data?.name as TRolesDB);
                 },
                 cellStyle: { cursor: 'pointer' }
             },
             {
-                field: 'identification',
-                headerValueGetter: () => t('identification'),
-                filter: 'identification',
+                field: 'description',
+                headerValueGetter: () => t('role_description'),
+                filter: 'description',
                 filterParams: {
                     filterOptions: ['contains'],
                     maxNumConditions: 1
@@ -144,53 +120,7 @@ function UsersTable(props: UsersTableProps) {
                 onCellClicked: (p) => {
                     handleOpen();
                     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-                    setSelectedUser(p.data?.name as TUserDB);
-                },
-                cellStyle: { cursor: 'pointer' }
-            },
-            {
-                field: 'role',
-                headerValueGetter: () => t('role'),
-                filter: 'role',
-                filterParams: {
-                    filterOptions: ['contains'],
-                    maxNumConditions: 1
-                },
-                onCellClicked: (p) => {
-                    handleOpen();
-                    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-                    setSelectedUser(p.data?.name as TUserDB);
-                },
-                cellStyle: { cursor: 'pointer', textTransform: 'capitalize' }
-            },
-            {
-                field: 'email',
-                headerValueGetter: () => t('email'),
-                filter: 'email',
-                filterParams: {
-                    filterOptions: ['contains'],
-                    maxNumConditions: 1
-                },
-                onCellClicked: (p) => {
-                    handleOpen();
-                    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-                    setSelectedUser(p.data?.name as TUserDB);
-                },
-                cellStyle: { cursor: 'pointer' }
-            },
-            {
-                field: 'contact',
-                headerValueGetter: () => t('contact'),
-                cellRenderer: ContactPhoneCell,
-                filter: 'contact',
-                filterParams: {
-                    filterOptions: ['contains'],
-                    maxNumConditions: 1
-                },
-                onCellClicked: (p) => {
-                    handleOpen();
-                    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-                    setSelectedUser(p.data?.name as TUserDB);
+                    setSelectedRole(p.data?.name as TRolesDB);
                 },
                 cellStyle: { cursor: 'pointer' }
             },
@@ -201,17 +131,17 @@ function UsersTable(props: UsersTableProps) {
                 onCellClicked: (p) => {
                     handleOpen();
                     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-                    setSelectedUser(p.data?.name as TUserDB);
+                    setSelectedRole(p.data?.name as TRolesDB);
                 },
                 cellStyle: { cursor: 'pointer' }
             },
             {
                 field: 'actions',
                 headerValueGetter: () => t('actions'),
-                cellRenderer: ActionsCell
+                cellRenderer: UserActionsCell
             }
         ];
-    }, [users, t]);
+    }, [roles, t]);
     /**
      * End block
      */
@@ -247,4 +177,4 @@ function UsersTable(props: UsersTableProps) {
     );
 }
 
-export default UsersTable;
+export default RolesTable;

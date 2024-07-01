@@ -16,6 +16,7 @@ interface UserNameCellProps extends CustomCellRendererProps {
  * The user name item.
  */
 function UserNameCell(params: UserNameCellProps) {
+    console.log('19 params >>> ', params);
     const user = params?.value as TUserDB;
     const userFullName: string = useMemo(() => `${user?.firstName} ${user?.middleName} ${user?.lastName}`, [user]);
 

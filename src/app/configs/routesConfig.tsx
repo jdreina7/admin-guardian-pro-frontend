@@ -25,6 +25,10 @@ const routes: FuseRoutesType = [
         auth: settingsConfig.defaultAuth
     },
     {
+        path: 'roles',
+        element: <Navigate to="/roles" />
+    },
+    {
         path: 'users',
         element: <Navigate to="/users" />
     },

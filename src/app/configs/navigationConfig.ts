@@ -20,6 +20,15 @@ const navigationConfig: FuseNavItemType[] = [
         url: 'dashboard'
     },
     {
+        id: 'roles',
+        title: 'roles_title',
+        type: 'item',
+        icon: 'heroicons-outline:key',
+        translate: 'roles_title',
+        url: 'roles',
+        auth: ['superadmin']
+    },
+    {
         id: 'users',
         title: 'users_title',
         type: 'item',
