@@ -91,7 +91,13 @@ const locale = {
     user_form_validation_schema_email_2: 'You must enter an email',
     user_form_validation_schema_first_name: 'FirstName is too short - must be at least 3 chars.',
     user_form_validation_schema_last_name: 'LastName is too short - must be at least 3 chars.',
-    user_form_validation_schema_username: 'The username is required and must be at least 5 characters long.'
+    user_form_validation_schema_username: 'The username is required and must be at least 5 characters long.',
+
+    // Roles
+    roles_title: 'Roles',
+    add_new_role_btn: 'Add new Role',
+    role_name: 'Role Name',
+    role_description: 'Description'
 };
 
 export default locale;
