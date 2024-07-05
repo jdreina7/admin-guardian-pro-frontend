@@ -53,7 +53,6 @@ const mapRolesData = (roles: TRolesDB[]) => {
 };
 
 function RolesTable(props: RolesTableProps) {
-    console.log('56 props >>> ', props);
     const { t } = useTranslation();
     const currentLanguage = useSelector(selectCurrentLanguageId);
     const { roles, handleOpen, setSelectedRole } = props;

@@ -477,8 +477,8 @@ export function UserForm(data: UsersFormProps) {
                             control={control}
                             render={({ field }) => (
                                 <FormControl error={!!errors.status} required fullWidth>
-                                    <InputLabel id="statusLabel">{t('user_form_status')}</InputLabel>
-                                    <Select {...field} labelId="statusLabel" id="statusId" label={t('user_form_status')} variant="outlined" fullWidth>
+                                    <InputLabel id="statusLabel">{t('status')}</InputLabel>
+                                    <Select {...field} labelId="statusLabel" id="statusId" label={t('status')} variant="outlined" fullWidth>
                                         {statusData.map((status) => (
                                             <MenuItem key={status?.id} value={status?.value}>
                                                 {status?.name}
