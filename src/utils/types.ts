@@ -185,11 +185,17 @@ export type TRolesDBResponse = {
 
 export type TRolesDB = {
     name: string;
-    description: string;
+    description?: string;
     status: boolean;
-    createdAt: string;
-    updatedAt: string;
-    id: string;
+    createdAt?: string;
+    updatedAt?: string;
+    id?: string;
+};
+
+export type TRolesCreationDB = {
+    name: string;
+    description?: string;
+    status: string;
 };
 
 // SwwetAlert2
