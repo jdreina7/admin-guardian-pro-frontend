@@ -44,6 +44,7 @@ const locale = {
     return_to_dashboard_btn_text: 'Regresar al Escritorio',
     error_403_text: 'Te extraviaste?',
     error_500_text: 'Error 500 del Servidor. Nuestro equipo ha sido notificado de la falla, agradecemos su comprensión.',
+    status: 'Estado',
 
     // Users
     users_title: 'Usuarios',
@@ -57,7 +58,6 @@ const locale = {
     role: 'Rol',
     email: 'Email',
     contact: 'Contacto',
-    status: 'Estado',
     activate_user_status_text: 'Este proceso cambiará el estado del usuario a ACTIVO.',
     deactivate_user_status_text: 'Este proceso cambiará el estado del usuario a INACTIVO.',
     forbidden_update_your_own: 'No puedes cambiar tu propio estado mientras estás conectado en el portal.',
@@ -81,7 +81,6 @@ const locale = {
     user_form_marital_status: 'Estado civil',
     user_form_ocupation: 'Ocupación',
     user_form_role: 'Rol',
-    user_form_status: 'Estado',
     user_form_username: 'Nombre de usuario',
     user_form_address: 'Dirección',
     user_form_city: 'Ciudad',
@@ -98,7 +97,12 @@ const locale = {
     roles_title: 'Roles',
     add_new_role_btn: 'Agregar nuevo Rol',
     role_name: 'Nombre del Rol',
-    role_description: 'Descripción'
+    role_description: 'Descripción',
+    role_form_validation_schema_name: 'Nombre del Rol demasiado corto - Debe contener mínimo 4 caractéres.',
+    role_form_edit_title: 'Editar Rol',
+    role_form_create_title: 'Crear Rol',
+    role_updated: 'El Rol ha sido actualizado.',
+    role_created: 'Rol creado correctamente!'
 };
 
 export default locale;

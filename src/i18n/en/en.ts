@@ -44,6 +44,7 @@ const locale = {
     return_to_dashboard_btn_text: 'Back to Dashboard',
     error_403_text: 'Are you lost?',
     error_500_text: 'Server Error 500. Our staff has been notified, thank you for your understanding.',
+    status: 'Status',
 
     // Users
     users_title: 'Users',
@@ -57,7 +58,6 @@ const locale = {
     role: 'Role',
     email: 'Email',
     contact: 'Contact',
-    status: 'Status',
     activate_user_status_text: 'This process will change the user status to ACTIVE.',
     deactivate_user_status_text: 'This process will change the user status to INACTIVE.',
     forbidden_update_your_own: 'You cannot change your own status while logged into the portal.',
@@ -80,7 +80,6 @@ const locale = {
     user_form_marital_status: 'Marital Status',
     user_form_ocupation: 'Ocupation',
     user_form_role: 'Role',
-    user_form_status: 'Status',
     user_form_username: 'Username/Nickname',
     user_form_address: 'Address',
     user_form_city: 'City',
@@ -97,7 +96,12 @@ const locale = {
     roles_title: 'Roles',
     add_new_role_btn: 'Add new Role',
     role_name: 'Role Name',
-    role_description: 'Description'
+    role_description: 'Description',
+    role_form_validation_schema_name: 'Name is too short - must be at least 4 chars.',
+    role_form_edit_title: 'Edit Role',
+    role_form_create_title: 'Create Role',
+    role_updated: 'The role has been updated.',
+    role_created: 'The role has been created successfully!'
 };
 
 export default locale;

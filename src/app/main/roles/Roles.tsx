@@ -13,6 +13,7 @@ import { TModalConstants, TRolesDB } from '../../../utils/types';
 import useSwalWrapper from '../../../utils/vendors/sweetalert2/hooks';
 import { ERROR_PAGE_403, ERROR_PAGE_404, ERROR_PAGE_500 } from '../../../utils/contants';
 import RolesTable from './components/RolesTable';
+import { RolesForm } from './components/RolesForm';
 
 const Root = styled(FusePageSimple)(({ theme }) => ({
     '& .FusePageSimple-header': {
@@ -26,7 +27,7 @@ const style = {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: '50%',
+    width: '30%',
     bgcolor: 'background.paper',
     border: '1px solid #ccc',
     borderRadius: '25px',
@@ -45,8 +46,6 @@ function Roles() {
     const rolesList: TRolesDB[] = useMemo(() => data?.data?.data, [data]);
     const [selectedRole, setSelectedRole] = useState<TRolesDB>();
     const [open, setOpen] = useState(false);
-
-    console.log('49 selectedRole >>> ', selectedRole);
 
     const errorUrl: string = useMemo(() => {
         const respError = error as AxiosError;
@@ -118,7 +117,7 @@ function Roles() {
                     >
                         <Fade in={open}>
                             <Box sx={style}>
-                                {/* <UserForm currentUser={selectedUser} handleClose={handleClose} onError={onError} onSuccess={onSuccess} /> */}
+                                <RolesForm currentRole={selectedRole} handleClose={handleClose} onError={onError} onSuccess={onSuccess} />
                             </Box>
                         </Fade>
                     </Modal>
