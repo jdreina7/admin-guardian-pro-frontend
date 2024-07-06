@@ -102,7 +102,9 @@ const locale = {
     role_form_edit_title: 'Editar Rol',
     role_form_create_title: 'Crear Rol',
     role_updated: 'El Rol ha sido actualizado.',
-    role_created: 'Rol creado correctamente!'
+    role_created: 'Rol creado correctamente!',
+    role_info_alert_title: 'Prohibído',
+    role_info_alert_content: 'Esta es un rol predeterminado del sistema, no puede editar el nombre o el estado de este rol, solo la descripción.'
 };
 
 export default locale;
