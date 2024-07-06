@@ -101,7 +101,9 @@ const locale = {
     role_form_edit_title: 'Edit Role',
     role_form_create_title: 'Create Role',
     role_updated: 'The role has been updated.',
-    role_created: 'The role has been created successfully!'
+    role_created: 'The role has been created successfully!',
+    role_info_alert_title: 'Forbidden',
+    role_info_alert_content: 'This is a system default role, you cannot edit the name or status of this role, only the description.'
 };
 
 export default locale;

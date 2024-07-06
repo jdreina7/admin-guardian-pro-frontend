@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux';
 import FuseLoading from '@fuse/core/FuseLoading';
 
 import ActionsCell from 'app/shared-components/cells-components/ActionsCell';
+import { capitalizeFirstLetter } from 'src/utils/utils';
 import es from '../../../../i18n/es/es';
 import en from '../../../../i18n/en/en';
 
@@ -26,6 +27,7 @@ type RolesTableProps = {
 };
 
 type UsersDataTable = {
+    id: string;
     name: string;
     description: string;
     status: boolean;
@@ -41,7 +43,8 @@ const mapRolesData = (roles: TRolesDB[]) => {
 
     roles.forEach((role) => {
         const ob: UsersDataTable = {
-            name: role?.name,
+            id: role?.id,
+            name: capitalizeFirstLetter(role?.name),
             description: role?.description,
             status: role?.status
         };
@@ -105,7 +108,7 @@ function RolesTable(props: RolesTableProps) {
                     // function callback for open the edit user dialog
                     handleOpen();
                     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-                    setSelectedRole(p.data?.name as TRolesDB);
+                    setSelectedRole(p.data as TRolesDB);
                 },
                 cellStyle: { cursor: 'pointer' }
             },
@@ -120,7 +123,7 @@ function RolesTable(props: RolesTableProps) {
                 onCellClicked: (p) => {
                     handleOpen();
                     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-                    setSelectedRole(p.data?.name as TRolesDB);
+                    setSelectedRole(p.data as TRolesDB);
                 },
                 cellStyle: { cursor: 'pointer' }
             },
@@ -131,7 +134,7 @@ function RolesTable(props: RolesTableProps) {
                 onCellClicked: (p) => {
                     handleOpen();
                     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-                    setSelectedRole(p.data?.name as TRolesDB);
+                    setSelectedRole(p.data as TRolesDB);
                 },
                 cellStyle: { cursor: 'pointer' }
             },

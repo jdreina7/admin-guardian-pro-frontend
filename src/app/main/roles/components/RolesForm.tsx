@@ -2,11 +2,12 @@ import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Box, Button, Divider, FormControl, FormHelperText, Grid, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import FuseLoading from '@fuse/core/FuseLoading';
 import { AxiosError, AxiosResponse } from 'axios';
 
 import { useTranslation } from 'react-i18next';
+import { InfoAlert } from 'app/shared-components/alerts/InfoAlert';
 import { useUpdateRole, useCreateRole } from '../../../../api/hooks';
 import { TModalConstants, TRolesDB, TRolesCreationDB, TRolesDBResponse } from '../../../../utils/types';
 import { IAPIErrorResponse } from '../../../../utils/interfaces';
@@ -28,6 +29,15 @@ export function RolesForm(data: RoleFormProps) {
     const { handleClose, currentRole, onSuccess, onError } = data;
 
     const token = localStorage.getItem('access_token');
+
+    // Validate the current role name
+    const disableField: boolean = useMemo(() => {
+        if (currentRole?.name === 'Superadmin' || currentRole?.name === 'Admin' || currentRole?.name === 'User') {
+            return true;
+        }
+
+        return false;
+    }, [currentRole]);
 
     // Store roles data
     const { mutateAsync: updateRole, isPending: isUpdatingRol, error: updateRoleError } = useUpdateRole(token, currentRole?.id);
@@ -132,6 +142,7 @@ export function RolesForm(data: RoleFormProps) {
             <Divider variant="middle" />
 
             <form name="RoleForm" noValidate className="flex flex-col w-full h-full" onSubmit={handleSubmit(onSubmit)}>
+                {disableField && <InfoAlert title={t('role_info_alert_title')} content={t('role_info_alert_content')} />}
                 <Grid container justifyContent="center" className="mt-10">
                     <Grid item xs={12} md={12}>
                         <Controller
@@ -148,6 +159,7 @@ export function RolesForm(data: RoleFormProps) {
                                     required
                                     fullWidth
                                     className="mt-10"
+                                    disabled={disableField}
                                 />
                             )}
                         />
@@ -174,7 +186,7 @@ export function RolesForm(data: RoleFormProps) {
                             name="status"
                             control={control}
                             render={({ field }) => (
-                                <FormControl error={!!errors.status} required fullWidth className="mt-10">
+                                <FormControl error={!!errors.status} required fullWidth className="mt-10" disabled={disableField}>
                                     <InputLabel id="statusLabel">{t('status')}</InputLabel>
                                     <Select {...field} labelId="statusLabel" id="statusId" label={t('status')} variant="outlined" fullWidth>
                                         {statusData.map((status) => (
